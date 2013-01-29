@@ -1,0 +1,30 @@
+form.task legend {
+}
+
+form.task fieldset {
+	max-width: 25em;
+	padding: 1em 0.75em 1.5em;
+	margin: 0 10px;
+	font-size: 1.5em;
+}
+
+form.task label {
+	display: none;
+}
+
+
+form.task .title input {
+	display: block;
+	font-size: 1em;
+	width: 90%;
+	padding: 0.1em 0.25em;
+	margin: 0 auto;
+}
+
+form.task.new .description {
+	display: none;
+}
+
+form.task.new button {
+	display: none;
+}

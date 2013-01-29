@@ -1,0 +1,73 @@
+@import url(http://fonts.googleapis.com/css?family=Ruluko);
+
+a {
+	color: inherit;
+	text-decoration: inherit;
+}
+
+body {
+	position: relative;
+	padding: 50px 0 30px 0;
+	background-color: #e8e8e8;
+	font-family: "Lucida Grande", Arial, helvetica, sans-serif;
+	min-height: 500px;
+	font-size: 100%;
+	letter-spacing: 0.035em;
+}
+
+.top-bar .replanner {
+	color: #000000;
+	font-size: 24px;
+}
+
+p.signature {
+	clear: both;
+	float: right;
+	font-size: 0.6em;
+}
+
+.top-bar {
+	position: fixed;
+	top: 0; left: 0;
+	width: 100%;
+	padding: 0.2em 0;
+	background: -moz-linear-gradient(top, #b22080 65%, #d369ac 100%); /* FF3.6+ */
+	background: -webkit-linear-gradient(top, #b22080 65%, #d369ac 100%); /* FF3.6+ */
+	border-bottom: 1px solid #f2f2f2;
+	
+	color: #ffffff;
+	text-indent: 0.5em;
+	
+/* Red #d12961, ligth-violet-red = #d369ac */
+/*mediumvioletred = #C71585*/
+	
+}
+
+.bottom-bar {
+	position: fixed;
+	bottom: 0; left: 0;
+	width: 100%;
+	padding: 0.2em 0;
+	background: -moz-linear-gradient(top, #b22080 65%, #d369ac 100%);
+	background: -webkit-linear-gradient(top, #b22080 65%, #d369ac 100%);
+	border-top: 1px solid #f2f2f2;
+	
+	color: #ffffff;
+	text-indent: 0.5em;
+}
+
+.col1 {
+	float: left;
+	width: 25%; min-height: 100px;
+	overflow: auto;
+}
+.col2 {
+	float: left;
+	width: 50%; min-height: 100px;
+	overflow: auto;
+}
+.col3 {
+	float: left;
+	width: 25%; min-height: 100px;
+	overflow: auto;
+}

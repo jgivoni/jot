@@ -1,0 +1,12 @@
+<?php
+interface SqlDatabaseAdapterInterface {
+	/**
+	 * @param string $sql
+	 * @return DbQueryResult
+	 */
+	public function query($sql);
+	/**
+	 * @return int
+	 */
+	public function getInsertId();
+}

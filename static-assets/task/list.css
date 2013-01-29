@@ -1,0 +1,30 @@
+@import url(http://fonts.googleapis.com/css?family=Lustria);
+
+ul.tasks {
+	padding: 0 10px; margin: 0;
+	list-style: none;
+}
+
+ul.tasks li {
+	padding: 4px 0;
+	-font-family: Lustria;
+	letter-spacing: 0;
+	text-decoration: none;
+	border-bottom: 1px dashed #a0a0a0;
+}
+
+ul.tasks li span.task-id {
+	display: inline-block;
+	width: 2em;
+	text-align: right;
+}
+
+ul.tasks li.ui-sortable-helper {
+	padding-left: 1em;
+	background: yellow;
+	z-index: 1;
+}
+
+ul.tasks li.ui-sortable-placeholder {
+	background: #f8f8f8;
+}
