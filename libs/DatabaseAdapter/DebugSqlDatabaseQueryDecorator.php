@@ -1,5 +1,6 @@
 <?php
 
+namespace Ophp;
 
 /**
  * Provides timing, logging and meta-sql capabilities to Sql queries, to be

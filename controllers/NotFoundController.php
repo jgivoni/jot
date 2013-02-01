@@ -1,5 +1,7 @@
 <?php
 
+namespace Replanner;
+
 class NotFoundController extends BaseController {
 	public function __invoke() {
 		$res = $this->newResponse();

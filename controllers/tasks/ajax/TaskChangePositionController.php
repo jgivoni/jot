@@ -1,5 +1,7 @@
 <?php
 
+namespace Replanner;
+
 class TaskChangePositionController extends AjaxController {
 	protected $task_id;
 	protected $taskModel;
@@ -30,7 +32,7 @@ class TaskChangePositionController extends AjaxController {
 		}
 	}
 
-	public function postRequest(Request $req) {
+	public function postRequest(HttpRequest $req) {
 		$taskMapper = $this->getDataMapper('task');
 		$dropTaskId = $req->getPostParam('dropTaskId');
 		$dropTask = $taskMapper->loadByPrimaryKey($dropTaskId);

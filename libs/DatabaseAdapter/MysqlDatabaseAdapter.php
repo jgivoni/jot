@@ -1,5 +1,7 @@
 <?php
 
+namespace Ophp;
+
 class MysqlDatabaseAdapter implements SqlDatabaseAdapterInterface {
 	protected $connectionLink;
 	

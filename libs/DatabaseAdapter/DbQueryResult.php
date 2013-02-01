@@ -1,6 +1,8 @@
 <?php
 
-class DbQueryResult implements Iterator {
+namespace Ophp;
+
+class DbQueryResult implements \Iterator {
 	
 	/**
 	 * A function to call to fetch a row
@@ -31,7 +33,7 @@ class DbQueryResult implements Iterator {
 	protected $numRows;
 	protected $matchedRows;
 
-	function __construct(Closure $fetchRecord) {
+	function __construct(\Closure $fetchRecord) {
 		$this->fetchRecordFunction = $fetchRecord;
 		$this->rewind();
 	}

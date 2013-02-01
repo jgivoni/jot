@@ -1,5 +1,7 @@
 <?php
 
+namespace Replanner;
+
 class ViewTaskController extends BaseController {
 	
 	/**

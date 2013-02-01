@@ -1,5 +1,7 @@
 <?php
 
+namespace Replanner;
+
 class DeleteTaskController extends BaseController {
 	protected $task_id;
 	protected $taskModel;

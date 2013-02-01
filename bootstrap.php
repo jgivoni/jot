@@ -15,15 +15,12 @@ if (!ini_get('date.timezone')) {
 	date_default_timezone_set('Europe/Madrid');
 }
 
-// Bootstrap the entire app by loading and initialising the AppPackage
+// Bootstrap the entire app by loading and initialising the Application Package
 require __DIR__.'/AppPackage.php';
-new AppPackage();
+$app = new Replanner\AppPackage();
 
 // Grab the request and route it to a controller
-$server = new Server(__DIR__);
-
-include __DIR__.'/routes.php';
-$server->handleRequest(); // Serve it up!
+$app->run();
 	
 /**
  * Editing a book

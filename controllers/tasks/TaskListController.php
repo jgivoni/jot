@@ -1,5 +1,7 @@
 <?php
 
+namespace Replanner;
+
 class TaskListController extends BaseController {
 	
 	public function __invoke() {

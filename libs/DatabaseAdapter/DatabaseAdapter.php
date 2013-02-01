@@ -1,5 +1,7 @@
 <?php
 
+namespace Ophp;
+
 /**
  * This is the old class that should be surpassed by a more modern pattern
  */

@@ -1,5 +1,7 @@
 <?php
 
+namespace Replanner;
+
 class AjaxViewTaskController extends AjaxController {
 	
 	/**

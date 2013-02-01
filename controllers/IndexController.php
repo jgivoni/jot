@@ -1,5 +1,7 @@
 <?php
 
+namespace Replanner;
+
 class IndexController extends BaseController {
 	
 	public function __invoke() {

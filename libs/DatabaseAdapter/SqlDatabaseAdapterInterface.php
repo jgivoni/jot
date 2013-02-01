@@ -1,4 +1,7 @@
 <?php
+
+namespace Ophp;
+
 interface SqlDatabaseAdapterInterface {
 	/**
 	 * @param string $sql

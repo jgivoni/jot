@@ -1,9 +1,11 @@
 <?php
 
+namespace Replanner;
+
 /**
  * Model Mapper for tasks
  */
-class TaskMapper extends DataMapper {
+class TaskMapper extends \Ophp\DataMapper {
 	/**
 	 * @var array Fields in the database. Specify key if name of field in model differs
 	 */

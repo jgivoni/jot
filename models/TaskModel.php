@@ -1,6 +1,8 @@
 <?php
 
-class TaskModel extends Model {
+namespace Replanner;
+
+class TaskModel extends \Ophp\Model {
 	const PRIORITY_HIGH = 'high';
 	const PRIORITY_NORMAL = 'normal';
 	const PRIORITY_LOW = 'low';

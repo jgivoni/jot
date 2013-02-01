@@ -1,5 +1,7 @@
 <?php
 
+namespace Replanner;
+
 class NewTaskController extends BaseController {
 	/**
 	 * @var TaskModel
@@ -96,7 +98,7 @@ class NewTaskController extends BaseController {
 	 * 
 	 * @return null
 	 */
-	public function postRequest(Request $req) {
+	public function postRequest(HttpRequest $req) {
 		$fields = $this->fields;
 		$this->taskModel->setTitle($req->getPostParam($fields->title['name']));
 		$this->newDataMapper('task')->saveTask($this->taskModel);

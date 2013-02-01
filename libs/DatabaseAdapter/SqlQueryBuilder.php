@@ -1,5 +1,7 @@
 <?php
 
+namespace Ophp;
+
 /**
  * Constructs sql queries bit by bit
  */

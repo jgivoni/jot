@@ -1,5 +1,7 @@
 <?php
 
+namespace Replanner;
+
 class EditTaskController extends BaseController {
 	protected $task_id;
 	protected $taskModel;
