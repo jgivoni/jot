@@ -1,10 +1,9 @@
-<?php 
-namespace HtmlView;
-$this->parent->addCssFile('/static/task/view.css');
+<?php
+$this->parent->addCssFile($this->parent->url->staticAssets('task/view.css'));
 ?>
 <div class="task-element">
-	<h3><?=e($task->getTitle())?></h3>
-	<p><?=e($task->getDescription())?></p>
-	<a class="edit" href="<?=e($task->getUrlPath())?>/edit">Edit</a>
-	<a class="delete" href="<?=e($task->getUrlPath())?>/delete">Delete</a>
+	<h3><? $p($task->getTitle())->chData(); ?></h3>
+	<p><? $p($task->getDescription())->chData(); ?></p>
+	<a class="edit" href="<? $p($task->getUrlPath())->attrVal(); ?>/edit">Edit</a>
+	<a class="delete" href="<? $p($task->getUrlPath())->attrVal(); ?>/delete">Delete</a>
 </div>

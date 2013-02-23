@@ -40,11 +40,11 @@ $_smarty_tpl->decodeProperties(array (
 		<h2 class="application">re*planner</h2>
 		
 <div class="task-element">
-	<h3><?php echo $_smarty_tpl->getVariable('task')->value->getTitle();?>
+	<h3><?php echo $_smarty_tpl->getVariable('task')->originalValue->getTitle();?>
 </h3>
-	<p><?php echo $_smarty_tpl->getVariable('task')->value->getDescription();?>
+	<p><?php echo $_smarty_tpl->getVariable('task')->originalValue->getDescription();?>
 </p>
-	<a class="edit" href="<?php echo $_smarty_tpl->getVariable('task')->value->getUrl();?>
+	<a class="edit" href="<?php echo $_smarty_tpl->getVariable('task')->originalValue->getUrl();?>
 /edit">Edit</a>
 </div>
 

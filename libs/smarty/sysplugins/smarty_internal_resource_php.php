@@ -111,8 +111,8 @@ class Smarty_Internal_Resource_PHP {
         $_smarty_ptr = $_smarty_template;
         do {
             foreach ($_smarty_ptr->tpl_vars as $_smarty_var => $_smarty_var_object) {
-                if (isset($_smarty_var_object->value)) {
-                    $$_smarty_var = $_smarty_var_object->value;
+                if (isset($_smarty_var_object->originalValue)) {
+                    $$_smarty_var = $_smarty_var_object->originalValue;
                 } 
             } 
             $_smarty_ptr = $_smarty_ptr->parent;

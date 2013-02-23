@@ -62,7 +62,7 @@ abstract class BaseController extends \Ophp\Controller {
 	protected function newView($template) {
 		// Make this dependent on ajax
 		if (!$this->getRequest()->isAjax()) {
-			$view = new \Ophp\PartialView($this->getFullTemplatePath($template));
+			$view = new \Ophp\ViewFragment($this->getFullTemplatePath($template));
 			$view->attachToParent($this->newDocumentView(), 'content');
 			return $view;
 		} else {
@@ -76,13 +76,14 @@ abstract class BaseController extends \Ophp\Controller {
 		$document = new \Ophp\HtmlDocumentView($this->getFullTemplatePath($this->baseTemplate), function($template) use ($self) {
 					return $self->tmp_newView($template);
 				});
+		$document->title = "Replanner";
 		$document->url = $this->getServer()->getUrlHelper();
 		$document->index = new \Ophp\View($this->getFullTemplatePath('task/list.html'));
 		$document->index->assign(array(
 			'tasks' => $this->getDataMapper('task')->loadAll()
 		));
 		$document->notifications = 'Was it what you expected?';
-		$document->addCssFile('/static-assets/task/form.css');
+		$document->addCssFile($this->getServer()->getUrlHelper()->staticAssets('task/form.css'));
 		$document->addCssFile('/static-assets/task/list.css');
 
 		return $document;

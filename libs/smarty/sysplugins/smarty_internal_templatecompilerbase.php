@@ -423,7 +423,7 @@ class Smarty_Internal_TemplateCompilerBase {
             $error_text .= $args;
         } else {
             // expected token from parser
-            $error_text .= ' - Unexpected "' . $this->lex->value.'"';
+            $error_text .= ' - Unexpected "' . $this->lex->originalValue.'"';
             if (count($this->parser->yy_get_expected_tokens($this->parser->yymajor)) <= 4 ) {
             	foreach ($this->parser->yy_get_expected_tokens($this->parser->yymajor) as $token) {
             	    $exp_token = $this->parser->yyTokenName[$token];

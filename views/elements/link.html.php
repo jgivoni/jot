@@ -1,3 +1,1 @@
-<?php
-namespace HtmlView;
-?><link type="text/css" rel="stylesheet" href="<?=e($path)?>"/>
+<link type="text/css" rel="stylesheet" href="<? $p($path)->attrVal(); ?>"/>

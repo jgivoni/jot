@@ -1,0 +1,1 @@
+<input type="text" name="<? $p($name)->attrVal() ?>" placeholder="Type text here" value="<? $p($value)->attrVal() ?>"/>

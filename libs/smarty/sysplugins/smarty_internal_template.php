@@ -656,7 +656,7 @@ class Smarty_Internal_Template extends Smarty_Internal_Data {
             if (isset($this->parent) && ($scope == Smarty::SCOPE_PARENT || $_variable_scope == Smarty::SCOPE_PARENT)) {
                 if (isset($this->parent->tpl_vars[$_key])) {
                     // variable is already defined in parent, copy value
-                    $this->parent->tpl_vars[$_key]->value = $this->tpl_vars[$_key]->value;
+                    $this->parent->tpl_vars[$_key]->originalValue = $this->tpl_vars[$_key]->value;
                 } else {
                     // create variable in parent
                     $this->parent->tpl_vars[$_key] = clone $_variable;
@@ -687,7 +687,7 @@ class Smarty_Internal_Template extends Smarty_Internal_Data {
             if ($scope == Smarty::SCOPE_GLOBAL || $_variable_scope == Smarty::SCOPE_GLOBAL) {
                 if (isset(Smarty::$global_tpl_vars[$_key])) {
                     // variable is already defined in root, copy value
-                    Smarty::$global_tpl_vars[$_key]->value = $this->tpl_vars[$_key]->value;
+                    Smarty::$global_tpl_vars[$_key]->originalValue = $this->tpl_vars[$_key]->value;
                 } else {
                     // create global variable
                    Smarty::$global_tpl_vars[$_key] = clone $_variable;

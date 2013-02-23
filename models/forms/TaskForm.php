@@ -1,14 +1,18 @@
 <?php
 
+namespace Replanner;
+
 /**
  *  Not sure this should be used - check out TaskFilter instead
  * 
  */
-class TaskForm {
+class TaskForm
+{
 
 	public $title, $description, $position, $priority;
 
-	public function __construct(TaskModel $taskModel) {
+	public function __construct(TaskModel $taskModel)
+	{
 		$this->title = array(
 			'name' => 'title',
 			'value' => $taskModel->getTitle()
@@ -27,6 +31,11 @@ class TaskForm {
 		);
 	}
 
+	public function getElement($name)
+	{
+		
+	}
+
 }
 
 /**
@@ -38,7 +47,8 @@ class TaskForm {
  * The form ui object will populate the model if the data is valid
  * The form ui object can be questioned about validation errors
  */
-class TaskFormUI {
+class TaskFormUI
+{
 
 	/**
 	 *
@@ -47,15 +57,18 @@ class TaskFormUI {
 	protected $model;
 	protected $filter;
 
-	public function __construct($filter) {
+	public function __construct($filter)
+	{
 		$this->filter = $filter;
 	}
 
-	public function getFields() {
+	public function getFields()
+	{
 		
 	}
 
-	public function submit($data) {
+	public function submit($data)
+	{
 		try {
 			$filter = $this->filter;
 			$pureData = $filter($data);

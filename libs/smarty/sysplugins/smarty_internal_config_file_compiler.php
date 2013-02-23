@@ -97,7 +97,7 @@ class Smarty_Internal_Config_File_Compiler {
                 } 
             } 
             // output parser error message
-            $error_text .= ' - Unexpected "' . $this->lex->value . '", expected one of: ' . implode(' , ', $expect);
+            $error_text .= ' - Unexpected "' . $this->lex->originalValue . '", expected one of: ' . implode(' , ', $expect);
         } 
         throw new SmartyCompilerException($error_text);
     } 

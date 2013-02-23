@@ -9,6 +9,6 @@ return array(
 		)
 	),
 	'paths' => array(
-		'static_assets' => 'static-assets/',
+		'staticAssets' => 'static-assets/',
 	)
 );

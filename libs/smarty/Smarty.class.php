@@ -495,14 +495,14 @@ class Smarty extends Smarty_Internal_Data {
     {
         if (isset($varname)) {
             if (isset(self::$global_tpl_vars[$varname])) {
-                return self::$global_tpl_vars[$varname]->value;
+                return self::$global_tpl_vars[$varname]->originalValue;
             } else {
                 return '';
             }
         } else {
             $_result = array();
             foreach (self::$global_tpl_vars AS $key => $var) {
-                $_result[$key] = $var->value;
+                $_result[$key] = $var->originalValue;
             }
             return $_result;
         }

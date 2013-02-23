@@ -40,29 +40,29 @@ $_smarty_tpl->decodeProperties(array (
 	<body>
 		<h2 class="application">re*planner</h2>
 		
-<form class="task <?php echo $_smarty_tpl->getVariable('mode')->value;?>
+<form class="task <?php echo $_smarty_tpl->getVariable('mode')->originalValue;?>
 " method="post">
 	<fieldset>
 		<legend>Create new task</legend>
 		<div class="title">
 			<label>Title</label>
-			<input type="text" name="<?php echo $_smarty_tpl->getVariable('fields')->value['title']['name'];?>
-" placeholder="Type title here" value="<?php echo smarty_modifier_escape($_smarty_tpl->getVariable('fields')->value['title']['value']);?>
+			<input type="text" name="<?php echo $_smarty_tpl->getVariable('fields')->originalValue['title']['name'];?>
+" placeholder="Type title here" value="<?php echo smarty_modifier_escape($_smarty_tpl->getVariable('fields')->originalValue['title']['value']);?>
 "/>
 		</div>
 		<div class="description">
 			<label>Description</label>
-			<textarea name="<?php echo $_smarty_tpl->getVariable('fields')->value['description']['name'];?>
-" placeholder="Type description here"><?php echo smarty_modifier_escape($_smarty_tpl->getVariable('fields')->value['description']['value']);?>
+			<textarea name="<?php echo $_smarty_tpl->getVariable('fields')->originalValue['description']['name'];?>
+" placeholder="Type description here"><?php echo smarty_modifier_escape($_smarty_tpl->getVariable('fields')->originalValue['description']['value']);?>
 </textarea>
 		</div>
 		<div class="position">
-			<input type="text" name="<?php echo $_smarty_tpl->getVariable('fields')->value['position']['name'];?>
-" value="<?php echo $_smarty_tpl->getVariable('fields')->value['position']['value'];?>
+			<input type="text" name="<?php echo $_smarty_tpl->getVariable('fields')->originalValue['position']['name'];?>
+" value="<?php echo $_smarty_tpl->getVariable('fields')->originalValue['position']['value'];?>
 "/>
 		</div>
 		<div class="priority">
-			<select name="<?php echo $_smarty_tpl->getVariable('fields')->value['priority']['name'];?>
+			<select name="<?php echo $_smarty_tpl->getVariable('fields')->originalValue['priority']['name'];?>
 ">
 				<option>high</option>
 				<option>normal</option>

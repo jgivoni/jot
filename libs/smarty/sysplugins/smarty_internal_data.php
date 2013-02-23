@@ -63,7 +63,7 @@ class Smarty_Internal_Data {
     {
         if ($tpl_var != '') {
             $this->tpl_vars[$tpl_var] = new Smarty_variable(null, $nocache);
-            $this->tpl_vars[$tpl_var]->value = &$value;
+            $this->tpl_vars[$tpl_var]->originalValue = &$value;
         }
     }
 
@@ -101,15 +101,15 @@ class Smarty_Internal_Data {
                             $this->tpl_vars[$_key] = clone $tpl_var_inst;
                         }
                     }
-                    if (!(is_array($this->tpl_vars[$_key]->value) || $this->tpl_vars[$_key]->value instanceof ArrayAccess)) {
-                        settype($this->tpl_vars[$_key]->value, 'array');
+                    if (!(is_array($this->tpl_vars[$_key]->originalValue) || $this->tpl_vars[$_key]->originalValue instanceof ArrayAccess)) {
+                        settype($this->tpl_vars[$_key]->originalValue, 'array');
                     }
                     if ($merge && is_array($_val)) {
                         foreach($_val as $_mkey => $_mval) {
-                            $this->tpl_vars[$_key]->value[$_mkey] = $_mval;
+                            $this->tpl_vars[$_key]->originalValue[$_mkey] = $_mval;
                         }
                     } else {
-                        $this->tpl_vars[$_key]->value[] = $_val;
+                        $this->tpl_vars[$_key]->originalValue[] = $_val;
                     }
                 }
             }
@@ -123,15 +123,15 @@ class Smarty_Internal_Data {
                         $this->tpl_vars[$tpl_var] = clone $tpl_var_inst;
                     }
                 }
-                if (!(is_array($this->tpl_vars[$tpl_var]->value) || $this->tpl_vars[$tpl_var]->value instanceof ArrayAccess)) {
-                    settype($this->tpl_vars[$tpl_var]->value, 'array');
+                if (!(is_array($this->tpl_vars[$tpl_var]->originalValue) || $this->tpl_vars[$tpl_var]->originalValue instanceof ArrayAccess)) {
+                    settype($this->tpl_vars[$tpl_var]->originalValue, 'array');
                 }
                 if ($merge && is_array($value)) {
                     foreach($value as $_mkey => $_mval) {
-                        $this->tpl_vars[$tpl_var]->value[$_mkey] = $_mval;
+                        $this->tpl_vars[$tpl_var]->originalValue[$_mkey] = $_mval;
                     }
                 } else {
-                    $this->tpl_vars[$tpl_var]->value[] = $value;
+                    $this->tpl_vars[$tpl_var]->originalValue[] = $value;
                 }
             }
         }
@@ -150,15 +150,15 @@ class Smarty_Internal_Data {
             if (!isset($this->tpl_vars[$tpl_var])) {
                 $this->tpl_vars[$tpl_var] = new Smarty_variable();
             }
-            if (!@is_array($this->tpl_vars[$tpl_var]->value)) {
-                settype($this->tpl_vars[$tpl_var]->value, 'array');
+            if (!@is_array($this->tpl_vars[$tpl_var]->originalValue)) {
+                settype($this->tpl_vars[$tpl_var]->originalValue, 'array');
             }
             if ($merge && is_array($value)) {
                 foreach($value as $_key => $_val) {
-                    $this->tpl_vars[$tpl_var]->value[$_key] = &$value[$_key];
+                    $this->tpl_vars[$tpl_var]->originalValue[$_key] = &$value[$_key];
                 }
             } else {
-                $this->tpl_vars[$tpl_var]->value[] = &$value;
+                $this->tpl_vars[$tpl_var]->originalValue[] = &$value;
             }
         }
     }
@@ -197,7 +197,7 @@ class Smarty_Internal_Data {
             } while ($_ptr !== null) {
                 foreach ($_ptr->tpl_vars AS $key => $var) {
                     if (!array_key_exists($key, $_result)) {
-                        $_result[$key] = $var->value;
+                        $_result[$key] = $var->originalValue;
                     }
                 }
                 // not found, try at parent
@@ -210,7 +210,7 @@ class Smarty_Internal_Data {
             if ($search_parents && isset(Smarty::$global_tpl_vars)) {
                 foreach (Smarty::$global_tpl_vars AS $key => $var) {
                     if (!array_key_exists($key, $_result)) {
-                        $_result[$key] = $var->value;
+                        $_result[$key] = $var->originalValue;
                     }
                 }
             }
