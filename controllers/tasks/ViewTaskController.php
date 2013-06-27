@@ -36,9 +36,14 @@ class ViewTaskController extends BaseController {
 			$view = $this->newView('task/notfound.html');
 		}
 		
-		//$view->parent->addCssFile('/static/task/view.css');
-		//$view->parent->setTitle('View task');
 		return $this->newResponse()->body($view);
+	}
+	
+	protected function newDocumentView() {
+		$document = parent::newDocumentView();
+		$document->addCssFile($this->getServer()->getUrlHelper()->staticAssets('task/view.css'));
+		$document->setTitle('View task');
+		return $document;
 	}
 	
 }

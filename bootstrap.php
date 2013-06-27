@@ -18,8 +18,6 @@ if (!ini_get('date.timezone')) {
 // Bootstrap the entire app by loading and initialising the Application Package
 require __DIR__.'/AppPackage.php';
 $app = new Replanner\AppPackage();
-
-// Grab the request and route it to a controller
 $app->run();
 	
 /**

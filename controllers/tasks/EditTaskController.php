@@ -64,7 +64,7 @@ class EditTaskController extends BaseController {
 				->setPosition($input['position'])
 				->setPriority($input['priority']);
 			$this->fields = new TaskForm($this->taskModel);
-			throw new \InvalidArgumentException;
+			throw new \InvalidArgumentException();
 		}
 		
 	}

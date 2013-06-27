@@ -32,7 +32,7 @@ class TaskChangePositionController extends AjaxController {
 		}
 	}
 
-	public function postRequest(HttpRequest $req) {
+	public function postRequest(\Ophp\HttpRequest $req) {
 		$taskMapper = $this->getDataMapper('task');
 		$dropTaskId = $req->getPostParam('dropTaskId');
 		$dropTask = $taskMapper->loadByPrimaryKey($dropTaskId);

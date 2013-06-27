@@ -52,24 +52,11 @@ class NewTaskController extends BaseController {
 	 * @return Response
 	 */
 	public function showForm() {
-		$task_list = $this->newView('task/list.html')->assign(array(
-			'tasks' => $this->getDataMapper('task')->loadTasks()
+		$content = $this->newView('task/form.html')->assign(array(
+			'fields' => $this->fields,
+			'mode' => 'edit'
 		));
-		return $this->newResponse()->body($this->newView('base.html')->assign(array(
-			'title' => 'New task',
-			'head' => array(
-				'<link type="text/css" rel="stylesheet" href="/static/task/form.css"/>',
-				'<link type="text/css" rel="stylesheet" href="/static/task/list.css"/>',
-				'<link type="text/css" rel="stylesheet" href="/static/task/view.css"/>',
-				'<script type="text/javascript" src="/static/task/tasks.js"></script>'
-			),
-			'content' => $this->newView('task/form.html')->assign(array(
-				'fields' => $this->fields,
-				'mode' => 'new'
-			)),
-			'index' => $task_list,
-			'notifications' => 'Ready to rock!'
-		)));
+		return $this->newResponse()->body($content);
 	}
 
 	/**
@@ -80,7 +67,7 @@ class NewTaskController extends BaseController {
 	 * @return Response 
 	 */
 	public function redirectToView() {
-		return $this->newResponse()->redirect($this->taskModel->getUrl());
+		return $this->newResponse()->redirect($this->taskModel->getUrlPath());
 	}
 
 	/**
@@ -98,7 +85,7 @@ class NewTaskController extends BaseController {
 	 * 
 	 * @return null
 	 */
-	public function postRequest(HttpRequest $req) {
+	public function postRequest(\Ophp\HttpRequest $req) {
 		$fields = $this->fields;
 		$this->taskModel->setTitle($req->getPostParam($fields->title['name']));
 		$this->newDataMapper('task')->saveTask($this->taskModel);

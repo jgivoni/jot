@@ -25,6 +25,7 @@ abstract class BaseController extends \Ophp\Controller {
 	 * 
 	 * @param string $model Model name
 	 * @return \Ophp\dataMapper
+	 * @todo Wrap in factory - be more specific about return type
 	 */
 	protected function newDataMapper($model) {
 		switch ($model) {
@@ -60,13 +61,11 @@ abstract class BaseController extends \Ophp\Controller {
 	}
 
 	protected function newView($template) {
-		// Make this dependent on ajax
+		$view = new \Ophp\ViewFragment($this->getFullTemplatePath($template));
 		if (!$this->getRequest()->isAjax()) {
-			$view = new \Ophp\ViewFragment($this->getFullTemplatePath($template));
 			$view->attachToParent($this->newDocumentView(), 'content');
 			return $view;
 		} else {
-			$view = new ViewDecorator(new View($this->getFullTemplatePath($template)));
 			return $view;
 		}
 	}
