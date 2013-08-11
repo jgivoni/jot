@@ -22,7 +22,7 @@ class AppPackage {
 	protected function bootstrap() {
 		spl_autoload_register(function($class){
 			$paths = array(
-				'Ophp\CorePackage' => 'ophp/CorePackage.php',
+				'Ophp\CorePackage' => '../ophp/CorePackage.php',
 
 				__NAMESPACE__.'\Routes' => 'Routes.php',
 				__NAMESPACE__.'\NotFoundController' => 'controllers/NotFoundController.php',
