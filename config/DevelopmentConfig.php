@@ -1,21 +1,21 @@
 <?php
 
-class DevelopmentConfig
+namespace Replanner;
+
+class DevelopmentConfig extends \Ophp\Config
 {
-	public function get()
-	{
-		return array(
-			'database_connections' => array(
-				'replanner' => array(
-					'host' => 'localhost',
-					'database' => 'replanner',
-					'user' => 'webapp',
-					'password' => 'BFvmny5awwFvbvRt',
-				)
-			),
-			'paths' => array(
-				'staticAssets' => 'static-assets/',
-			)
-		);
-	}
+
+	protected $runMode = 'development';
+	protected $databaseConnections = array(
+		'replanner' => array(
+			'host' => 'localhost',
+			'database' => 'replanner',
+			'user' => 'user',
+			'password' => '',
+		),
+	);
+	protected $paths = array(
+		'staticAssets' => 'static-assets/',
+	);
+
 }

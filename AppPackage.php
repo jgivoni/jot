@@ -49,7 +49,8 @@ class AppPackage {
 				'Ophp\DbaPackage' => 'libs/DatabaseAdapter/DbaPackage.php',
 
 				/* Config */
-				__NAMESPACE__.'\DevelopmentConfig' => 'config\DevelopmentConfig.php',
+				__NAMESPACE__.'\DevelopmentConfig' => 'config/DevelopmentConfig.php',
+				'EnvironmentConfig' => apache_getenv('ophp.root_config'),
 				/* 3rd party libraries */
 			);
 			if (isset($paths[$class])) {
