@@ -48,6 +48,8 @@ class AppPackage {
 				/* engines */
 				'Ophp\DbaPackage' => 'libs/DatabaseAdapter/DbaPackage.php',
 
+				/* Config */
+				__NAMESPACE__.'\DevelopmentConfig' => 'config\DevelopmentConfig.php',
 				/* 3rd party libraries */
 			);
 			if (isset($paths[$class])) {
