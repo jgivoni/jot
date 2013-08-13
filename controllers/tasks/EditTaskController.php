@@ -58,6 +58,7 @@ class EditTaskController extends BaseController {
 				->setPriority($params['priority']);
 			$this->getDataMapper('task')->saveTask($this->taskModel);
 		} else {
+			die($filter->errorMessage());
 			$this->taskModel
 				->setTitle($input['title'])
 				->setDescription($input['description'])

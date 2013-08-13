@@ -2,7 +2,7 @@
 	<?php foreach ($tasks as $task) : ?>
 		<li data-task-id="<?=$task['taskId']?>" class="priority_<?=$task['priority']?>">
 			<span class="task-id"><?=$task['taskId']?></span>
-			<a href="<?=$task['urlPath']?>">
+			<a href="<? $p($task['urlPath'])->attrVal() ?>">
 				<?=$task['title']?>
 			</a>
 		</li>

@@ -1,4 +1,4 @@
-<form class="task <?= $mode ?>" method="post">
+<form class="task <? $p($mode)->attrVal() ?>" method="post">
 	<fieldset>
 		<legend>Create new task</legend>
 		<div class="title">
@@ -13,10 +13,11 @@
 			<? $p($this->fragment('elements/textarea.html')->assign($fields->description))->html() ?>
 		</div>
 		<div class="position">
-			<input type="text" name="<?= $fields->position['name'] ?>" value="<?= $fields->position['value'] ?>"/>
+			<input type="text" name="<? $p($fields->position['name'])->attrVal() ?>" 
+				   value="<? $p($fields->position['value'])->attrVal() ?>"/>
 		</div>
 		<div class="priority">
-			<select name="<?= $fields->priority['name'] ?>">
+			<select name="<? $p($fields->priority['name'])->attrVal() ?>">
 				<option>high</option>
 				<option>normal</option>
 				<option>low</option>

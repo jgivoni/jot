@@ -41,7 +41,6 @@ class ViewTaskController extends BaseController {
 	
 	protected function newDocumentView() {
 		$document = parent::newDocumentView();
-		$document->addCssFile($this->getServer()->getUrlHelper()->staticAssets('task/view.css'));
 		$document->setTitle('View task');
 		return $document;
 	}

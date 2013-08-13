@@ -83,6 +83,7 @@ abstract class BaseController extends \Ophp\Controller {
 		));
 		$document->notifications = 'Was it what you expected?';
 		$document->addCssFile($this->getServer()->getUrlHelper()->staticAssets('task/form.css'));
+		$document->addCssFile($this->getServer()->getUrlHelper()->staticAssets('task/view.css'));
 		$document->addCssFile('/static-assets/task/list.css');
 
 		return $document;

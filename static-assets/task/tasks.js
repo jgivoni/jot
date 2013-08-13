@@ -21,7 +21,6 @@ var Tasks = {
 				return true;
 			}
 			event.preventDefault();
-			console.log($(this).attr('href'));
 			History.pushState(null, null, $(this).attr('href'));
 			return false;
 		});
@@ -30,7 +29,6 @@ var Tasks = {
 $(window).bind('statechange', function() {
 	var url;
 	url = History.getState().url;
-	console.log(url);
 	$.ajax(
 			url,
 			{

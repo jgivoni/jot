@@ -8,7 +8,7 @@
 		<script type="text/javascript" src="<? $p($url->staticAssets('jquery-ui/js/jquery-1.7.2.min.js'))->attrVal(); ?>"></script>
 		<script type="text/javascript" src="/static-assets/jquery-ui/js/jquery-ui-1.8.19.custom.min.js"></script>
 		<!-- History.js --> 
-		<script defer src="http://balupton.github.com/history.js/scripts/bundled/html4+html5/jquery.history.js"></script>
+		<script src="/static-assets/jquery-ui/js/jquery.history.js"></script>
 		<!-- This Gist -->
 		<!--script defer src="http://gist.github.com/raw/854622/ajaxify-html5.js"></script-->  
 		<?php foreach ($head as $line) : ?>

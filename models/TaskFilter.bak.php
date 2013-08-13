@@ -16,8 +16,10 @@ class TaskFilter extends \Ophp\ParamsFilter
 			 */
 			new \Ophp\DependencyFilter(new \Ophp\IssetFilter(), new \Ophp\AggregateFilter(array(
 				new \Ophp\StringFilter('UTF-8'),
-				new \Ophp\StrTrimFilter(),
-				new \Ophp\StrMaxLengthFilter(50), // Max 50 characters
+				new \Ophp\TrimStringFilter(),
+				new \Ophp\ValidationFilter(
+					new \Ophp\StrMaxLengthFilter(50) // Max 50 characters
+				),
 			))),
 		)));
 
@@ -42,7 +44,7 @@ class TaskFilter extends \Ophp\ParamsFilter
 		 * 3. Trim (filter)
 		 * 4. Check against enums (validator)
 		 */
-//		$this->addParamFilter('status', new \Ophp\EnumFilter(array('draft', 'published')));
+		$this->addParamFilter('status', new \Ophp\EnumFilter(array('draft', 'published')));
 
 		// The 'position' field is required (must not be null)
 		$this->addParamFilter('position', new \Ophp\IssetFilter());
