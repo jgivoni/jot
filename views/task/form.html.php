@@ -17,11 +17,7 @@
 				   value="<? $p($fields->position['value'])->attrVal() ?>"/>
 		</div>
 		<div class="priority">
-			<select name="<? $p($fields->priority['name'])->attrVal() ?>">
-				<option>high</option>
-				<option>normal</option>
-				<option>low</option>
-			</select>
+			<? $p($this->fragment('elements/select.html')->assign($fields->priority))->html() ?>
 		</div>
 		<button type="reset">Reset</button>
 		<button type="submit">Save</button>
@@ -34,3 +30,9 @@
 //		->legend()->text('Create new task')
 //			->div()->_class('title')->end()
 //			->div();
+//$this->html(
+//	$this->form($this->_class('task')->_method('post')
+//		->fieldset(
+//			$this->legend('Create new task')
+//			->div($this->_class('title'))))
+//	->div('test')));

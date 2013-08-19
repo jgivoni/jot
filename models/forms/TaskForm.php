@@ -27,7 +27,11 @@ class TaskForm
 		);
 		$this->priority = array(
 			'name' => 'priority',
-			'value' => $taskModel->getPriority()
+			'value' => $taskModel->getPriority(),
+			'type' => 'select',
+			'options' => array(
+				'high', 'normal', 'low'
+			)
 		);
 	}
 
