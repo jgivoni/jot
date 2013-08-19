@@ -3,17 +3,18 @@
 namespace Replanner;
 
 class EditTaskController extends BaseController {
+
 	protected $task_id;
 	protected $taskModel;
 	protected $title;
 	protected $fields;
-	protected $taskFilter; 
-	
+	protected $taskFilter;
+
 	function __construct($task_id) {
 		parent::__construct();
 		$this->task_id = $task_id;
 	}
-	
+
 	public function __invoke() {
 		$this->taskModel = $this->getDataMapper('task')->loadByPrimaryKey($this->task_id);
 		$this->fields = new TaskForm($this->taskModel);
@@ -29,52 +30,52 @@ class EditTaskController extends BaseController {
 			return $this->redirectToView();
 		}
 	}
-	
+
 	public function showForm() {
 		$content = $this->newView('task/form.html')->assign(array(
 			'fields' => $this->fields,
 			'mode' => 'edit'
-		));
+				));
 		return $this->newResponse()->body($content);
 	}
 
 	public function redirectToView() {
 		return $this->newResponse()->redirect($this->taskModel->getUrlPath());
 	}
-	
+
 	public function redirectToForm() {
-		return $this->newResponse()->redirect('/tasks/new/'.$this->getRequest()->getPostParam($fields->title['name']));
+		return $this->newResponse()->redirect('/tasks/new/' . $this->getRequest()->getPostParam($fields->title['name']));
 	}
 
 	public function postRequest() {
 		$filter = $this->getTaskFilter();
 		$input = $this->getRequest()->getPostParams();
-		if ($filter($input)->isValid()) {
-			$params = $filter->filter();
+		try {
+			$input = $filter($input);
+		} catch (\InvalidArgumentException $e) {
 			$this->taskModel
-				->setTitle($params['title'])
-				->setDescription($params['description'])
-				->setPosition($params['position'])
-				->setPriority($params['priority']);
-			$this->getDataMapper('task')->saveTask($this->taskModel);
-		} else {
-			die($filter->errorMessage());
-			$this->taskModel
+					->setTitle($input['title'])
+					->setDescription($input['description'])
+					->setPosition($input['position'])
+					->setPriority($input['priority']);
+			$this->fields = new TaskForm($this->taskModel);
+			throw $e;
+		}
+		
+		$this->taskModel
 				->setTitle($input['title'])
 				->setDescription($input['description'])
 				->setPosition($input['position'])
 				->setPriority($input['priority']);
-			$this->fields = new TaskForm($this->taskModel);
-			throw new \InvalidArgumentException();
-		}
-		
+		$this->getDataMapper('task')->saveTask($this->taskModel);
 	}
-	
+
 	/**
 	 * 
 	 * @return TaskFilter
 	 */
 	protected function getTaskFilter() {
-		return isset($this->taskFilter) ? $this->taskFilter : $this->taskFilter = new TaskFilter();  
+		return isset($this->taskFilter) ? $this->taskFilter : $this->taskFilter = new TaskFilter();
 	}
+
 }
