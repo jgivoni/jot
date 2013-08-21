@@ -1,1 +1,1 @@
-<textarea name="<? $p($name)->attrVal() ?>" placeholder="Type text here"><? $p($value)->attrVal() ?></textarea>
+<textarea name="<? $p($field->getName())->attrVal() ?>" placeholder="Type text here"><? $p($field->getValue())->attrVal() ?></textarea>

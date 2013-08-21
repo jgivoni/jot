@@ -4,20 +4,20 @@
 		<div class="title">
 			<label>Title</label>
 			<?
-				$p($this->fragment('elements/textfield.html')->assign($fields->title))->html() 
+				$p($this->fragment('elements/textfield.html')->assign(array('field' => $form->getField('title'))))->html() 
 //					->wrap('elements/inputblock.html'))->html();
 			?>
 		</div>
 		<div class="description">
 			<label>Description</label>
-			<? $p($this->fragment('elements/textarea.html')->assign($fields->description))->html() ?>
+			<? $p($this->fragment('elements/textarea.html')->assign(array('field' => $form->getField('description'))))->html() ?>
 		</div>
 		<div class="position">
-			<input type="text" name="<? $p($fields->position['name'])->attrVal() ?>" 
-				   value="<? $p($fields->position['value'])->attrVal() ?>"/>
+			<input type="text" name="<? $p($form->getField('position')->getName())->attrVal() ?>" 
+				   value="<? $p($form->getField('position')->getValue())->attrVal() ?>"/>
 		</div>
 		<div class="priority">
-			<? $p($this->fragment('elements/select.html')->assign($fields->priority))->html() ?>
+			<? $p($this->fragment('elements/select.html')->assign(array('field' => $form->getField('priority'))))->html() ?>
 		</div>
 		<button type="reset">Reset</button>
 		<button type="submit">Save</button>

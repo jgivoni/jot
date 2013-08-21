@@ -6,38 +6,31 @@ namespace Replanner;
  *  Not sure this should be used - check out TaskFilter instead
  * 
  */
-class TaskForm
-{
+class TaskForm extends \Ophp\Form {
 
-	public $title, $description, $position, $priority;
-
-	public function __construct(TaskModel $taskModel)
-	{
-		$this->title = array(
-			'name' => 'title',
-			'value' => $taskModel->getTitle()
-		);
-		$this->description = array(
-			'name' => 'description',
-			'value' => $taskModel->getDescription()
-		);
-		$this->position = array(
-			'name' => 'position',
-			'value' => $taskModel->getPosition()
-		);
-		$this->priority = array(
-			'name' => 'priority',
-			'value' => $taskModel->getPriority(),
-			'type' => 'select',
-			'options' => array(
-				'high', 'normal', 'low'
-			)
-		);
+	public function __construct() {
+		$this->addField(
+						$this->newField('title')
+						->setType(\Ophp\FormField::TYPE_TEXT))
+				->addField(
+						$this->newField('description')
+						->setType(\Ophp\FormField::TYPE_TEXTAREA))
+				->addField(
+						$this->newField('position')
+						->setType(\Ophp\FormField::TYPE_TEXT))
+				->addField(
+						$this->newField('priority')
+						->setType(\Ophp\FormField::TYPE_SELECT)
+						->setOptions(array(
+							'high', 'normal', 'low'
+						)));
 	}
 
-	public function getElement($name)
-	{
-		
+	public function setValues(TaskModel $task) {
+		$this->getField('title')->setValue($task->getTitle());
+		$this->getField('description')->setValue($task->getDescription());
+		$this->getField('position')->setValue($task->getPosition());
+		$this->getField('priority')->setValue($task->getPriority());
 	}
 
 }
@@ -51,8 +44,7 @@ class TaskForm
  * The form ui object will populate the model if the data is valid
  * The form ui object can be questioned about validation errors
  */
-class TaskFormUI
-{
+class TaskFormUI {
 
 	/**
 	 *
@@ -61,18 +53,15 @@ class TaskFormUI
 	protected $model;
 	protected $filter;
 
-	public function __construct($filter)
-	{
+	public function __construct($filter) {
 		$this->filter = $filter;
 	}
 
-	public function getFields()
-	{
+	public function getFields() {
 		
 	}
 
-	public function submit($data)
-	{
+	public function submit($data) {
 		try {
 			$filter = $this->filter;
 			$pureData = $filter($data);

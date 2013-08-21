@@ -7,7 +7,6 @@ class EditTaskController extends BaseController {
 	protected $task_id;
 	protected $taskModel;
 	protected $title;
-	protected $fields;
 	protected $taskFilter;
 
 	function __construct($task_id) {
@@ -17,7 +16,6 @@ class EditTaskController extends BaseController {
 
 	public function __invoke() {
 		$this->taskModel = $this->getDataMapper('task')->loadByPrimaryKey($this->task_id);
-		$this->fields = new TaskForm($this->taskModel);
 		$req = $this->getRequest();
 		if ($req->isGet()) {
 			return $this->showForm();
@@ -32,8 +30,10 @@ class EditTaskController extends BaseController {
 	}
 
 	public function showForm() {
+		$form = new TaskForm();
+		$form->setValues($this->taskModel);
 		$content = $this->newView('task/form.html')->assign(array(
-			'fields' => $this->fields,
+			'form' => $form,
 			'mode' => 'edit'
 				));
 		return $this->newResponse()->body($content);
@@ -58,7 +58,6 @@ class EditTaskController extends BaseController {
 					->setDescription($input['description'])
 					->setPosition($input['position'])
 					->setPriority($input['priority']);
-			$this->fields = new TaskForm($this->taskModel);
 			throw $e;
 		}
 		
