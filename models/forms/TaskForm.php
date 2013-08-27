@@ -22,7 +22,9 @@ class TaskForm extends \Ophp\Form {
 						$this->newField('priority')
 						->setType(\Ophp\FormField::TYPE_SELECT)
 						->setOptions(array(
-							'high', 'normal', 'low'
+							new \Ophp\FormFieldOption('high'),
+							new \Ophp\FormFieldOption('normal'),
+							new \Ophp\FormFieldOption('low'),
 						)));
 	}
 

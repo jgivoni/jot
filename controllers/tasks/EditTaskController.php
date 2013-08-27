@@ -8,6 +8,7 @@ class EditTaskController extends BaseController {
 	protected $taskModel;
 	protected $title;
 	protected $taskFilter;
+	protected $taskForm;
 
 	function __construct($task_id) {
 		parent::__construct();
@@ -22,7 +23,7 @@ class EditTaskController extends BaseController {
 		} elseif ($req->isPost()) {
 			try {
 				$this->postRequest();
-			} catch (\InvalidArgumentException $e) {
+			} catch (\Ophp\FilterException $e) {
 				return $this->showForm();
 			}
 			return $this->redirectToView();
@@ -30,7 +31,7 @@ class EditTaskController extends BaseController {
 	}
 
 	public function showForm() {
-		$form = new TaskForm();
+		$form = $this->getTaskForm();
 		$form->setValues($this->taskModel);
 		$content = $this->newView('task/form.html')->assign(array(
 			'form' => $form,
@@ -52,12 +53,13 @@ class EditTaskController extends BaseController {
 		$input = $this->getRequest()->getPostParams();
 		try {
 			$input = $filter($input);
-		} catch (\InvalidArgumentException $e) {
+		} catch (\Ophp\FilterException $e) {
 			$this->taskModel
 					->setTitle($input['title'])
 					->setDescription($input['description'])
 					->setPosition($input['position'])
 					->setPriority($input['priority']);
+//			$this->getTaskForm()->setErrors($e->getParamErrors());
 			throw $e;
 		}
 		
@@ -75,6 +77,14 @@ class EditTaskController extends BaseController {
 	 */
 	protected function getTaskFilter() {
 		return isset($this->taskFilter) ? $this->taskFilter : $this->taskFilter = new TaskFilter();
+	}
+	
+	/**
+	 * 
+	 * @return TaskForm
+	 */
+	protected function getTaskForm() {
+		return isset($this->taskForm) ? $this->taskForm : $this->taskForm = new TaskForm();
 	}
 
 }
