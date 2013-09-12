@@ -1,6 +1,16 @@
 <form class="task <? $p($mode)->attrVal() ?>" method="post">
 	<fieldset>
-		<legend>Create new task</legend>
+		<legend>Create or edit task</legend>
+		<? if ($form->hasExceptions()) : ?>
+			<div class="form-errors">
+			<? foreach ($form->getExceptions() as $exception) : ?>
+				<p class="error"><? $p($exception->getMessage())->chData(); ?></p>
+			<? endforeach; ?>
+			</div>
+		<? endif; ?>
+		<?
+			$p($this->fragment('elements/inputblock.html')->assign(array('field' => $form->getField('title'))))->html() 
+		?>
 		<div class="title">
 			<label>Title</label>
 			<?

@@ -34,7 +34,7 @@ class TaskForm extends \Ophp\Form {
 		$this->getField('position')->setValue($task->getPosition());
 		$this->getField('priority')->setValue($task->getPriority());
 	}
-
+	
 }
 
 /**

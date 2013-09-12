@@ -53,13 +53,13 @@ class EditTaskController extends BaseController {
 		$input = $this->getRequest()->getPostParams();
 		try {
 			$input = $filter($input);
-		} catch (\Ophp\FilterException $e) {
+		} catch (\Ophp\AggregateFilterException $e) {
 			$this->taskModel
 					->setTitle($input['title'])
 					->setDescription($input['description'])
 					->setPosition($input['position'])
 					->setPriority($input['priority']);
-//			$this->getTaskForm()->setErrors($e->getParamErrors());
+			$this->getTaskForm()->addExceptions($e->getExceptions());
 			throw $e;
 		}
 		

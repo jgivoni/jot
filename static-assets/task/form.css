@@ -28,3 +28,8 @@ form.task.new .description {
 form.task.new button {
 	display: none;
 }
+form.task .form-errors {
+	font-size: 0.6em;
+	color: red;
+}
+
