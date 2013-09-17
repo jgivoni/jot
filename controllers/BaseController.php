@@ -59,44 +59,37 @@ abstract class BaseController extends \Ophp\Controller {
 	protected function getFullTemplatePath($template) {
 		return $this->getServer()->getAppRootPath() . '/views/' . $template . '.php';
 	}
+	
+	protected function getTemplateBase() {
+		return $this->getServer()->getAppRootPath() . '/views/';
+	}
 
 	protected function newView($template) {
-		$view = new \Ophp\ViewFragment($this->getFullTemplatePath($template));
 		if (!$this->getRequest()->isAjax()) {
-			$view->attachToParent($this->newDocumentView(), 'content');
-			return $view;
+			$document = $this->newDocumentView();
+			$view = $document->fragment($template);
+			$document->assign(['content' => $view]);
 		} else {
-			return $view;
+			$view = new \Ophp\View($template, $this->getTemplateBase());
 		}
+		return $view;
 	}
 
 	protected function newDocumentView() {
-		$self = $this; // Fix for php 5.3
-		$document = new \Ophp\HtmlDocumentView($this->getFullTemplatePath($this->baseTemplate), function($template) use ($self) {
-					return $self->tmp_newView($template);
-				});
+		$document = new \Ophp\HtmlDocumentView($this->baseTemplate, $this->getTemplateBase());
 		$document->title = "Replanner";
 		$document->url = $this->getServer()->getUrlHelper();
-		$document->index = new \Ophp\View($this->getFullTemplatePath('task/list.html'));
+		$document->index = $document->fragment('task/list.html');
 		$document->index->assign(array(
 			'tasks' => $this->getDataMapper('task')->loadAll()
 		));
 		$document->notifications = 'Was it what you expected?';
 		$document->addCssFile($this->getServer()->getUrlHelper()->staticAssets('task/form.css'));
 		$document->addCssFile($this->getServer()->getUrlHelper()->staticAssets('task/view.css'));
-		$document->addCssFile('/static-assets/task/list.css');
+		$document->addCssFile($this->getServer()->getUrlHelper()->staticAssets('task/list.css'));
+		$document->addJsFile($this->getServer()->getUrlHelper()->staticAssets('task/tasks.js'));
 
 		return $document;
-	}
-
-	/**
-	 * Temporary public wrapper for newView until moving to PHP 5.4
-	 * @param type $template
-	 * @return \View
-	 */
-	public function tmp_newView($template) {
-		$view = new \Ophp\View($this->getFullTemplatePath($template));
-		return $view;
 	}
 
 	/**

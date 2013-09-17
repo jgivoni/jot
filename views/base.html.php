@@ -11,8 +11,11 @@
 		<script src="/static-assets/jquery-ui/js/jquery.history.js"></script>
 		<!-- This Gist -->
 		<!--script defer src="http://gist.github.com/raw/854622/ajaxify-html5.js"></script-->  
-		<?php foreach ($head as $line) : ?>
-			<? $p($line)->html(); ?>
+		<?php foreach ($cssFiles as $path) : ?>
+			<? $p($this->fragment('elements/link.html')->assign(['path' => $path]))->html(); ?>
+		<?php endforeach; ?>
+		<?php foreach ($jsFiles as $path) : ?>
+			<? $p($this->fragment('elements/script.html')->assign(['path' => $path]))->html(); ?>
 		<?php endforeach; ?>
 	</head>
 	<body>

@@ -12,20 +12,19 @@ class ViewTaskController extends BaseController {
 	/**
 	 * @var int Current task id
 	 */
-	protected $task_id;
+	protected $taskId;
 	
 	/**
 	 * Creates a new controller and sets the task id
 	 */
-	function __construct($task_id) {
+	function __construct($taskId) {
 		parent::__construct();
-		$this->task_id = $task_id;
+		$this->taskId = $taskId;
 	}
 	
 	public function __invoke() {
-		
 		try {
-			$this->taskModel = $this->getDataMapper('task')->loadByPrimaryKey($this->task_id);
+			$this->taskModel = $this->getDataMapper('task')->loadByPrimaryKey($this->taskId);
 			if ($this->getRequest()->getUrlPath() != $urlPath = $this->taskModel->getUrlPath()) {
 				return $this->newResponse()->redirect($urlPath);
 			}
@@ -36,7 +35,7 @@ class ViewTaskController extends BaseController {
 			$view = $this->newView('task/notfound.html');
 		}
 		
-		return $this->newResponse()->body($view);
+		return $this->newResponse()->body($view->top());
 	}
 	
 	protected function newDocumentView() {

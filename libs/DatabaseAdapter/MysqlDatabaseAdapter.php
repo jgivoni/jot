@@ -2,49 +2,47 @@
 
 namespace Ophp;
 
-class MysqlDatabaseAdapter implements SqlDatabaseAdapterInterface
-{
+class MysqlDatabaseAdapter implements SqlDatabaseAdapterInterface {
 
+	/**
+	 *
+	 * @var \PDO
+	 */
 	protected $connectionLink;
 	protected $host, $database, $user, $password;
 
-	public function __construct($host, $database, $user, $password)
-	{
+	public function __construct($host, $database, $user, $password) {
 		$this->host = $host;
 		$this->database = $database;
 		$this->user = $user;
 		$this->password = $password;
 	}
 
-	protected function isConnected()
-	{
+	protected function isConnected() {
 		return isset($this->conn);
 	}
 
-	protected function connect()
-	{
+	protected function connect() {
 		if ($this->isConnected()) {
 			return;
 		}
 
-		$connectionLink = @mysql_connect($this->host, $this->user, $this->password);
-		if ($connectionLink === false) {
-			throw new \Exception("Couldn't open database connection: " . mysql_error());
+		try {
+			$connectionLink = new \PDO('mysql:host=' . $this->host . ';dbname=' . $this->database, 
+					$this->user, $this->password, array(
+				\PDO::ATTR_PERSISTENT => true
+					)
+			);
+		} catch (\PDOException $e) {
+			throw new \Exception("Couldn't open database connection: " . $e->getMessage());
 		}
 
-		mysql_query('SET NAMES "utf8"', $connectionLink);
-		mysql_query('SET SQL_BIG_SELECTS = 1', $connectionLink);
-
-		if (mysql_select_db($this->database, $connectionLink) === false) {
-			throw new \Exception("Couldn't select database: " . mysql_error($connectionLink));
-		}
 		$this->connectionLink = $connectionLink;
 	}
 
-	public function close()
-	{
+	public function close() {
 		if ($this->isConnected()) {
-			mysql_close($this->connectionLink);
+			unset($this->connectionLink);
 		}
 	}
 
@@ -52,41 +50,37 @@ class MysqlDatabaseAdapter implements SqlDatabaseAdapterInterface
 	 * @param string $sql
 	 * @returns DbQueryResult
 	 */
-	public function query($sql)
-	{
+	public function query($sql) {
 		$this->connect();
 
-		$result = mysql_query((string) $sql, $this->connectionLink);
-
-		if ($result === false) {
-			throw new \Exception("Couldn't execute SQL statement: \n" . 
-				mysql_error($this->connectionLink) . 
-				"\nSQL: '" . $sql . "'");
+		/* @var $result \PDOStatement */
+		try {
+			$result = $this->connectionLink->query((string) $sql);
+		} catch (\PDOException $e) {
+			throw new \Exception("Couldn't execute SQL statement: \n" .
+				$e->getMessage . "\nSQL: '" . $sql . "'");
 		}
 
 		$dbQueryResult = new DbQueryResult(function() use ($result) {
-				return mysql_fetch_assoc($result);
-			});
-		if (is_resource($result)) {
-			$dbQueryResult->setNumRows(mysql_num_rows($result));
+					return $result->fetch();
+				});
+		if ($result->columnCount() > 0) {
+			$dbQueryResult->setNumRows($result->rowCount());
 		}
 
 		return $dbQueryResult;
 	}
 
-	public function escapeString($str)
-	{
+	public function escapeString($str) {
 		$this->connect();
-		return mysql_real_escape_string($str, $this->connectionLink);
+		return $this->connectionLink->quote($str, \PDO::PARAM_STR);
 	}
 
-	public function getInsertId()
-	{
-		return mysql_insert_id($this->connectionLink);
+	public function getInsertId() {
+		return $this->connectionLink->lastInsertId();
 	}
 
-	public function getMatchedRows()
-	{
+	public function getMatchedRows() {
 		$result = $this->query('SELECT FOUND_ROWS()');
 		list($matchedRows) = $result->rewind()->current();
 		return $matchedRows;
@@ -100,8 +94,7 @@ class MysqlDatabaseAdapter implements SqlDatabaseAdapterInterface
 	 * @param mixed array|string $fields
 	 * @return \SqlQueryBuilder_Select
 	 */
-	public function select($fields = array())
-	{
+	public function select($fields = array()) {
 		$sql = new SqlQueryBuilder_Select;
 		$sql->setDba($this);
 		$sql->select($fields);
