@@ -37,15 +37,18 @@ class EditTaskController extends BaseController {
 			'form' => $form,
 			'mode' => 'edit'
 				));
-		return $this->newResponse()->body($content);
+		return $this->newResponse($content);
 	}
 
+	/**
+	 * Returns a response that redirects to the view task page of the current task
+	 * 
+	 * Called after task is successfully saved
+	 * 
+	 * @return Response 
+	 */
 	public function redirectToView() {
 		return $this->newResponse()->redirect($this->taskModel->getUrlPath());
-	}
-
-	public function redirectToForm() {
-		return $this->newResponse()->redirect('/tasks/new/' . $this->getRequest()->getPostParam($fields->title['name']));
 	}
 
 	public function postRequest() {
@@ -57,16 +60,14 @@ class EditTaskController extends BaseController {
 			$this->taskModel
 					->setTitle($input['title'])
 					->setDescription($input['description'])
-					->setPosition($input['position'])
 					->setPriority($input['priority']);
-			$this->getTaskForm()->addExceptions($e->getExceptions());
+			$this->getTaskForm()->addException($e);
 			throw $e;
 		}
 		
 		$this->taskModel
 				->setTitle($input['title'])
 				->setDescription($input['description'])
-				->setPosition($input['position'])
 				->setPriority($input['priority']);
 		$this->getDataMapper('task')->saveTask($this->taskModel);
 	}

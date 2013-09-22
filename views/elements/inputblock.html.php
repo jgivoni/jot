@@ -12,7 +12,7 @@
 	<? if ($field->hasExceptions()) : ?>
 		<div class="field-errors">
 			<? foreach ($field->getExceptions() as $exception) : ?>
-				<p class="error"><? $p($exception->getMessage()) ?></p>
+				<p class="error"><? $p($exception->getMessage())->chData() ?></p>
 			<? endforeach; ?>
 		</div>
 	<? endif; ?>

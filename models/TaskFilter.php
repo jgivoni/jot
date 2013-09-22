@@ -9,7 +9,7 @@ class TaskFilter extends \Ophp\ParamsFilter
 		$this->addParamFilter('title', new \Ophp\AggregateFilter(array(
 			new \Ophp\IssetFilter(), // Must have a value (null is not a value)
 			new \Ophp\StringFilter(), // Must be a valid string
-			new \Ophp\StrMaxLengthFilter(20), // Max length 20 characters
+			new \Ophp\StrMaxLengthFilter(64), // Max length 64 characters
 //			new \Ophp\StrNotEmpty(), // Must not be an empty string
 		)));
 
@@ -17,13 +17,14 @@ class TaskFilter extends \Ophp\ParamsFilter
 			new \Ophp\IssetFilter(), new \Ophp\AggregateFilter(array(
 			new \Ophp\StringFilter('UTF-8'),
 			new \Ophp\StrTrimFilter(),
-			new \Ophp\StrMaxLengthFilter(10), // Max 50 characters
+			new \Ophp\StrMaxLengthFilter(1000), // Max 1000 characters
 		))));
 
-		$this->addParamFilter('position', new \Ophp\IntegerFilter());
-
-		$this->addParamFilter('priority', new \Ophp\EnumFilter(array('high', 'normal',
-			'low')));
+		$this->addParamFilter('priority', new \Ophp\EnumFilter(array(
+			TaskModel::PRIORITY_HIGH, 
+			TaskModel::PRIORITY_NORMAL,
+			TaskModel::PRIORITY_LOW,
+		)));
 
 		// How to toggle whether to validate or sanitize?
 	}

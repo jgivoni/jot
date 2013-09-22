@@ -46,9 +46,9 @@ class TaskMapper extends \Ophp\DataMapper
 	 * @param int $task_id
 	 * @return TaskModel
 	 */
-	public function loadByPrimaryKey($task_id)
+	public function loadByPrimaryKey($taskId)
 	{
-		return parent::loadByPrimaryKey($task_id);
+		return parent::loadByPrimaryKey($taskId);
 	}
 
 	public function saveTask(TaskModel $task)
@@ -74,7 +74,7 @@ class TaskMapper extends \Ophp\DataMapper
 			$value = $task[$modelField];
 			if (isset($value)) {
 				if (is_string($value)) {
-					$value_sql_formatted = '"' . $this->dba->escapeString($value) . '"';
+					$value_sql_formatted = $this->dba->escapeString($value);
 				} elseif (is_int($value) && preg_match('/timestamp$/', $name)) {
 					$value_sql_formatted = '"' . date('Y-m-d H:i:s', $value) . '"';
 				} else {
@@ -98,10 +98,25 @@ class TaskMapper extends \Ophp\DataMapper
 		}
 	}
 
-	public function deleteTask(TaskModel $taskModel)
+	/**
+	 * Deletes a task
+	 * 
+	 * @param \Replanner\TaskModel $taskModel
+	 */
+	public function delete(TaskModel $taskModel)
 	{
-		$sql = 'DELETE FROM `task` WHERE `task_id` = ' . $taskModel->getTaskId();
-		$this->dba->query($sql);
+		return $this->deleteByModel($taskModel);
 	}
 
+	public function loadAllOrdered() {
+		$query = $this->dba->select()
+				->orderBy('position');
+		return $this->loadAll($query);
+	}
+	
+	public function loadLast() {
+		$query = $this->dba->select()
+				->orderBy('position DESC');
+		return $this->loadOne($query);
+	}
 }

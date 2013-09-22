@@ -2,23 +2,13 @@
 
 namespace Replanner;
 
-class NewTaskController extends BaseController {
-	/**
-	 * @var TaskModel
-	 */
-	protected $taskModel;
-	/**
-	 * @var string Name of a new task
-	 */
-	protected $title;
-	
-	protected $fields;
+class NewTaskController extends EditTaskController {
 	
 	/**
 	 * Creates a new controller and sets the title for a new task if given
 	 */
 	public function __construct($title = '') {
-		parent::__construct();
+		parent::__construct(null);
 		$this->title = $title;
 	}
 	
@@ -31,16 +21,15 @@ class NewTaskController extends BaseController {
 	 * @return Response
 	 */
 	public function __invoke() {
-		$this->taskModel = $this->getDataMapper('task')->newModel()->setTitle($this->title);
-		$this->fields = new TaskForm($this->taskModel);
+		$this->taskModel = $this->getTaskMapper()->newModel()->setTitle($this->title);
 		$req = $this->getRequest();
 		if ($req->isGet()) {
 			return $this->showForm();
 		} elseif ($req->isPost()) {
 			try {
-				$this->postRequest($req);
-			} catch (InvalidArgumentException $e) {
-				return $this->redirectToForm();
+				$this->postRequest();
+			} catch (\Ophp\FilterException $e) {
+				return $this->showForm();
 			}
 			return $this->redirectToView();
 		}
@@ -52,42 +41,13 @@ class NewTaskController extends BaseController {
 	 * @return Response
 	 */
 	public function showForm() {
+		$form = $this->getTaskForm();
+		$form->setValues($this->taskModel);
 		$content = $this->newView('task/form.html')->assign(array(
-			'fields' => $this->fields,
-			'mode' => 'edit'
-		));
-		return $this->newResponse()->body($content);
+			'form' => $form,
+			'mode' => 'create'
+				));
+		return $this->newResponse($content);
 	}
 
-	/**
-	 * Returns a response that redirects to the view task page of the current task
-	 * 
-	 * Called after task is successfully saved
-	 * 
-	 * @return Response 
-	 */
-	public function redirectToView() {
-		return $this->newResponse()->redirect($this->taskModel->getUrlPath());
-	}
-
-	/**
-	 * Returns a response that redirects to the form from which to create a new item
-	 * 
-	 * @return Response
-	 */
-	public function redirectToForm() {
-		$fields = $this->fields;
-		return $this->newResponse()->redirect('/tasks/new/'.$this->getRequest()->getPostParam($fields->title['name']));
-	}
-
-	/**
-	 * Accepts posted form input and tries to save a new task
-	 * 
-	 * @return null
-	 */
-	public function postRequest(\Ophp\HttpRequest $req) {
-		$fields = $this->fields;
-		$this->taskModel->setTitle($req->getPostParam($fields->title['name']));
-		$this->newDataMapper('task')->saveTask($this->taskModel);
-	}
 }

@@ -83,7 +83,7 @@ class DbQueryResult implements \Iterator {
 	 * @return \DbQueryResult
 	 */
 	public function rewind() {
-		$this->pointer = $this->numRows > 0 ? 0 : null;
+		$this->pointer = !$this->isEmpty() ? 0 : null;
 		return $this;
 	}
 	
@@ -114,6 +114,7 @@ class DbQueryResult implements \Iterator {
 
 	public function setInsertId($id) {
 		$this->insertId = $id;
+		return $this;
 	}
 	
 	/**
@@ -124,26 +125,23 @@ class DbQueryResult implements \Iterator {
 		return $this->insertId;
 	}
 	
-	public function getAffectedRows() {
-		
-	}
-	
 	public function getMatchedRows() {
 		return $this->matchedRows;
 	}
 	
 	public function setMatchedRows($n) {
 		$this->matchedRows = $n;
+		return $this;
 	}
 	
 	public function setNumRows($n) {
 		$this->numRows = $n;
+		return $this;
 	}
 	
 	public function getNumRows() {
 		return $this->numRows;
 	}
-
 
 	public function isEmpty() {
 		return $this->numRows == 0;

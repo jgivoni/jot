@@ -13,7 +13,7 @@ class DeleteTaskController extends BaseController {
 	
 	public function __invoke() {
 		$this->taskModel = $this->getDataMapper('task')->loadByPrimaryKey($this->task_id);
-		$this->getDataMapper('task')->deleteTask($this->taskModel);
+		$this->getDataMapper('task')->delete($this->taskModel);
 		return $this->newResponse()->redirect('/tasks');
 	}
 }

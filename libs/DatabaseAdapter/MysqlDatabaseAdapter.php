@@ -37,6 +37,7 @@ class MysqlDatabaseAdapter implements SqlDatabaseAdapterInterface {
 			throw new \Exception("Couldn't open database connection: " . $e->getMessage());
 		}
 
+		$connectionLink->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 		$this->connectionLink = $connectionLink;
 	}
 
@@ -58,15 +59,13 @@ class MysqlDatabaseAdapter implements SqlDatabaseAdapterInterface {
 			$result = $this->connectionLink->query((string) $sql);
 		} catch (\PDOException $e) {
 			throw new \Exception("Couldn't execute SQL statement: \n" .
-				$e->getMessage . "\nSQL: '" . $sql . "'");
+				$e->getMessage() . "\nSQL: '" . $sql . "'");
 		}
-
+		
 		$dbQueryResult = new DbQueryResult(function() use ($result) {
 					return $result->fetch();
 				});
-		if ($result->columnCount() > 0) {
-			$dbQueryResult->setNumRows($result->rowCount());
-		}
+		$dbQueryResult->setNumRows($result->rowCount());
 
 		return $dbQueryResult;
 	}
@@ -80,19 +79,13 @@ class MysqlDatabaseAdapter implements SqlDatabaseAdapterInterface {
 		return $this->connectionLink->lastInsertId();
 	}
 
-	public function getMatchedRows() {
-		$result = $this->query('SELECT FOUND_ROWS()');
-		list($matchedRows) = $result->rewind()->current();
-		return $matchedRows;
-	}
-
 	/**
-	 * Returns a prepared query builder
+	 * Returns a prepared select query builder
 	 * 
 	 * Run run() on the query builder to execute the query
 	 * 
 	 * @param mixed array|string $fields
-	 * @return \SqlQueryBuilder_Select
+	 * @return SqlQueryBuilder_Select
 	 */
 	public function select($fields = array()) {
 		$sql = new SqlQueryBuilder_Select;
@@ -100,5 +93,20 @@ class MysqlDatabaseAdapter implements SqlDatabaseAdapterInterface {
 		$sql->select($fields);
 		return $sql;
 	}
+	
+	/**
+	 * Returns a prepared delete query builder
+	 * 
+	 * Run run() on the query builder to execute the query
+	 * 
+	 * @param mixed array|string $fields
+	 * @return \SqlQueryBuilder_Select
+	 */
+	public function delete() {
+		$sql = new SqlQueryBuilder_Delete();
+		$sql->setDba($this);
+		return $sql;
+	}
+	
 
 }

@@ -6,6 +6,10 @@ namespace Ophp;
  * Constructs sql queries bit by bit
  */
 abstract class SqlQueryBuilder {
+	/**
+	 *
+	 * @var MySqlDatabaseAdapter
+	 */
 	protected $dba;
 	 
 	protected $from = array();
@@ -14,6 +18,7 @@ abstract class SqlQueryBuilder {
 	protected $offset = '';
 	protected $limit = '';
 	protected $compiledQuery = '';
+	protected $queryResult;
 	
 	abstract protected function compileQuery();
 	
@@ -37,6 +42,10 @@ abstract class SqlQueryBuilder {
 		return $this->compiledQuery;
 	}
 
+	/**
+	 * 
+	 * @param type $part
+	 */
 	public function from($part)
 	{
 		$this->from[] = $part;
@@ -119,8 +128,16 @@ abstract class SqlQueryBuilder {
 		return "LIMIT $str";
 	}
 	
+	/**
+	 * 
+	 * @return DbQueryResult
+	 */
 	public function run() {
-		return $this->dba->query($this->getCompiledQuery());
+		return $this->queryResult = $this->dba->query($this->getCompiledQuery());
+	}
+	
+	public function getQueryResult() {
+		return $this->queryResult;
 	}
 }
 
@@ -130,6 +147,7 @@ class SqlQueryBuilder_Select extends SqlQueryBuilder {
 	protected $select = array();
 	protected $group = array();
 	protected $having = array();
+	protected $countMatchedRows = false;
 	
 	public function __construct($part = null) {
 		if (isset($part)) {
@@ -137,9 +155,9 @@ class SqlQueryBuilder_Select extends SqlQueryBuilder {
 		}
 	}
 
-	protected function compileQuery($extra = null)
+	protected function compileQuery()
 	{
-		$select = $this->getSelectPart($extra == self::EXTRA_COUNT_TOTAL);
+		$select = $this->getSelectPart();
 		$from 	= $this->getFromPart();
 		$where 	= $this->getWherePart();
 		$group 	= $this->getGroupPart();
@@ -152,6 +170,11 @@ class SqlQueryBuilder_Select extends SqlQueryBuilder {
 		return $query;
 	}
 	
+	/**
+	 * 
+	 * @param string $part
+	 * @return \Ophp\SqlQueryBuilder_Select
+	 */
 	public function select($part)
 	// Adds a field part to a select query
 	{
@@ -165,16 +188,14 @@ class SqlQueryBuilder_Select extends SqlQueryBuilder {
 		return $this;
 	}
 
-	protected function getSelectPart($count_total_rows = false)
+	protected function getSelectPart()
 	{
 		$str = implode(",\n ", $this->select);
 		if (empty($str)) {
 			$str = "*";
 		}
-		if ($count_total_rows) {
-			$count_total_rows = "SQL_CALC_FOUND_ROWS";
-		}
-		return "SELECT $count_total_rows $str";
+		$countMatchedRowsString = $this->countMatchedRows ? 'SQL_CALC_FOUND_ROWS' : '';
+		return "SELECT $countMatchedRowsString $str";
 	}
 	
 	public function groupBy($part)
@@ -204,6 +225,26 @@ class SqlQueryBuilder_Select extends SqlQueryBuilder {
 		$str = implode("\nAND ", $this->having);
 		return !empty($str) ? "HAVING $str" : '';
 	}
+	
+	public function countMatchedRows($count = true) {
+		$this->countMatchedRows = $count;
+		return $this;
+	}
+	
+	/**
+	 * 
+	 * @return DbQueryResult
+	 */
+	public function run() {
+		$result = parent::run();
+		if ($this->countMatchedRows) {
+			$result2 = $this->dba->query('SELECT FOUND_ROWS()');
+			$matchedRows = (int) $result2->first()[0];
+			$result->setMatchedRows($matchedRows);
+		}
+		return $result;
+	}
+
 }
 
 class SqlQueryBuilder_Update extends SqlQueryBuilder {

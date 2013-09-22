@@ -11,24 +11,12 @@
 		<?
 			$p($this->fragment('elements/inputblock.html')->assign(array('field' => $form->getField('title'))))->html() 
 		?>
-		<div class="title">
-			<label>Title</label>
-			<?
-				$p($this->fragment('elements/textfield.html')->assign(array('field' => $form->getField('title'))))->html() 
-//					->wrap('elements/inputblock.html'))->html();
-			?>
-		</div>
-		<div class="description">
-			<label>Description</label>
-			<? $p($this->fragment('elements/textarea.html')->assign(array('field' => $form->getField('description'))))->html() ?>
-		</div>
-		<div class="position">
-			<input type="text" name="<? $p($form->getField('position')->getName())->attrVal() ?>" 
-				   value="<? $p($form->getField('position')->getValue())->attrVal() ?>"/>
-		</div>
-		<div class="priority">
-			<? $p($this->fragment('elements/select.html')->assign(array('field' => $form->getField('priority'))))->html() ?>
-		</div>
+		<?
+			$p($this->fragment('elements/inputblock.html')->assign(array('field' => $form->getField('description'))))->html() 
+		?>
+		<?
+			$p($this->fragment('elements/inputblock.html')->assign(array('field' => $form->getField('priority'))))->html() 
+		?>
 		<button type="reset">Reset</button>
 		<button type="submit">Save</button>
 	</fieldset>

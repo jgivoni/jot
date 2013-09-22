@@ -21,11 +21,12 @@ var Tasks = {
 				return true;
 			}
 			event.preventDefault();
-			History.pushState(null, null, $(this).attr('href'));
+			History.pushState(null, $(this).text(), $(this).attr('href'));
 			return false;
 		});
 	}
 }
+
 $(window).bind('statechange', function() {
 	var url;
 	url = History.getState().url;

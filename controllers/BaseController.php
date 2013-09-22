@@ -52,6 +52,14 @@ abstract class BaseController extends \Ophp\Controller {
 	}
 
 	/**
+	 * 
+	 * @return TaskMapper
+	 */
+	protected function getTaskMapper() {
+		return $this->getDataMapper('task');
+	}
+	
+	/**
 	 * Returns the full path and filename to the template specified
 	 * @param string $template
 	 * @return string
@@ -81,7 +89,7 @@ abstract class BaseController extends \Ophp\Controller {
 		$document->url = $this->getServer()->getUrlHelper();
 		$document->index = $document->fragment('task/list.html');
 		$document->index->assign(array(
-			'tasks' => $this->getDataMapper('task')->loadAll()
+			'tasks' => $this->getTaskMapper()->loadAllOrdered()
 		));
 		$document->notifications = 'Was it what you expected?';
 		$document->addCssFile($this->getServer()->getUrlHelper()->staticAssets('task/form.css'));
@@ -101,4 +109,11 @@ abstract class BaseController extends \Ophp\Controller {
 				$this->dba = $this->getServer()->newMysqlDatabaseAdapter('replanner');
 	}
 
+	protected function newResponse(\Ophp\View $view = null) {
+		$response = parent::newResponse();
+		if (isset($view)) {
+			$response->body($view->top());
+		}
+		return $response;
+	}
 }
