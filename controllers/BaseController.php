@@ -30,10 +30,13 @@ abstract class BaseController extends \Ophp\Controller {
 	protected function newDataMapper($model) {
 		switch ($model) {
 			case 'task':
-				$dataMapper = new TaskMapper();
+				$dataMapper = new TaskMapper;
+				break;
+			case 'taskUser':
+				$dataMapper = new TaskUserMapper;
 				break;
 			default:
-				throw new Exception('Unknown model');
+				throw new \Exception('Unknown model');
 		}
 		$dataMapper->setDba($this->getDba());
 		return $dataMapper;
@@ -59,6 +62,15 @@ abstract class BaseController extends \Ophp\Controller {
 		return $this->getDataMapper('task');
 	}
 	
+	/**
+	 * 
+	 * @return TaskUserMapper
+	 */
+	protected function getTaskUserMapper() {
+		return $this->getDataMapper('taskUser');
+	}
+
+
 	/**
 	 * Returns the full path and filename to the template specified
 	 * @param string $template
@@ -88,9 +100,10 @@ abstract class BaseController extends \Ophp\Controller {
 		$document->title = "Replanner";
 		$document->url = $this->getServer()->getUrlHelper();
 		$document->index = $document->fragment('task/list.html');
-		$document->index->assign(array(
-			'tasks' => $this->getTaskMapper()->loadAllOrdered()
-		));
+		$document->index->assign([
+//			'tasks' => $this->getTaskMapper()->loadAllOrdered(),
+			'tasks' => $this->getTaskUserMapper()->loadAllOrdered(),
+		]);
 		$document->notifications = 'Was it what you expected?';
 		$document->addCssFile($this->getServer()->getUrlHelper()->staticAssets('task/form.css'));
 		$document->addCssFile($this->getServer()->getUrlHelper()->staticAssets('task/view.css'));

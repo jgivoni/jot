@@ -24,7 +24,7 @@ class ViewTaskController extends BaseController {
 	
 	public function __invoke() {
 		try {
-			$this->taskModel = $this->getTaskMapper()->loadByPrimaryKey($this->taskId);
+			$this->taskModel = $this->getTaskUserMapper()->loadByPrimaryKey($this->taskId);
 			if ($this->getRequest()->getUrlPath() != $urlPath = $this->taskModel->getUrlPath()) {
 				return $this->newResponse()->redirect($urlPath);
 			}

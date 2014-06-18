@@ -12,13 +12,33 @@ class TaskMapper extends \Ophp\DataMapper
 	 * @var array Fields in the database. Specify key if name of field in model differs
 	 */
 	protected $fields = array(
-		'taskId' => 'task_id',
-		'title',
-		'description',
-		'createdTimestamp' => 'created_timestamp',
-		'position',
-		'priority',
-		'parent'
+		'taskId' => array(
+			'column' => 'task_id',
+			'type' => 'int',
+		),
+		'title' => array(
+			'type' => 'string'
+		),
+		'description' => array(
+			'type' => 'string'
+		),
+		'createdTimestamp' => array(
+			'column' => 'created_timestamp',
+			'type' => 'timestamp',
+		),
+		'position' => array(
+			'type' => 'int',
+		),
+		'priority' => array(
+			'type' => 'string'
+		),
+		'parent' => array(
+			'type' => 'int',
+		),
+		'userId' => array(
+			'column' => 'user_id',
+			'type' => 'int',
+		)
 	);
 	protected $primaryKey = 'taskId';
 	protected $tableName = 'task';
@@ -43,7 +63,7 @@ class TaskMapper extends \Ophp\DataMapper
 	}
 
 	/**
-	 * @param int $task_id
+	 * @param int $taskId
 	 * @return TaskModel
 	 */
 	public function loadByPrimaryKey($taskId)
@@ -69,32 +89,31 @@ class TaskMapper extends \Ophp\DataMapper
 			$this->dba->query($sql);
 		}
 		$fields = array();
-		foreach ($this->fields as $key => $name) {
-			$modelField = is_numeric($key) ? $name : $key;
-			$value = $task[$modelField];
+		foreach ($this->fields as $modelField => $config) {
+			$value = $task->$modelField;
+			$name = isset($config['column']) ? $config['column'] : $modelField;
 			if (isset($value)) {
-				if (is_string($value)) {
-					$value_sql_formatted = $this->dba->escapeString($value);
-				} elseif (is_int($value) && preg_match('/timestamp$/', $name)) {
-					$value_sql_formatted = '"' . date('Y-m-d H:i:s', $value) . '"';
-				} else {
-					$value_sql_formatted = $value;
+				switch ($config['type']) {
+					case 'int': isset($v) || $v = (int) $value;
+					case 'string': isset($v) || $v = $this->dba->escapeString($value);
+					case 'timestamp': isset($v) || $v = '"' . date('Y-m-d H:i:s', $value) . '"';
+					default: isset($v) || $v = $value;
+						$value_sql_formatted = $v;
+						unset($v);
 				}
 				$fields[] = "`$name` = $value_sql_formatted";
 			}
 		}
-		$query = new \Ophp\SqlDatabaseQuery($this->dba);
-		$set = 'SET ' . implode(',', $fields);
+		$sql = $task->isNew() ? 
+			$this->dba->insert()->into('`task`') : 
+			$this->dba->update('`task`')->where($this->getPkColumn() . '=' . $task[$this->primaryKey]);
+		$result = $sql->set(implode(',', $fields))
+			->run();
+		
 		if ($task->isNew()) {
-			$sql = 'INTO `task` ' . $set;
-			$taskId = $query->insert($sql)->getInsertId();
+			$taskId = $this->dba->getInsertId();
 			$task->setTaskId($taskId);
 			$this->setSharedModel($task);
-		} else {
-			$sql = '`task` ' . $set .
-				' WHERE ' . $this->fields[$this->primaryKey] . '=' . $task[$this->primaryKey];
-
-			$query->update($sql);
 		}
 	}
 
@@ -119,4 +138,5 @@ class TaskMapper extends \Ophp\DataMapper
 				->orderBy('position DESC');
 		return $this->loadOne($query);
 	}
+	
 }

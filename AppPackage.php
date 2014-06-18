@@ -42,6 +42,12 @@ class AppPackage {
 				__NAMESPACE__.'\TaskMapper' => 'models/TaskMapper.php',
 				__NAMESPACE__.'\TaskForm' => 'models/forms/TaskForm.php',
 				__NAMESPACE__.'\TaskFilter' => 'models/TaskFilter.php',
+				__NAMESPACE__.'\UserModel' => 'models/UserModel.php',
+				__NAMESPACE__.'\UserMapper' => 'models/UserMapper.php',
+				__NAMESPACE__.'\TaskUserModel' => 'models/TaskUserModel.php',
+				__NAMESPACE__.'\TaskUserMapper' => 'models/TaskUserMapper.php',
+				__NAMESPACE__.'\ParentUser' => 'models/ParentUser.php',
+				__NAMESPACE__.'\JoinUser' => 'models/JoinUser.php',
 
 				__NAMESPACE__.'\HtmlView' => 'view/HtmlViewHelpers.php',
 				

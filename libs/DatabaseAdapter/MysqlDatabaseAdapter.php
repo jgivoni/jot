@@ -95,12 +95,12 @@ class MysqlDatabaseAdapter implements SqlDatabaseAdapterInterface {
 	}
 	
 	/**
-	 * Returns a prepared delete query builder
+	 * Returns a prepared DELETE query builder
 	 * 
 	 * Run run() on the query builder to execute the query
 	 * 
 	 * @param mixed array|string $fields
-	 * @return \SqlQueryBuilder_Select
+	 * @return \SqlQueryBuilder_Delete
 	 */
 	public function delete() {
 		$sql = new SqlQueryBuilder_Delete();
@@ -108,5 +108,32 @@ class MysqlDatabaseAdapter implements SqlDatabaseAdapterInterface {
 		return $sql;
 	}
 	
-
+	/**
+	 * Returns a prepared INSERT query builder
+	 * 
+	 * Run run() on the query builder to execute the query
+	 * 
+	 * @param mixed array|string $fields
+	 * @return \SqlQueryBuilder_Insert
+	 */
+	public function insert() {
+		$sql = new SqlQueryBuilder_Insert();
+		$sql->setDba($this);
+		return $sql;
+	}
+	
+	/**
+	 * Returns a prepared UPDATE query builder
+	 * 
+	 * Run run() on the query builder to execute the query
+	 * 
+	 * @param mixed array|string $fields
+	 * @return \SqlQueryBuilder_Update
+	 */
+	public function update($part = null) {
+		$sql = new SqlQueryBuilder_update();
+		$sql->setDba($this);
+		$sql->update($part);
+		return $sql;
+	}
 }

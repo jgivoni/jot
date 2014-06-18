@@ -20,6 +20,7 @@ class DbaPackage {
 				__NAMESPACE__.'\SqlQueryBuilder' => 'SqlQueryBuilder.php',
 				__NAMESPACE__.'\SqlQueryBuilder_Select' => 'SqlQueryBuilder.php',
 				__NAMESPACE__.'\SqlQueryBuilder_Update' => 'SqlQueryBuilder.php',
+				__NAMESPACE__.'\SqlQueryBuilder_Insert' => 'SqlQueryBuilder.php',
 				__NAMESPACE__.'\SqlQueryBuilder_Delete' => 'SqlQueryBuilder.php',
 			);
 			if (isset($paths[$class])) {

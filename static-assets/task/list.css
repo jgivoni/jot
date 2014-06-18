@@ -28,3 +28,8 @@ ul.tasks li.ui-sortable-helper {
 ul.tasks li.ui-sortable-placeholder {
 	background: #f8f8f8;
 }
+
+ul.tasks li .username {
+	font-size: 0.8em;
+	color: grey;
+}

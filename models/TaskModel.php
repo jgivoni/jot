@@ -88,6 +88,15 @@ class TaskModel extends \Ophp\Model {
 	public function getParent() {
 		return $this->parent;
 	}
+	
+	public function setUserId($userId) {
+		$this->userId = (int) $userId;
+		return $this;
+	}
+	
+	public function getUserId() {
+		return $this->userId;
+	}
 
 	public function getUrlPath() {
 		$title = preg_replace('#[\'!\?]#', '', $this->title);
