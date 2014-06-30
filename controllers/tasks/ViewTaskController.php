@@ -31,7 +31,7 @@ class ViewTaskController extends BaseController {
 			$view = $this->newView('task/view.html')->assign(array(
 				'task' => $this->taskModel
 			));
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			$view = $this->newView('task/notfound.html');
 		}
 		

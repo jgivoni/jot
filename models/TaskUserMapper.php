@@ -41,11 +41,8 @@ class TaskUserMapper extends TaskMapper
 	 * 
 	 * @return array Of TaskUserModel
 	 */
-	public function onLoad(\Ophp\SqlQueryBuilder_Select $query = null) {
-		if (!isset($query)) {
-			$query = $this->dba->select();
-		}
-		$query = parent::onLoad($query);
+	public function newQuery() {
+		$query = parent::newQuery();
 		return $this->addJoinUser($query);
 	}
 	

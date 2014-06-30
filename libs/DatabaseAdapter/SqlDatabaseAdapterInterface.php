@@ -12,4 +12,9 @@ interface SqlDatabaseAdapterInterface {
 	 * @return int
 	 */
 	public function getInsertId();
+	
+	/**
+	 * @return string
+	 */
+	public function escapeString($str);
 }

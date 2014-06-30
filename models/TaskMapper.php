@@ -2,6 +2,8 @@
 
 namespace Replanner;
 
+use Ophp\SqlCriteriaBuilder as CB;
+
 /**
  * Model Mapper for tasks
  */
@@ -76,17 +78,23 @@ class TaskMapper extends \Ophp\DataMapper
 		if (!isset($task['position'])) {
 			$task['position'] = 1;
 		}
-		$sql = "position FROM task WHERE position = " . $task['position'];
+		// Find out if any other tasks are occupying the position of this task
+		$query = $this->dba->select(CB::field('position'))
+				->from("`task`")
+				->where(CB::is('position', $task['position']));
 		if (!$task->isNew()) {
-			$sql .= ' AND task_id != ' . $task['taskId'];
+			$query->where(CB::isnot('task_id', $task['taskId']));
 		}
-		$query = new \Ophp\SqlDatabaseQuery($this->dba);
-		if ($query->select($sql)->rewind()->current()) {
-			$sql = "UPDATE `task` SET `position` = `position` + 1 WHERE `position` >= " . $task['position'];
+		if ($query->run()->getNumRows() > 0) {
+			// Move all tasks from this position and beyond to make room for this task
+			$criteria = CB::notless('position', $task['position']);
 			if (!$task->isNew()) {
-				$sql .= " AND task_id != " . $task['taskId'];
+				$criteria = $criteria->and_(CB::isnot('task_id', $task['taskId']));
 			}
-			$this->dba->query($sql);
+			$this->dba->update("`task`")
+					->set("`position` = `position` + 1")
+					->where($criteria)
+					->run();
 		}
 		$fields = array();
 		foreach ($this->fields as $modelField => $config) {
@@ -128,14 +136,16 @@ class TaskMapper extends \Ophp\DataMapper
 	}
 
 	public function loadAllOrdered() {
-		$query = $this->dba->select()
-				->orderBy('position');
+		$query = $this->newQuery()
+				->orderBy(CB::field('position'))
+				->countMatchedRows();
+
 		return $this->loadAll($query);
 	}
 	
 	public function loadLast() {
-		$query = $this->dba->select()
-				->orderBy('position DESC');
+		$query = $this->newQuery()
+				->orderBy(CB::expr('%1 DESC', CB::field('position')));
 		return $this->loadOne($query);
 	}
 	

@@ -53,7 +53,8 @@ class AppPackage {
 				
 				/* engines */
 				'Ophp\DbaPackage' => 'libs/DatabaseAdapter/DbaPackage.php',
-
+				'Ophp\FirePhpPackage' => 'libs/FirePHPCore/FirePhpPackage.php',
+				
 				/* Config */
 				__NAMESPACE__.'\DevelopmentConfig' => 'config/DevelopmentConfig.php',
 				'EnvironmentConfig' => apache_getenv('ophp.root_config'),

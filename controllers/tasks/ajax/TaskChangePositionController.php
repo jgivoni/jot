@@ -22,7 +22,7 @@ class TaskChangePositionController extends BaseController {
 				return $this->newResponse()->body(array('success' => false));
 			}
 			$taskList = $this->newView('task/list.html')->assign(array(
-				'tasks' => $this->getDataMapper('task')->loadAllOrdered()
+				'tasks' => $this->getDataMapper('taskUser')->loadAllOrdered()
 			));
 			return $this->newResponse()->body(array(
 				'taskList' => (string)$taskList

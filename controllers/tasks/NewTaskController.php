@@ -22,6 +22,7 @@ class NewTaskController extends EditTaskController {
 	 */
 	public function __invoke() {
 		$this->taskModel = $this->getTaskMapper()->newModel()->setTitle($this->title);
+		$this->taskModel->setUserId(1);
 		$req = $this->getRequest();
 		if ($req->isGet()) {
 			return $this->showForm();

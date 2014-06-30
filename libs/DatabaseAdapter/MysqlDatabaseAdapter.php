@@ -10,6 +10,11 @@ class MysqlDatabaseAdapter implements SqlDatabaseAdapterInterface {
 	 */
 	protected $connectionLink;
 	protected $host, $database, $user, $password;
+	/**
+	 *
+	 * @var SqlCriteriaAssembler
+	 */
+	protected $criteriaAssembler;
 
 	public function __construct($host, $database, $user, $password) {
 		$this->host = $host;
@@ -131,9 +136,18 @@ class MysqlDatabaseAdapter implements SqlDatabaseAdapterInterface {
 	 * @return \SqlQueryBuilder_Update
 	 */
 	public function update($part = null) {
-		$sql = new SqlQueryBuilder_update();
+		$sql = new SqlQueryBuilder_Update;
 		$sql->setDba($this);
 		$sql->update($part);
 		return $sql;
+	}
+	
+	public function getCriteriaAssembler() {
+		if (!isset($this->criteriaAssembler)) {
+			$this->criteriaAssembler = (new SqlCriteriaAssembler)
+				->setDba($this);
+			
+		}
+		return $this->criteriaAssembler;
 	}
 }

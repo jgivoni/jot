@@ -5,6 +5,10 @@ namespace Replanner;
 class EditTaskController extends BaseController {
 
 	protected $task_id;
+	/**
+	 *
+	 * @var TaskModel
+	 */
 	protected $taskModel;
 	protected $title;
 	protected $taskFilter;
