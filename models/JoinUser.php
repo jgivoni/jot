@@ -8,7 +8,8 @@ namespace Replanner;
 trait JoinUser {
 
 	/**
-	 * 
+	 * Returns the specified query, joined with the user table,
+	 * selecting username
 	 * @return \Ophp\SqlQueryBuilder_Select
 	 */
 	public function addJoinUser(\Ophp\SqlQueryBuilder_Select $query) {
@@ -18,7 +19,7 @@ trait JoinUser {
 	}
 
 	/**
-	 * 
+	 * Returns the specified model, linked to a model for the parent user
 	 * @param array $row
 	 * @return \Ophp\Model
 	 */

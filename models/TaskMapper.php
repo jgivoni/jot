@@ -9,13 +9,21 @@ use Ophp\SqlCriteriaBuilder as CB;
  */
 class TaskMapper extends \Ophp\DataMapper
 {
-
+	const FIELD_TASKID = 'task_id';
+	const FIELD_POSITION = 'position';
+	
 	/**
-	 * @var array Fields in the database. Specify key if name of field in model differs
+	 * Name of the corresponding db table
+	 * @var string
+	 */
+	protected $tableName = 'task';
+	
+	/**
+	 * @var array Properties of the model. Specify 'column' if column name in db differs
 	 */
 	protected $fields = array(
 		'taskId' => array(
-			'column' => 'task_id',
+			'column' => self::FIELD_TASKID,
 			'type' => 'int',
 		),
 		'title' => array(
@@ -28,7 +36,7 @@ class TaskMapper extends \Ophp\DataMapper
 			'column' => 'created_timestamp',
 			'type' => 'timestamp',
 		),
-		'position' => array(
+		self::FIELD_POSITION => array(
 			'type' => 'int',
 		),
 		'priority' => array(
@@ -42,8 +50,12 @@ class TaskMapper extends \Ophp\DataMapper
 			'type' => 'int',
 		)
 	);
+	
+	/**
+	 * Name of the property which acts a primary key
+	 * @var string
+	 */
 	protected $primaryKey = 'taskId';
-	protected $tableName = 'task';
 
 	/**
 	 * 
@@ -73,50 +85,49 @@ class TaskMapper extends \Ophp\DataMapper
 		return parent::loadByPrimaryKey($taskId);
 	}
 
+	/**
+	 * Stores the task model data in the db
+	 * @param \Replanner\TaskModel $task
+	 */
 	public function saveTask(TaskModel $task)
 	{
-		if (!isset($task['position'])) {
-			$task['position'] = 1;
+		// If no position is given, make it the first (new tasks go at the top)
+		if ($task->getPosition() === null) {
+			$task->setPosition(1);
 		}
-		// Find out if any other tasks are occupying the position of this task
-		$query = $this->dba->select(CB::field('position'))
-				->from("`task`")
-				->where(CB::is('position', $task['position']));
+		
+		/** Find out if any other tasks are occupying the position of this task
+		 * and move them and all after them down by one
+		 */
+		$query = $this->newSelectQuery()
+				->where(CB::is(self::FIELD_POSITION, $task->getPosition()));
 		if (!$task->isNew()) {
-			$query->where(CB::isnot('task_id', $task['taskId']));
+			$query->where(CB::isnot(self::FIELD_TASKID, $task->getTaskId()));
 		}
-		if ($query->run()->getNumRows() > 0) {
+		if ($this->loadOne($query)->getNumRows() > 0) {
 			// Move all tasks from this position and beyond to make room for this task
-			$criteria = CB::notless('position', $task['position']);
+			$criteria = CB::notless(self::FIELD_POSITION, $task->getPosition());
 			if (!$task->isNew()) {
-				$criteria = $criteria->and_(CB::isnot('task_id', $task['taskId']));
+				$criteria = $criteria->and_(CB::isnot(self::FIELD_TASKID, $task->getTaskId()));
 			}
-			$this->dba->update("`task`")
-					->set("`position` = `position` + 1")
-					->where($criteria)
-					->run();
+			$update = $this->newUpdateQuery()
+					->set(CB::expr('%1 = %1 + 1', CB::field(self::FIELD_POSITION)))
+					->where($criteria);
+			$this->dba->query($update);
 		}
-		$fields = array();
+		
+		$sql = $task->isNew() ? 
+			$this->newInsertQuery() : 
+			$this->newUpdateQuery()->where(CB::is(self::FIELD_TASKID, $task->getTaskId()));
 		foreach ($this->fields as $modelField => $config) {
 			$value = $task->$modelField;
 			$name = isset($config['column']) ? $config['column'] : $modelField;
 			if (isset($value)) {
-				switch ($config['type']) {
-					case 'int': isset($v) || $v = (int) $value;
-					case 'string': isset($v) || $v = $this->dba->escapeString($value);
-					case 'timestamp': isset($v) || $v = '"' . date('Y-m-d H:i:s', $value) . '"';
-					default: isset($v) || $v = $value;
-						$value_sql_formatted = $v;
-						unset($v);
-				}
-				$fields[] = "`$name` = $value_sql_formatted";
+				$sql->set(CB::expr('%1 = %2', [CB::field($name), $value]));
 			}
 		}
-		$sql = $task->isNew() ? 
-			$this->dba->insert()->into('`task`') : 
-			$this->dba->update('`task`')->where($this->getPkColumn() . '=' . $task[$this->primaryKey]);
-		$result = $sql->set(implode(',', $fields))
-			->run();
+		
+		$this->dba->query($sql);
 		
 		if ($task->isNew()) {
 			$taskId = $this->dba->getInsertId();
@@ -136,7 +147,7 @@ class TaskMapper extends \Ophp\DataMapper
 	}
 
 	public function loadAllOrdered() {
-		$query = $this->newQuery()
+		$query = $this->newSelectQuery()
 				->orderBy(CB::field('position'))
 				->countMatchedRows();
 
@@ -144,7 +155,7 @@ class TaskMapper extends \Ophp\DataMapper
 	}
 	
 	public function loadLast() {
-		$query = $this->newQuery()
+		$query = $this->newSelectQuery()
 				->orderBy(CB::expr('%1 DESC', CB::field('position')));
 		return $this->loadOne($query);
 	}

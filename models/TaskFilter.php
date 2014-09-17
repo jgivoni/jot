@@ -25,6 +25,8 @@ class TaskFilter extends \Ophp\ParamsFilter
 			TaskModel::PRIORITY_NORMAL,
 			TaskModel::PRIORITY_LOW,
 		)));
+		
+		$this->addParamFilter('parent', new \Ophp\IntegerFilter());
 
 		// How to toggle whether to validate or sanitize?
 	}

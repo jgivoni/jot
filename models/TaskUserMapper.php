@@ -41,8 +41,8 @@ class TaskUserMapper extends TaskMapper
 	 * 
 	 * @return array Of TaskUserModel
 	 */
-	public function newQuery() {
-		$query = parent::newQuery();
+	public function newSelectQuery() {
+		$query = parent::newSelectQuery();
 		return $this->addJoinUser($query);
 	}
 	

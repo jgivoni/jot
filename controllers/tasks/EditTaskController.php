@@ -12,6 +12,10 @@ class EditTaskController extends BaseController {
 	protected $taskModel;
 	protected $title;
 	protected $taskFilter;
+	/**
+	 *
+	 * @var TaskForm
+	 */
 	protected $taskForm;
 
 	function __construct($task_id) {
@@ -64,7 +68,8 @@ class EditTaskController extends BaseController {
 			$this->taskModel
 					->setTitle($input['title'])
 					->setDescription($input['description'])
-					->setPriority($input['priority']);
+					->setPriority($input['priority'])
+					->setParent($input['parent']);
 			$this->getTaskForm()->addException($e);
 			throw $e;
 		}
@@ -72,8 +77,9 @@ class EditTaskController extends BaseController {
 		$this->taskModel
 				->setTitle($input['title'])
 				->setDescription($input['description'])
-				->setPriority($input['priority']);
-		$this->getDataMapper('task')->saveTask($this->taskModel);
+				->setPriority($input['priority'])
+				->setParent($input['parent']);
+		$this->getTaskMapper()->saveTask($this->taskModel);
 	}
 
 	/**
@@ -89,7 +95,18 @@ class EditTaskController extends BaseController {
 	 * @return TaskForm
 	 */
 	protected function getTaskForm() {
-		return isset($this->taskForm) ? $this->taskForm : $this->taskForm = new TaskForm();
+		if (!isset($this->taskForm)) {
+			$this->taskForm = new TaskForm();
+			$parentTasks = $this->getTaskMapper()->loadAllOrdered();
+			$parentOptions = [];
+			foreach ($parentTasks as $task) {
+				/* @var $task TaskModel */
+				$parentOptions[] = new \Ophp\FormFieldOption($task->taskId, $task->getTitle());
+			}
+			$this->taskForm->getField('parent')
+					->setOptions($parentOptions);
+		}
+		return $this->taskForm;
 	}
 
 }

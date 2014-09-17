@@ -142,12 +142,4 @@ class MysqlDatabaseAdapter implements SqlDatabaseAdapterInterface {
 		return $sql;
 	}
 	
-	public function getCriteriaAssembler() {
-		if (!isset($this->criteriaAssembler)) {
-			$this->criteriaAssembler = (new SqlCriteriaAssembler)
-				->setDba($this);
-			
-		}
-		return $this->criteriaAssembler;
-	}
 }

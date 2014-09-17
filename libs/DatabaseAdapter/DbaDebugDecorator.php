@@ -37,7 +37,7 @@ class DbaDebugDecorator implements SqlDatabaseAdapterInterface {
 	 * @returns DbQueryResult
 	 */
 	public function query($sql) {
-		\FB::log($sql);
+		\FB::log((string)$sql);
 		return $this->dba->query($sql);
 	}
 

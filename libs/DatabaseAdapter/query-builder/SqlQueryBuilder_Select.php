@@ -89,4 +89,13 @@ class SqlQueryBuilder_Select extends SqlQueryBuilder {
 		return $this;
 	}
 
+	/**
+	 * 
+	 * @param string $part1
+	 * @param string $part2
+	 * @return SqlQueryBuilder_Select
+	 */
+	public function limit($part, $part2 = null) {
+		return parent::limit($part, $part2);
+	}
 }

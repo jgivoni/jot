@@ -36,6 +36,9 @@ class SqlQueryBuilder_Update extends SqlQueryBuilder {
 	public function set($part)
 	{
 		if (!empty($part)) {
+			if ($part instanceof SqlExpression) {
+				$part = $part->acceptAssembler($this->queryAssembler);
+			}
 			$this->set[] = $part;
 		}
 		return $this;

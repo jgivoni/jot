@@ -3,7 +3,7 @@ namespace Ophp;
 
 use Ophp\SqlCriteriaBuilder as CB;
 
-abstract class SqlCriteriaNode {
+abstract class SqlCriteriaNode extends SqlExpression {
 	public function or_($b) {
 		return new SqlCriteriaNodeGroup($this, $b, CB::OR_);
 	}
@@ -12,13 +12,6 @@ abstract class SqlCriteriaNode {
 		return new SqlCriteriaNodeGroup($this, $b, CB::AND_);
 	}
 	
-/*	public function __toString() {
-		return $this->acceptAssembler($this->dba->getCriteriaAssembler());
-	}*/
-	
-	public function acceptAssembler($assemblerVisitor) {
-		return $assemblerVisitor->assemble($this);
-	}
 }
 
 /*

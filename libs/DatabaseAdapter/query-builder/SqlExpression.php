@@ -6,6 +6,8 @@ use Ophp\SqlCriteriaBuilder as CB;
 
 class SqlExpression {
 
+	const JOIN = 1;
+	
 	/**
 	 * A string with placeholders
 	 * @var string
@@ -42,6 +44,14 @@ class SqlExpression {
 					return $r->acceptAssembler($assemblerVisitor);
 				}, $this->replacements);
 		return $assemblerVisitor->assembleExpression($this->string, $replacements, $this->placeholder);
+	}
+	
+	/**
+	 * Returns an expression consisting of this one followed by another one
+	 * @param \Ophp\SqlExpression $expr
+	 */
+	public function chain(SqlExpression $expr) {
+		return new SqlExpressionChain($this, $expr);
 	}
 
 }

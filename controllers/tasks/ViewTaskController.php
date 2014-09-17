@@ -2,6 +2,8 @@
 
 namespace Replanner;
 
+use Ophp\SqlCriteriaBuilder as CB;
+
 class ViewTaskController extends BaseController {
 	
 	/**
@@ -29,9 +31,10 @@ class ViewTaskController extends BaseController {
 				return $this->newResponse()->redirect($urlPath);
 			}
 			$view = $this->newView('task/view.html')->assign(array(
-				'task' => $this->taskModel
+				'task' => $this->taskModel,
+				'subtasks' => $this->getSubtasks(),
 			));
-		} catch (\Exception $e) {
+		} catch (\OutOfBoundsException $e) {
 			$view = $this->newView('task/notfound.html');
 		}
 		
@@ -44,4 +47,9 @@ class ViewTaskController extends BaseController {
 		return $document;
 	}
 	
+	protected function getSubtasks() {
+		$query = $this->getTaskMapper()->newSelectQuery()
+				->where(CB::field('parent')->is($this->taskModel->getTaskId()));
+		return $this->getTaskMapper()->loadAll($query);
+	}
 }

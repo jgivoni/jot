@@ -62,7 +62,7 @@ class SqlCriteriaAssembler {
 
 	public function assembleValue($value) {
 		if (is_string($value)) {
-			$value = "'" . $this->escapeStringFunction->__invoke($value) . "'";
+			$value = $this->escapeStringFunction->__invoke($value);
 		} elseif (!is_scalar($value)) {
 			$value = '';
 		}
@@ -80,6 +80,16 @@ class SqlCriteriaAssembler {
 					}
 					return $replacements[(int) $matches[2] - 1];
 				}, $string);
+	}
+	
+	/**
+	 * 
+	 * @param string $expr1
+	 * @param string $expr2
+	 * @return string
+	 */
+	public function assembleExpressionChain($expr1, $expr2) {
+		return $expr1 . ' ' . $expr2;
 	}
 
 }

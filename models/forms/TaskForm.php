@@ -22,13 +22,18 @@ class TaskForm extends \Ophp\Form {
 							new \Ophp\FormFieldOption(TaskModel::PRIORITY_HIGH, 'High'),
 							new \Ophp\FormFieldOption(TaskModel::PRIORITY_NORMAL, 'Normal'),
 							new \Ophp\FormFieldOption(TaskModel::PRIORITY_LOW, 'Low'),
-						)));
+						)))
+			->addField($this->newField('parent')
+				->setType(\Ophp\FormField::TYPE_SELECT)
+					
+					);
 	}
 
 	public function setValues(TaskModel $task) {
 		$this->getField('title')->setValue($task->getTitle());
 		$this->getField('description')->setValue($task->getDescription());
 		$this->getField('priority')->setValue($task->getPriority());
+		$this->getField('parent')->setValue($task->getParent());
 	}
 	
 }

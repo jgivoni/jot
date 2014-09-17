@@ -17,6 +17,9 @@
 		<?
 			$p($this->fragment('elements/inputblock.html')->assign(array('field' => $form->getField('priority'))))->html() 
 		?>
+		<?
+			$p($this->fragment('elements/inputblock.html')->assign(array('field' => $form->getField('parent'))))->html() 
+		?>
 		<button type="reset">Reset</button>
 		<button type="submit">Save</button>
 	</fieldset>

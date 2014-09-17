@@ -12,3 +12,8 @@ div.task-element {
 	font-size: 1.5em;
 	border: 2px groove #ffffff;
 }
+
+div.task-element .user {
+	font-size: 0.65em;
+	color: grey;
+}
