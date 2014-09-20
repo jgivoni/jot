@@ -2,7 +2,7 @@
 
 namespace Replanner;
 
-class TaskListController extends BaseController {
+class ListTaskController extends TaskController {
 	
 	public function __invoke() {
 		$content = $this->newView('task/index.html');

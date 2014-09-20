@@ -17,7 +17,7 @@ var Tasks = {
 			}
 		});
 		$("ul.tasks li a").click(function(event) {
-			if (event.which == 2 || event.metaKey) {
+			if (event.which === 2 || event.metaKey) {
 				return true;
 			}
 			event.preventDefault();
@@ -25,7 +25,7 @@ var Tasks = {
 			return false;
 		});
 	}
-}
+};
 
 $(window).bind('statechange', function() {
 	var url;

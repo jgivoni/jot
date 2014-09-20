@@ -11,6 +11,7 @@ class TaskMapper extends \Ophp\DataMapper
 {
 	const FIELD_TASKID = 'task_id';
 	const FIELD_POSITION = 'position';
+	const FIELD_PARENT = 'parent';
 	
 	/**
 	 * Name of the corresponding db table
@@ -42,7 +43,7 @@ class TaskMapper extends \Ophp\DataMapper
 		'priority' => array(
 			'type' => 'string'
 		),
-		'parent' => array(
+		self::FIELD_PARENT => array(
 			'type' => 'int',
 		),
 		'userId' => array(
@@ -99,18 +100,18 @@ class TaskMapper extends \Ophp\DataMapper
 		/** Find out if any other tasks are occupying the position of this task
 		 * and move them and all after them down by one
 		 */
-		$query = $this->newSelectQuery()
+		$query = $this->newSelectQuery()->comment('Push down?')
 				->where(CB::is(self::FIELD_POSITION, $task->getPosition()));
 		if (!$task->isNew()) {
 			$query->where(CB::isnot(self::FIELD_TASKID, $task->getTaskId()));
 		}
-		if ($this->loadOne($query)->getNumRows() > 0) {
+		if ($this->loadOne($query)) {
 			// Move all tasks from this position and beyond to make room for this task
 			$criteria = CB::notless(self::FIELD_POSITION, $task->getPosition());
 			if (!$task->isNew()) {
 				$criteria = $criteria->and_(CB::isnot(self::FIELD_TASKID, $task->getTaskId()));
 			}
-			$update = $this->newUpdateQuery()
+			$update = $this->newUpdateQuery()->comment('Push down!')
 					->set(CB::expr('%1 = %1 + 1', CB::field(self::FIELD_POSITION)))
 					->where($criteria);
 			$this->dba->query($update);
@@ -119,6 +120,7 @@ class TaskMapper extends \Ophp\DataMapper
 		$sql = $task->isNew() ? 
 			$this->newInsertQuery() : 
 			$this->newUpdateQuery()->where(CB::is(self::FIELD_TASKID, $task->getTaskId()));
+		$sql->comment(__METHOD__);
 		foreach ($this->fields as $modelField => $config) {
 			$value = $task->$modelField;
 			$name = isset($config['column']) ? $config['column'] : $modelField;
@@ -147,17 +149,27 @@ class TaskMapper extends \Ophp\DataMapper
 	}
 
 	public function loadAllOrdered() {
-		$query = $this->newSelectQuery()
-				->orderBy(CB::field('position'))
-				->countMatchedRows();
+		$query = $this->newSelectQuery()->comment(__METHOD__)
+				->orderBy(CB::field(self::FIELD_POSITION));
 
 		return $this->loadAll($query);
 	}
 	
 	public function loadLast() {
-		$query = $this->newSelectQuery()
-				->orderBy(CB::expr('%1 DESC', CB::field('position')));
+		$query = $this->newSelectQuery()->comment(__METHOD__)
+				->orderBy(CB::expr('%1 DESC', CB::field(self::FIELD_POSITION)));
 		return $this->loadOne($query);
 	}
 	
+	public function loadParent(TaskModel $task) {
+		$query = $this->newSelectQuery()->comment(__METHOD__)
+				->where(CB::field(self::FIELD_TASKID)->is($task->getParent()));
+		return $this->loadOne($query);
+	}
+	
+	public function loadSubtasks(TaskModel $task) {
+		$query = $this->newSelectQuery()->comment(__METHOD__)
+				->where(CB::field(self::FIELD_PARENT)->is($task->getTaskId()));
+		return $this->loadAll($query);
+	}
 }

@@ -6,7 +6,7 @@ namespace Replanner;
  * 
  * An abstract base class for all controllers within this app
  */
-abstract class BaseController extends \Ophp\Controller {
+abstract class TaskController extends \Ophp\Controller {
 
 	/**
 	 * @var View
@@ -36,7 +36,7 @@ abstract class BaseController extends \Ophp\Controller {
 				$dataMapper = new TaskUserMapper;
 				break;
 			default:
-				throw new \Exception('Unknown model');
+				throw new \Exception('Unknown model class');
 		}
 		$dataMapper->setDba($this->getDba());
 		return $dataMapper;
@@ -70,7 +70,6 @@ abstract class BaseController extends \Ophp\Controller {
 		return $this->getDataMapper('taskUser');
 	}
 
-
 	/**
 	 * Returns the full path and filename to the template specified
 	 * @param string $template
@@ -95,6 +94,10 @@ abstract class BaseController extends \Ophp\Controller {
 		return $view;
 	}
 
+	/**
+	 * Returns a new document
+	 * @return \Ophp\HtmlDocumentView
+	 */
 	protected function newDocumentView() {
 		$document = new \Ophp\HtmlDocumentView($this->baseTemplate, $this->getTemplateBase());
 		$document->title = "Replanner";
@@ -109,7 +112,8 @@ abstract class BaseController extends \Ophp\Controller {
 		$document->addCssFile($this->getServer()->getUrlHelper()->staticAssets('task/view.css'));
 		$document->addCssFile($this->getServer()->getUrlHelper()->staticAssets('task/list.css'));
 		$document->addJsFile($this->getServer()->getUrlHelper()->staticAssets('task/tasks.js'));
-
+		$document->addJsFile($this->getServer()->getUrlHelper()->staticAssets('chosen_v1.1.0/chosen.jquery.min.js'));
+		$document->addCssFile($this->getServer()->getUrlHelper()->staticAssets('chosen_v1.1.0/chosen.min.css'));
 		return $document;
 	}
 
@@ -119,9 +123,14 @@ abstract class BaseController extends \Ophp\Controller {
 	 */
 	protected function getDba() {
 		return isset($this->dba) ? $this->dba :
-				$this->dba = $this->getServer()->newMysqlDatabaseAdapter('replanner');
+			$this->dba = $this->getServer()->newMysqlDatabaseAdapter('replanner');
 	}
 
+	/**
+	 * Returns a new response from the controller
+	 * @param \Ophp\View $view
+	 * @return \Ophp\HttpResponse
+	 */
 	protected function newResponse(\Ophp\View $view = null) {
 		$response = parent::newResponse();
 		if (isset($view)) {

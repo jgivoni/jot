@@ -1,3 +1,6 @@
+<? if (isset($parentTask)) : ?>
+	<p class="parent"><? $p($parentTask->getTitle())->chData(); ?></p>
+<? endif; ?>
 <div class="task-element">
 	<p class="user"><? $p($task->getParentUser()->name)->chData() ?></p>
 	<h3><? $p($task->getTitle())->chData(); ?></h3>

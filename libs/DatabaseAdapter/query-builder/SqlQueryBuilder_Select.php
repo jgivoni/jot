@@ -18,6 +18,7 @@ class SqlQueryBuilder_Select extends SqlQueryBuilder {
 	}
 
 	protected function compileQuery() {
+		$comments = $this->getCommentsPart();
 		$select = $this->getSelectPart();
 		$from = $this->getFromPart();
 		$where = $this->getWherePart();
@@ -25,7 +26,7 @@ class SqlQueryBuilder_Select extends SqlQueryBuilder {
 		$having = $this->getHavingPart();
 		$order = $this->getOrderPart();
 		$limit = $this->getLimitPart();
-		$query = "$select\n$from\n$where\n$group\n$having\n$order\n$limit";
+		$query = "$comments\n$select\n$from\n$where\n$group\n$having\n$order\n$limit";
 
 		$this->setCompiledQuery($query);
 		return $query;

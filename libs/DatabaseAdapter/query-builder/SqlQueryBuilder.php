@@ -19,6 +19,7 @@ abstract class SqlQueryBuilder {
 	protected $order = array();
 	protected $offset = '';
 	protected $limit = '';
+	protected $comments = [];
 	protected $compiledQuery = '';
 	
 	abstract protected function compileQuery();
@@ -39,8 +40,9 @@ abstract class SqlQueryBuilder {
 	
 	public function getCompiledQuery()
 	{
-		if (empty($this->compiledQuery))
+		if (empty($this->compiledQuery)) {
 			$this->compileQuery();
+		}
 		return $this->compiledQuery;
 	}
 
@@ -143,5 +145,14 @@ abstract class SqlQueryBuilder {
 			
 		return "LIMIT $str";
 	}
+
+	public function comment($comment) {
+		$this->comments[] = $comment;
+		return $this;
+	}
 	
+	protected function getCommentsPart() {
+		$str = implode("; ", $this->comments);
+		return !empty($str) ? "/* $str */" : '';
+	}
 }

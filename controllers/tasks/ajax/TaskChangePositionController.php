@@ -2,7 +2,7 @@
 
 namespace Replanner;
 
-class TaskChangePositionController extends BaseController {
+class TaskChangePositionController extends TaskController {
 	protected $task_id;
 	protected $taskModel;
 	protected $title;
@@ -26,14 +26,14 @@ class TaskChangePositionController extends BaseController {
 			));
 			return $this->newResponse()->body(array(
 				'taskList' => (string)$taskList
-			));;
+			));
 		} else {
 			return $this->newResponse()->body("No drop position posted");
 		}
 	}
 
 	public function postRequest(\Ophp\HttpRequest $req) {
-		$taskMapper = $this->getDataMapper('task');
+		$taskMapper = $this->getTaskMapper();
 		$dropTaskId = $req->getPostParam('dropTaskId');
 		if (!empty($dropTaskId)) {
 			$dropTask = $taskMapper->loadByPrimaryKey($dropTaskId);

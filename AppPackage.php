@@ -26,13 +26,13 @@ class AppPackage {
 
 				__NAMESPACE__.'\Routes' => 'Routes.php',
 				__NAMESPACE__.'\NotFoundController' => 'controllers/NotFoundController.php',
-				__NAMESPACE__.'\BaseController' => 'controllers/BaseController.php',
+				__NAMESPACE__.'\TaskController' => 'controllers/TaskController.php',
 				__NAMESPACE__.'\IndexController' => 'controllers/IndexController.php',
 				__NAMESPACE__.'\NewTaskController' => 'controllers/tasks/NewTaskController.php',
 				__NAMESPACE__.'\ViewTaskController' => 'controllers/tasks/ViewTaskController.php',
 				__NAMESPACE__.'\EditTaskController' => 'controllers/tasks/EditTaskController.php',
 				__NAMESPACE__.'\DeleteTaskController' => 'controllers/tasks/DeleteTaskController.php',
-				__NAMESPACE__.'\TaskListController' => 'controllers/tasks/TaskListController.php',
+				__NAMESPACE__.'\ListTaskController' => 'controllers/tasks/ListTaskController.php',
 				
 				__NAMESPACE__.'\AjaxController' => 'controllers/tasks/ajax/AjaxController.php',
 				__NAMESPACE__.'\TaskChangePositionController' => 'controllers/tasks/ajax/TaskChangePositionController.php',

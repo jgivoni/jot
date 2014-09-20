@@ -8,11 +8,12 @@ class SqlQueryBuilder_Update extends SqlQueryBuilder {
 		
 	protected function compileQuery()
 	{
+		$comments = $this->getCommentsPart();
 		$update = $this->getUpdatePart();
 		$set	= $this->getSetPart();
 		$where 	= $this->getWherePart();
 		$limit 	= $this->getLimitPart();
-		$query 	= "$update\n$set\n$where\n$limit";
+		$query 	= "$comments\n$update\n$set\n$where\n$limit";
 
 		$this->setCompiledQuery($query);
 		return $query;

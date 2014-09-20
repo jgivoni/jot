@@ -8,9 +8,10 @@ class SqlQueryBuilder_Insert extends SqlQueryBuilder {
 		
 	protected function compileQuery()
 	{
+		$comments = $this->getCommentsPart();
 		$into = $this->getIntoPart();
 		$set	= $this->getSetPart();
-		$query 	= "INSERT $into\n$set";
+		$query 	= "$comments\nINSERT $into\n$set";
 
 		$this->setCompiledQuery($query);
 		return $query;

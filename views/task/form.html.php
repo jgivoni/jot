@@ -24,7 +24,9 @@
 		<button type="submit">Save</button>
 	</fieldset>
 </form>
-
+<script type="text/javascript">
+	$('select[data-ui="typeahead"]').chosen();
+</script>
 <?
 //$html->form()->_class('task')->_method('post')
 //	->fieldset()

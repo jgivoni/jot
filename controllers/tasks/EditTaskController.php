@@ -2,7 +2,7 @@
 
 namespace Replanner;
 
-class EditTaskController extends BaseController {
+class EditTaskController extends TaskController {
 
 	protected $task_id;
 	/**
@@ -98,7 +98,9 @@ class EditTaskController extends BaseController {
 		if (!isset($this->taskForm)) {
 			$this->taskForm = new TaskForm();
 			$parentTasks = $this->getTaskMapper()->loadAllOrdered();
-			$parentOptions = [];
+			$parentOptions = [
+				new \Ophp\FormFieldOption(0, 'N/A'),
+			];
 			foreach ($parentTasks as $task) {
 				/* @var $task TaskModel */
 				$parentOptions[] = new \Ophp\FormFieldOption($task->taskId, $task->getTitle());
