@@ -4,6 +4,8 @@ namespace Replanner;
 
 /**
  * Trait for joining with user
+ * 
+ * user is the user the task belongs to --- not necessarily the current user
  */
 trait JoinUser {
 
@@ -12,8 +14,8 @@ trait JoinUser {
 	 * selecting username
 	 * @return \Ophp\SqlQueryBuilder_Select
 	 */
-	public function addJoinUser(\Ophp\SqlQueryBuilder_Select $query) {
-		$query->join('LEFT JOIN `user` USING (`user_id`)')
+	public function addJoinUser(\Ophp\SqlQueryBuilder_Select $query, $onColumn) {
+		$query->join('LEFT JOIN `user` ON `user`.`user_id` = ' . $onColumn)
 				->select('user.name as username');
 		return $query;
 	}

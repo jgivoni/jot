@@ -33,7 +33,8 @@ class TaskForm extends \Ophp\Form {
 		$this->getField('title')->setValue($task->getTitle());
 		$this->getField('description')->setValue($task->getDescription());
 		$this->getField('priority')->setValue($task->getPriority());
-		$this->getField('parent')->setValue($task->getParent());
+		$this->getField('parent')->setValue($task->getParent())
+				->getOption($task->getTaskId())->setDisabled();
 	}
 	
 }

@@ -105,7 +105,7 @@ class TaskMapper extends \Ophp\DataMapper
 		if (!$task->isNew()) {
 			$query->where(CB::isnot(self::FIELD_TASKID, $task->getTaskId()));
 		}
-		if ($this->loadOne($query)) {
+		if ($this->count($query) > 0) {
 			// Move all tasks from this position and beyond to make room for this task
 			$criteria = CB::notless(self::FIELD_POSITION, $task->getPosition());
 			if (!$task->isNew()) {
@@ -163,7 +163,7 @@ class TaskMapper extends \Ophp\DataMapper
 	
 	public function loadParent(TaskModel $task) {
 		$query = $this->newSelectQuery()->comment(__METHOD__)
-				->where(CB::field(self::FIELD_TASKID)->is($task->getParent()));
+				->where(CB::field(self::FIELD_TASKID, $this->tableName)->is($task->getParent()));
 		return $this->loadOne($query);
 	}
 	

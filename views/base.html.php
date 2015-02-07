@@ -3,14 +3,6 @@
 	<head>
 		<title><? $p($title)->chData(); ?></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<link type="text/css" rel="stylesheet" href="/static-assets/global.css"/>
-		<link type="text/css" href="/static-assets/jquery-ui/css/humanity/jquery-ui-1.8.19.custom.css" rel="stylesheet" />
-		<script type="text/javascript" src="<? $p($url->staticAssets('jquery-ui/js/jquery-1.7.2.min.js'))->attrVal(); ?>"></script>
-		<script type="text/javascript" src="/static-assets/jquery-ui/js/jquery-ui-1.8.19.custom.min.js"></script>
-		<!-- History.js --> 
-		<script src="/static-assets/jquery-ui/js/jquery.history.js"></script>
-		<!-- This Gist -->
-		<!--script defer src="http://gist.github.com/raw/854622/ajaxify-html5.js"></script-->  
 		<?php foreach ($cssFiles as $path) : ?>
 			<? $p($this->fragment('elements/link.html')->assign(['path' => $path]))->html(); ?>
 		<?php endforeach; ?>

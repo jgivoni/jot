@@ -2,6 +2,7 @@
 	<p class="parent"><? $p($parentTask->getTitle())->chData(); ?></p>
 <? endif; ?>
 <div class="task-element">
+	<div class="star <? $p($task->isStarred() ? 'starred' : '')->attrVal() ?>">*</div>
 	<p class="user"><? $p($task->getParentUser()->name)->chData() ?></p>
 	<h3><? $p($task->getTitle())->chData(); ?></h3>
 	<p><? $p($task->getDescription())->chData(); ?></p>

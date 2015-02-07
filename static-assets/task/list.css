@@ -16,7 +16,12 @@ ul.tasks li {
 ul.tasks li span.task-id {
 	display: inline-block;
 	width: 2em;
+	padding-right: 0.25em;
+	font-size: 0.75em;
 	text-align: right;
+	background: #d0d080;
+	border-radius: 0.25em;
+	
 }
 
 ul.tasks li.ui-sortable-helper {

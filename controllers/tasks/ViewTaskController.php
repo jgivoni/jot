@@ -5,7 +5,7 @@ namespace Replanner;
 class ViewTaskController extends TaskController {
 	
 	/**
-	 * @var TaskModel The current task
+	 * @var TaskUserModel The current task
 	 */
 	protected $taskModel;
 	

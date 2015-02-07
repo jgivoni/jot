@@ -8,7 +8,10 @@ namespace Replanner;
 class TaskUserMapper extends TaskMapper
 {
 	use JoinUser;
+	use JoinUserTask;
 	
+	protected $currentUserId;
+		
 	/**
 	 * 
 	 * @return TaskUserModel
@@ -39,11 +42,12 @@ class TaskUserMapper extends TaskMapper
 	
 	/**
 	 * 
-	 * @return array Of TaskUserModel
+	 * @return \Ophp\SqlQueryBuilder_Select
 	 */
 	public function newSelectQuery() {
 		$query = parent::newSelectQuery();
-		return $this->addJoinUser($query);
+		$query = $this->addJoinUser($query, '`task`.`user_id`');
+		return $this->addJoinUserTask($query, '`task`.`task_id`', $this->currentUserId);
 	}
 	
 	/**
@@ -54,6 +58,13 @@ class TaskUserMapper extends TaskMapper
 	protected function mapRowToModel($row) {
 		$taskUserModel = parent::mapRowToModel($row);
 		$this->addMapUser($row, $taskUserModel);
+		$this->addMapUserTask($row, $taskUserModel);
 		return $taskUserModel;
 	}
+	
+	public function setCurrentUserId($currentUserId) {
+		$this->currentUserId = (int) $currentUserId;
+		return $this;
+	}
+			
 }

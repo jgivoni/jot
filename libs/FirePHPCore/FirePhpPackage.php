@@ -1,6 +1,6 @@
 <?php
 
-namespace Ophp;
+namespace FirePhp;
 
 class FirePhpPackage {
 	public function __construct() {

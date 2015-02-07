@@ -7,61 +7,58 @@ class AppPackage {
 		$this->bootstrap();
 		new \Ophp\CorePackage;
 		new \Ophp\DbaPackage;
-	}
-	
-	public function getServer() {
-		$server = new \Ophp\Server(__DIR__);
-		new Routes($server);
-		return $server;
-	}
-	
-	public function run() {
-		$this->getServer()->handleRequest();
+		new \Ophp\FilterPackage;
 	}
 	
 	protected function bootstrap() {
-		spl_autoload_register(function($class){
-			$paths = array(
-				'Ophp\CorePackage' => '../ophp/CorePackage.php',
+		$localPaths = array(
+			'AppServer' => 'AppServer.php',
+			'AppRouter' => 'AppRouter.php',
 
-				__NAMESPACE__.'\Routes' => 'Routes.php',
-				__NAMESPACE__.'\NotFoundController' => 'controllers/NotFoundController.php',
-				__NAMESPACE__.'\TaskController' => 'controllers/TaskController.php',
-				__NAMESPACE__.'\IndexController' => 'controllers/IndexController.php',
-				__NAMESPACE__.'\NewTaskController' => 'controllers/tasks/NewTaskController.php',
-				__NAMESPACE__.'\ViewTaskController' => 'controllers/tasks/ViewTaskController.php',
-				__NAMESPACE__.'\EditTaskController' => 'controllers/tasks/EditTaskController.php',
-				__NAMESPACE__.'\DeleteTaskController' => 'controllers/tasks/DeleteTaskController.php',
-				__NAMESPACE__.'\ListTaskController' => 'controllers/tasks/ListTaskController.php',
-				
-				__NAMESPACE__.'\AjaxController' => 'controllers/tasks/ajax/AjaxController.php',
-				__NAMESPACE__.'\TaskChangePositionController' => 'controllers/tasks/ajax/TaskChangePositionController.php',
-				__NAMESPACE__.'\AjaxViewTaskController' => 'controllers/tasks/ajax/AjaxViewTaskController.php',
+			'NotFoundController' => 'controllers/NotFoundController.php',
+			'TaskController' => 'controllers/TaskController.php',
+			'IndexController' => 'controllers/IndexController.php',
+			'NewTaskController' => 'controllers/tasks/NewTaskController.php',
+			'ViewTaskController' => 'controllers/tasks/ViewTaskController.php',
+			'EditTaskController' => 'controllers/tasks/EditTaskController.php',
+			'DeleteTaskController' => 'controllers/tasks/DeleteTaskController.php',
+			'ListTaskController' => 'controllers/tasks/ListTaskController.php',
 
-				__NAMESPACE__.'\TaskModel' => 'models/TaskModel.php',
-				__NAMESPACE__.'\TaskMapper' => 'models/TaskMapper.php',
-				__NAMESPACE__.'\TaskForm' => 'models/forms/TaskForm.php',
-				__NAMESPACE__.'\TaskFilter' => 'models/TaskFilter.php',
-				__NAMESPACE__.'\UserModel' => 'models/UserModel.php',
-				__NAMESPACE__.'\UserMapper' => 'models/UserMapper.php',
-				__NAMESPACE__.'\TaskUserModel' => 'models/TaskUserModel.php',
-				__NAMESPACE__.'\TaskUserMapper' => 'models/TaskUserMapper.php',
-				__NAMESPACE__.'\ParentUser' => 'models/ParentUser.php',
-				__NAMESPACE__.'\JoinUser' => 'models/JoinUser.php',
+			'AjaxController' => 'controllers/tasks/ajax/AjaxController.php',
+			'TaskChangePositionController' => 'controllers/tasks/ajax/TaskChangePositionController.php',
+			'AjaxViewTaskController' => 'controllers/tasks/ajax/AjaxViewTaskController.php',
 
-				__NAMESPACE__.'\HtmlView' => 'view/HtmlViewHelpers.php',
-				
-				/* engines */
-				'Ophp\DbaPackage' => 'libs/DatabaseAdapter/DbaPackage.php',
-				'Ophp\FirePhpPackage' => 'libs/FirePHPCore/FirePhpPackage.php',
-				
-				/* Config */
-				__NAMESPACE__.'\DevelopmentConfig' => 'config/DevelopmentConfig.php',
-				'EnvironmentConfig' => apache_getenv('ophp.root_config'),
-				/* 3rd party libraries */
-			);
+			'TaskModel' => 'models/TaskModel.php',
+			'TaskMapper' => 'models/TaskMapper.php',
+			'TaskForm' => 'models/forms/TaskForm.php',
+			'TaskFilter' => 'models/TaskFilter.php',
+			'UserModel' => 'models/UserModel.php',
+			'UserMapper' => 'models/UserMapper.php',
+			'TaskUserModel' => 'models/TaskUserModel.php',
+			'TaskUserMapper' => 'models/TaskUserMapper.php',
+			'ParentUser' => 'models/ParentUser.php',
+			'JoinUser' => 'models/JoinUser.php',
+			'JoinUserTask' => 'models/JoinUserTask.php',
+
+			'HtmlView' => 'view/HtmlViewHelpers.php',
+
+			/* Config */
+			'DevelopmentConfig' => 'config/DevelopmentConfig.php',
+		);
+
+		$paths = [];
+		foreach ($localPaths as $class => $path) {
+			$path = __DIR__ . '/' . $path;
+			$class = __NAMESPACE__ . '\\' . $class; 
+			$paths[$class] = $path;
+		}
+		$paths['Ophp\CorePackage'] = apache_getenv('ophp.path') . 'CorePackage.php';
+		$paths['FirePhp\FirePhpPackage'] = 'libs/FirePHPCore/FirePhpPackage.php';
+		$paths[__NAMESPACE__.'\EnvironmentConfig'] = apache_getenv('ophp.root_config');
+
+		spl_autoload_register(function($class) use ($paths) {
 			if (isset($paths[$class])) {
-				require_once __DIR__.'/'.$paths[$class];
+				require_once $paths[$class];
 			}
 		});
 	}

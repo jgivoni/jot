@@ -4,7 +4,7 @@ namespace Replanner;
 
 class EditTaskController extends TaskController {
 
-	protected $task_id;
+	protected $taskId;
 	/**
 	 *
 	 * @var TaskModel
@@ -18,13 +18,13 @@ class EditTaskController extends TaskController {
 	 */
 	protected $taskForm;
 
-	function __construct($task_id) {
+	function __construct($taskId) {
 		parent::__construct();
-		$this->task_id = $task_id;
+		$this->taskId = $taskId;
 	}
 
 	public function __invoke() {
-		$this->taskModel = $this->getDataMapper('task')->loadByPrimaryKey($this->task_id);
+		$this->taskModel = $this->getTaskMapper()->loadByPrimaryKey($this->taskId);
 		$req = $this->getRequest();
 		if ($req->isGet()) {
 			return $this->showForm();
@@ -40,7 +40,12 @@ class EditTaskController extends TaskController {
 
 	public function showForm() {
 		$form = $this->getTaskForm();
-		$form->setValues($this->taskModel);
+		if ($this->getRequest()->isPost()) {
+			$input = $this->getRequest()->getPostParams();
+			$form->setValues($input);
+		} else { 
+			$form->setValues($this->taskModel);
+		}
 		$content = $this->newView('task/form.html')->assign(array(
 			'form' => $form,
 			'mode' => 'edit'
@@ -65,12 +70,6 @@ class EditTaskController extends TaskController {
 		try {
 			$input = $filter($input);
 		} catch (\Ophp\AggregateFilterException $e) {
-			$this->taskModel
-					->setTitle($input['title'])
-					->setDescription($input['description'])
-					->setPriority($input['priority'])
-					->setParent($input['parent']);
-			$this->getTaskForm()->addException($e);
 			throw $e;
 		}
 		
@@ -111,4 +110,12 @@ class EditTaskController extends TaskController {
 		return $this->taskForm;
 	}
 
+	/**
+	 * Returns a new document
+	 * @return \Ophp\HtmlDocumentView
+	 */
+	protected function newDocumentView() {
+		return parent::newDocumentView()
+				->addJsFile($this->getServer()->getUrlHelper()->staticAssets('task/form.js'));
+	}
 }

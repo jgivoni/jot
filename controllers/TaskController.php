@@ -9,6 +9,12 @@ namespace Replanner;
 abstract class TaskController extends \Ophp\Controller {
 
 	/**
+	 * Id of the authenticated user
+	 * @var int
+	 */
+	protected $currentUserId = 1;
+	
+	/**
 	 * @var View
 	 */
 	protected $baseView;
@@ -67,7 +73,7 @@ abstract class TaskController extends \Ophp\Controller {
 	 * @return TaskUserMapper
 	 */
 	protected function getTaskUserMapper() {
-		return $this->getDataMapper('taskUser');
+		return $this->getDataMapper('taskUser')->setCurrentUserId($this->currentUserId);
 	}
 
 	/**
@@ -104,16 +110,23 @@ abstract class TaskController extends \Ophp\Controller {
 		$document->url = $this->getServer()->getUrlHelper();
 		$document->index = $document->fragment('task/list.html');
 		$document->index->assign([
-//			'tasks' => $this->getTaskMapper()->loadAllOrdered(),
 			'tasks' => $this->getTaskUserMapper()->loadAllOrdered(),
 		]);
 		$document->notifications = 'Was it what you expected?';
-		$document->addCssFile($this->getServer()->getUrlHelper()->staticAssets('task/form.css'));
-		$document->addCssFile($this->getServer()->getUrlHelper()->staticAssets('task/view.css'));
-		$document->addCssFile($this->getServer()->getUrlHelper()->staticAssets('task/list.css'));
-		$document->addJsFile($this->getServer()->getUrlHelper()->staticAssets('task/tasks.js'));
-		$document->addJsFile($this->getServer()->getUrlHelper()->staticAssets('chosen_v1.1.0/chosen.jquery.min.js'));
-		$document->addCssFile($this->getServer()->getUrlHelper()->staticAssets('chosen_v1.1.0/chosen.min.css'));
+		$staticAssets = $this->getServer()->getUrlHelper()->staticAssets;
+		
+		$document->addCssFile($staticAssets('global.css'));
+		$document->addCssFile($staticAssets('task/view.css'));
+		$document->addCssFile($staticAssets('task/form.css'));
+		$document->addCssFile($staticAssets('task/list.css'));
+		$document->addCssFile($staticAssets('jquery-ui/css/humanity/jquery-ui-1.8.19.custom.css'));
+		$document->addCssFile($staticAssets('chosen_v1.1.0/chosen.min.css'));
+		
+		$document->addJsFile($staticAssets('jquery-ui/js/jquery-1.7.2.min.js'));
+		$document->addJsFile($staticAssets('jquery-ui/js/jquery-ui-1.8.19.custom.min.js'));
+		$document->addJsFile($staticAssets('jquery-ui/js/jquery.history.js'));
+		$document->addJsFile($staticAssets('chosen_v1.1.0/chosen.jquery.min.js'));
+		$document->addJsFile($staticAssets('task/tasks.js'));
 		return $document;
 	}
 

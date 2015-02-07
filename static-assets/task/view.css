@@ -17,3 +17,12 @@ div.task-element .user {
 	font-size: 0.65em;
 	color: grey;
 }
+
+div.task-element .star {
+	float: right;
+}
+
+div.task-element .star.starred {
+	color: yellow;
+	font-weight: bold;
+}

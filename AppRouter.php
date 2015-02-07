@@ -2,11 +2,9 @@
 
 namespace Replanner;
 
-class Routes {
-	
-	public function __construct($server) {
-		$server
-			->addRoute(new \Ophp\RegexRoute('^$', function(){return new IndexController();}))
+class AppRouter extends \Ophp\UrlRouter {
+	public function __construct() {
+		$this->addRoute(new \Ophp\RegexRoute('^$', function(){return new IndexController();}))
 			->addRoute(new \Ophp\RegexRoute('^tasks/new(?:/([^/]*))?$', function($title=''){return new NewTaskController($title);}))
 			->addRoute(new \Ophp\RegexRoute('\.t(\d+)$', function($taskId) {return new ViewTaskController($taskId);}))
 			->addRoute(new \Ophp\RegexRoute('\.t(\d+)/edit$', function($taskId) {return new EditTaskController($taskId);}))
