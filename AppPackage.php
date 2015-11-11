@@ -23,6 +23,7 @@ class AppPackage {
 			'EditTaskController' => 'controllers/tasks/EditTaskController.php',
 			'DeleteTaskController' => 'controllers/tasks/DeleteTaskController.php',
 			'ListTaskController' => 'controllers/tasks/ListTaskController.php',
+			'CardsController' => 'controllers/tasks/CardsController.php',
 
 			'AjaxController' => 'controllers/tasks/ajax/AjaxController.php',
 			'TaskChangePositionController' => 'controllers/tasks/ajax/TaskChangePositionController.php',
