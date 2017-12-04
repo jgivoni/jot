@@ -36,3 +36,46 @@ $app->run();
  * SaveBookController: Store submitted data
  * ViewBookController: View book data
  */
+
+if ($name == 'tim') {
+	$age = 2;
+} elseif ($name == 'viggo') {
+	$age = 0;
+} elseif ($name == 'bente') {
+	$age = 22;
+} else {
+	$age = 13;
+}
+
+switch ($name) {
+	case 'tim':
+		$age = 2;
+		break;
+	case 'viggo':
+		$age = 0;
+		break;
+	case 'bente':
+		$age = 22;
+		break;
+	default:
+		$age = 13;
+}
+
+switch ($name) {
+	case 'tim':	$f || $f = function(){return 2;};
+	case 'viggo': $f || $f = function(){return 0;};
+	case 'bente': $f || $f = function(){return 22;};
+	default: $f || $f = function(){return 13;};
+		$age = $f();
+}
+
+switch ($name) {
+	case 'tim':	isset($age) || $age = 2 && ;
+	case 'viggo': $f || $f = 0;
+	case 'bente': $f || $f = 22;
+	default: $f || ($f = 13) && function(){
+		
+	};
+		$age = $f;
+}
+
