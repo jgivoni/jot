@@ -1,5 +1,7 @@
 <?php
 
+namespace Replanner;
+
 /**
  * This is the script where all requests start
  * Entry point, specified by the webserver (apache)
@@ -17,8 +19,9 @@ if (!ini_get('date.timezone')) {
 
 // Bootstrap the entire app by loading and initialising the Application Package
 require __DIR__.'/AppPackage.php';
-$app = new Replanner\AppPackage();
-$app->run();
+new AppPackage;
+// You can create a server for each type of request: webpages, REST, api, json
+(new AppServer)->handleRequest();
 	
 /**
  * Editing a book

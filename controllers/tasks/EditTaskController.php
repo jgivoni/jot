@@ -2,29 +2,36 @@
 
 namespace Replanner;
 
-class EditTaskController extends BaseController {
+class EditTaskController extends TaskController {
 
-	protected $task_id;
+	protected $taskId;
+	/**
+	 *
+	 * @var TaskModel
+	 */
 	protected $taskModel;
 	protected $title;
-	protected $fields;
 	protected $taskFilter;
+	/**
+	 *
+	 * @var TaskForm
+	 */
+	protected $taskForm;
 
-	function __construct($task_id) {
+	function __construct($taskId) {
 		parent::__construct();
-		$this->task_id = $task_id;
+		$this->taskId = $taskId;
 	}
 
 	public function __invoke() {
-		$this->taskModel = $this->getDataMapper('task')->loadByPrimaryKey($this->task_id);
-		$this->fields = new TaskForm($this->taskModel);
+		$this->taskModel = $this->getTaskMapper()->loadByPrimaryKey($this->taskId);
 		$req = $this->getRequest();
 		if ($req->isGet()) {
 			return $this->showForm();
 		} elseif ($req->isPost()) {
 			try {
 				$this->postRequest();
-			} catch (\InvalidArgumentException $e) {
+			} catch (\Ophp\FilterException $e) {
 				return $this->showForm();
 			}
 			return $this->redirectToView();
@@ -32,19 +39,29 @@ class EditTaskController extends BaseController {
 	}
 
 	public function showForm() {
+		$form = $this->getTaskForm();
+		if ($this->getRequest()->isPost()) {
+			$input = $this->getRequest()->getPostParams();
+			$form->setValues($input);
+		} else { 
+			$form->setValues($this->taskModel);
+		}
 		$content = $this->newView('task/form.html')->assign(array(
-			'fields' => $this->fields,
+			'form' => $form,
 			'mode' => 'edit'
 				));
-		return $this->newResponse()->body($content);
+		return $this->newResponse($content);
 	}
 
+	/**
+	 * Returns a response that redirects to the view task page of the current task
+	 * 
+	 * Called after task is successfully saved
+	 * 
+	 * @return Response 
+	 */
 	public function redirectToView() {
 		return $this->newResponse()->redirect($this->taskModel->getUrlPath());
-	}
-
-	public function redirectToForm() {
-		return $this->newResponse()->redirect('/tasks/new/' . $this->getRequest()->getPostParam($fields->title['name']));
 	}
 
 	public function postRequest() {
@@ -52,22 +69,16 @@ class EditTaskController extends BaseController {
 		$input = $this->getRequest()->getPostParams();
 		try {
 			$input = $filter($input);
-		} catch (\InvalidArgumentException $e) {
-			$this->taskModel
-					->setTitle($input['title'])
-					->setDescription($input['description'])
-					->setPosition($input['position'])
-					->setPriority($input['priority']);
-			$this->fields = new TaskForm($this->taskModel);
+		} catch (\Ophp\AggregateFilterException $e) {
 			throw $e;
 		}
 		
 		$this->taskModel
 				->setTitle($input['title'])
 				->setDescription($input['description'])
-				->setPosition($input['position'])
-				->setPriority($input['priority']);
-		$this->getDataMapper('task')->saveTask($this->taskModel);
+				->setPriority($input['priority'])
+				->setParent($input['parent']);
+		$this->getTaskMapper()->saveTask($this->taskModel);
 	}
 
 	/**
@@ -77,5 +88,34 @@ class EditTaskController extends BaseController {
 	protected function getTaskFilter() {
 		return isset($this->taskFilter) ? $this->taskFilter : $this->taskFilter = new TaskFilter();
 	}
+	
+	/**
+	 * 
+	 * @return TaskForm
+	 */
+	protected function getTaskForm() {
+		if (!isset($this->taskForm)) {
+			$this->taskForm = new TaskForm();
+			$parentTasks = $this->getTaskMapper()->loadAllOrdered();
+			$parentOptions = [
+				new \Ophp\FormFieldOption(0, 'N/A'),
+			];
+			foreach ($parentTasks as $task) {
+				/* @var $task TaskModel */
+				$parentOptions[] = new \Ophp\FormFieldOption($task->taskId, $task->getTitle());
+			}
+			$this->taskForm->getField('parent')
+					->setOptions($parentOptions);
+		}
+		return $this->taskForm;
+	}
 
+	/**
+	 * Returns a new document
+	 * @return \Ophp\HtmlDocumentView
+	 */
+	protected function newDocumentView() {
+		return parent::newDocumentView()
+				->addJsFile($this->getServer()->getUrlHelper()->staticAssets('task/form.js'));
+	}
 }

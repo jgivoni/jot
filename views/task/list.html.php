@@ -5,6 +5,7 @@
 			<a href="<? $p($task['urlPath'])->attrVal() ?>">
 				<?=$task['title']?>
 			</a>
+			<span class="username">(<?=$task->getParentUser()->name?>)</span>
 		</li>
 	<?php endforeach; ?>
 	<script type="text/javascript">

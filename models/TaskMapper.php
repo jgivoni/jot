@@ -2,26 +2,61 @@
 
 namespace Replanner;
 
+use Ophp\SqlCriteriaBuilder as CB;
+
 /**
  * Model Mapper for tasks
  */
 class TaskMapper extends \Ophp\DataMapper
 {
-
+	const FIELD_TASKID = 'task_id';
+	const FIELD_POSITION = 'position';
+	const FIELD_PARENT = 'parent';
+	
 	/**
-	 * @var array Fields in the database. Specify key if name of field in model differs
+	 * Name of the corresponding db table
+	 * @var string
+	 */
+	protected $tableName = 'task';
+	
+	/**
+	 * @var array Properties of the model. Specify 'column' if column name in db differs
 	 */
 	protected $fields = array(
-		'taskId' => 'task_id',
-		'title',
-		'description',
-		'createdTimestamp' => 'created_timestamp',
-		'position',
-		'priority',
-		'parent'
+		'taskId' => array(
+			'column' => self::FIELD_TASKID,
+			'type' => 'int',
+		),
+		'title' => array(
+			'type' => 'string'
+		),
+		'description' => array(
+			'type' => 'string'
+		),
+		'createdTimestamp' => array(
+			'column' => 'created_timestamp',
+			'type' => 'timestamp',
+		),
+		self::FIELD_POSITION => array(
+			'type' => 'int',
+		),
+		'priority' => array(
+			'type' => 'string'
+		),
+		self::FIELD_PARENT => array(
+			'type' => 'int',
+		),
+		'userId' => array(
+			'column' => 'user_id',
+			'type' => 'int',
+		)
 	);
+	
+	/**
+	 * Name of the property which acts a primary key
+	 * @var string
+	 */
 	protected $primaryKey = 'taskId';
-	protected $tableName = 'task';
 
 	/**
 	 * 
@@ -43,65 +78,98 @@ class TaskMapper extends \Ophp\DataMapper
 	}
 
 	/**
-	 * @param int $task_id
+	 * @param int $taskId
 	 * @return TaskModel
 	 */
-	public function loadByPrimaryKey($task_id)
+	public function loadByPrimaryKey($taskId)
 	{
-		return parent::loadByPrimaryKey($task_id);
+		return parent::loadByPrimaryKey($taskId);
 	}
 
+	/**
+	 * Stores the task model data in the db
+	 * @param \Replanner\TaskModel $task
+	 */
 	public function saveTask(TaskModel $task)
 	{
-		if (!isset($task['position'])) {
-			$task['position'] = 1;
+		// If no position is given, make it the first (new tasks go at the top)
+		if ($task->getPosition() === null) {
+			$task->setPosition(1);
 		}
-		$sql = "position FROM task WHERE position = " . $task['position'];
+		
+		/** Find out if any other tasks are occupying the position of this task
+		 * and move them and all after them down by one
+		 */
+		$query = $this->newSelectQuery()->comment('Push down?')
+				->where(CB::is(self::FIELD_POSITION, $task->getPosition()));
 		if (!$task->isNew()) {
-			$sql .= ' AND task_id != ' . $task['taskId'];
+			$query->where(CB::isnot(self::FIELD_TASKID, $task->getTaskId()));
 		}
-		$query = new \Ophp\SqlDatabaseQuery($this->dba);
-		if ($query->select($sql)->rewind()->current()) {
-			$sql = "UPDATE `task` SET `position` = `position` + 1 WHERE `position` >= " . $task['position'];
+		if ($this->count($query) > 0) {
+			// Move all tasks from this position and beyond to make room for this task
+			$criteria = CB::notless(self::FIELD_POSITION, $task->getPosition());
 			if (!$task->isNew()) {
-				$sql .= " AND task_id != " . $task['taskId'];
+				$criteria = $criteria->and_(CB::isnot(self::FIELD_TASKID, $task->getTaskId()));
 			}
-			$this->dba->query($sql);
+			$update = $this->newUpdateQuery()->comment('Push down!')
+					->set(CB::expr('%1 = %1 + 1', CB::field(self::FIELD_POSITION)))
+					->where($criteria);
+			$this->dba->query($update);
 		}
-		$fields = array();
-		foreach ($this->fields as $key => $name) {
-			$modelField = is_numeric($key) ? $name : $key;
-			$value = $task[$modelField];
+		
+		$sql = $task->isNew() ? 
+			$this->newInsertQuery() : 
+			$this->newUpdateQuery()->where(CB::is(self::FIELD_TASKID, $task->getTaskId()));
+		$sql->comment(__METHOD__);
+		foreach ($this->fields as $modelField => $config) {
+			$value = $task->$modelField;
+			$name = isset($config['column']) ? $config['column'] : $modelField;
 			if (isset($value)) {
-				if (is_string($value)) {
-					$value_sql_formatted = '"' . $this->dba->escapeString($value) . '"';
-				} elseif (is_int($value) && preg_match('/timestamp$/', $name)) {
-					$value_sql_formatted = '"' . date('Y-m-d H:i:s', $value) . '"';
-				} else {
-					$value_sql_formatted = $value;
-				}
-				$fields[] = "`$name` = $value_sql_formatted";
+				$sql->set(CB::expr('%1 = %2', [CB::field($name), $value]));
 			}
 		}
-		$query = new \Ophp\SqlDatabaseQuery($this->dba);
-		$set = 'SET ' . implode(',', $fields);
+		
+		$this->dba->query($sql);
+		
 		if ($task->isNew()) {
-			$sql = 'INTO `task` ' . $set;
-			$taskId = $query->insert($sql)->getInsertId();
+			$taskId = $this->dba->getInsertId();
 			$task->setTaskId($taskId);
 			$this->setSharedModel($task);
-		} else {
-			$sql = '`task` ' . $set .
-				' WHERE ' . $this->fields[$this->primaryKey] . '=' . $task[$this->primaryKey];
-
-			$query->update($sql);
 		}
 	}
 
-	public function deleteTask(TaskModel $taskModel)
+	/**
+	 * Deletes a task
+	 * 
+	 * @param \Replanner\TaskModel $taskModel
+	 */
+	public function delete(TaskModel $taskModel)
 	{
-		$sql = 'DELETE FROM `task` WHERE `task_id` = ' . $taskModel->getTaskId();
-		$this->dba->query($sql);
+		return $this->deleteByModel($taskModel);
 	}
 
+	public function loadAllOrdered() {
+		$query = $this->newSelectQuery()->comment(__METHOD__)
+				->orderBy(CB::field(self::FIELD_POSITION));
+
+		return $this->loadAll($query);
+	}
+	
+	public function loadLast() {
+		$query = $this->newSelectQuery()->comment(__METHOD__)
+				->orderBy(CB::expr('%1 DESC', CB::field(self::FIELD_POSITION)));
+		return $this->loadOne($query);
+	}
+	
+	public function loadParent(TaskModel $task) {
+		$query = $this->newSelectQuery()->comment(__METHOD__)
+				->where(CB::field(self::FIELD_TASKID, $this->tableName)->is($task->getParent()));
+		return $this->loadOne($query);
+	}
+	
+	public function loadSubtasks(TaskModel $task) {
+		$query = $this->newSelectQuery()->comment(__METHOD__)
+				->where(CB::field(self::FIELD_PARENT)->is($task->getTaskId()));
+		return $this->loadAll($query);
+	}
 }

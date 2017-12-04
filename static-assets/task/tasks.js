@@ -17,15 +17,16 @@ var Tasks = {
 			}
 		});
 		$("ul.tasks li a").click(function(event) {
-			if (event.which == 2 || event.metaKey) {
+			if (event.which === 2 || event.metaKey) {
 				return true;
 			}
 			event.preventDefault();
-			History.pushState(null, null, $(this).attr('href'));
+			History.pushState(null, $(this).text(), $(this).attr('href'));
 			return false;
 		});
 	}
-}
+};
+
 $(window).bind('statechange', function() {
 	var url;
 	url = History.getState().url;

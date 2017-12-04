@@ -1,0 +1,45 @@
+.cards .card {
+	float: left;
+	width: 10em;
+	height: 12em;
+	padding: 0.4em 0.6em;
+	margin: 0.4em 0.5em;
+	background-color: #f2ec86;
+	overflow: hidden;
+	box-shadow: 0 0 10px #808080;
+	border: 1px solid #f0f0f0;
+	border-radius: 4px;
+}
+.cards .card.add-task {
+	float: right;
+	font-size: 0.8em;
+	text-align: center;
+}
+.cards .card.add-task .icon {
+	position: relative;
+	top: 13%;
+	font-size: 6em;
+	font-weight: bold;
+	color: #fffca6;
+	text-shadow: 1px 1px 3px #000000;
+}
+.card.priority-high {
+	font-size: 1.2em;
+}
+
+.card.priority-low {
+	font-size: 0.8em;
+}
+
+div.cards div.card h2 {
+	font-size: 1.5em;
+	font-weight: normal;
+	margin: 0;
+}
+div.cards div.card h2.editing {
+	background-color: #ffffff;
+}
+.cards .card:hover {
+	box-shadow: 0 0 10px #000000;
+	cursor: pointer;
+}

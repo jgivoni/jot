@@ -1,1 +1,1 @@
-<input type="text" name="<? $p($name)->attrVal() ?>" placeholder="Type text here" value="<? $p($value)->attrVal() ?>"/>
+<input type="text" name="<? $p($field->getName())->attrVal() ?>" placeholder="Type text here" value="<? $p($field->getValue())->attrVal() ?>"/>

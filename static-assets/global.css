@@ -64,7 +64,6 @@ p.signature {
 .col2 {
 	float: left;
 	width: 50%; min-height: 100px;
-	overflow: auto;
 }
 .col3 {
 	float: left;

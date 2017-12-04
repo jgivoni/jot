@@ -9,21 +9,25 @@ class TaskFilter extends \Ophp\ParamsFilter
 		$this->addParamFilter('title', new \Ophp\AggregateFilter(array(
 			new \Ophp\IssetFilter(), // Must have a value (null is not a value)
 			new \Ophp\StringFilter(), // Must be a valid string
-			new \Ophp\StrMaxLengthFilter(20), // Max length 20 characters
+			new \Ophp\StrTrimFilter(),
+			new \Ophp\StrMaxLengthFilter(64), // Max length 64 characters
 //			new \Ophp\StrNotEmpty(), // Must not be an empty string
 		)));
 
 		$this->addParamFilter('description', new \Ophp\DependencyFilter(
 			new \Ophp\IssetFilter(), new \Ophp\AggregateFilter(array(
-			new \Ophp\StringFilter('UTF-8'),
+			new \Ophp\StringFilter(),
 			new \Ophp\StrTrimFilter(),
-			new \Ophp\StrMaxLengthFilter(10), // Max 50 characters
+			new \Ophp\StrMaxLengthFilter(1000), // Max 1000 characters
 		))));
 
-		$this->addParamFilter('position', new \Ophp\IntegerFilter());
-
-		$this->addParamFilter('priority', new \Ophp\EnumFilter(array('high', 'normal',
-			'low')));
+		$this->addParamFilter('priority', new \Ophp\EnumFilter(array(
+			TaskModel::PRIORITY_HIGH, 
+			TaskModel::PRIORITY_NORMAL,
+			TaskModel::PRIORITY_LOW,
+		)));
+		
+		$this->addParamFilter('parent', new \Ophp\IntegerFilter());
 
 		// How to toggle whether to validate or sanitize?
 	}

@@ -1,29 +1,32 @@
 <form class="task <? $p($mode)->attrVal() ?>" method="post">
 	<fieldset>
-		<legend>Create new task</legend>
-		<div class="title">
-			<label>Title</label>
-			<?
-				$p($this->fragment('elements/textfield.html')->assign($fields->title))->html() 
-//					->wrap('elements/inputblock.html'))->html();
-			?>
-		</div>
-		<div class="description">
-			<label>Description</label>
-			<? $p($this->fragment('elements/textarea.html')->assign($fields->description))->html() ?>
-		</div>
-		<div class="position">
-			<input type="text" name="<? $p($fields->position['name'])->attrVal() ?>" 
-				   value="<? $p($fields->position['value'])->attrVal() ?>"/>
-		</div>
-		<div class="priority">
-			<? $p($this->fragment('elements/select.html')->assign($fields->priority))->html() ?>
-		</div>
+		<legend>Create or edit task</legend>
+		<? if ($form->hasExceptions()) : ?>
+			<div class="form-errors">
+			<? foreach ($form->getExceptions() as $exception) : ?>
+				<p class="error"><? $p($exception->getMessage())->chData(); ?></p>
+			<? endforeach; ?>
+			</div>
+		<? endif; ?>
+		<?
+			$p($this->fragment('elements/inputblock.html')->assign(array('field' => $form->getField('title'))))->html() 
+		?>
+		<?
+			$p($this->fragment('elements/inputblock.html')->assign(array('field' => $form->getField('description'))))->html() 
+		?>
+		<?
+			$p($this->fragment('elements/inputblock.html')->assign(array('field' => $form->getField('priority'))))->html() 
+		?>
+		<?
+			$p($this->fragment('elements/inputblock.html')->assign(array('field' => $form->getField('parent'))))->html() 
+		?>
 		<button type="reset">Reset</button>
 		<button type="submit">Save</button>
 	</fieldset>
 </form>
-
+<script type="text/javascript">
+	$('select[data-ui="typeahead"]').chosen();
+</script>
 <?
 //$html->form()->_class('task')->_method('post')
 //	->fieldset()

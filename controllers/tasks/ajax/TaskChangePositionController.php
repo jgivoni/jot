@@ -2,7 +2,7 @@
 
 namespace Replanner;
 
-class TaskChangePositionController extends AjaxController {
+class TaskChangePositionController extends TaskController {
 	protected $task_id;
 	protected $taskModel;
 	protected $title;
@@ -22,22 +22,27 @@ class TaskChangePositionController extends AjaxController {
 				return $this->newResponse()->body(array('success' => false));
 			}
 			$taskList = $this->newView('task/list.html')->assign(array(
-				'tasks' => $this->getDataMapper('task')->loadAll()
+				'tasks' => $this->getDataMapper('taskUser')->loadAllOrdered()
 			));
 			return $this->newResponse()->body(array(
 				'taskList' => (string)$taskList
-			));;
+			));
 		} else {
-			return $this->newResponse()->body("No position or drop task posted");
+			return $this->newResponse()->body("No drop position posted");
 		}
 	}
 
 	public function postRequest(\Ophp\HttpRequest $req) {
-		$taskMapper = $this->getDataMapper('task');
+		$taskMapper = $this->getTaskMapper();
 		$dropTaskId = $req->getPostParam('dropTaskId');
-		$dropTask = $taskMapper->loadByPrimaryKey($dropTaskId);
-		$this->taskModel->setPosition($dropTask['position']);
-		//$this->taskModel->setPriority($req->getPostParam($fields['priority']['name']));
+		if (!empty($dropTaskId)) {
+			$dropTask = $taskMapper->loadByPrimaryKey($dropTaskId);
+			$newPosition = $dropTask['position'];
+		} else {
+			$lastTask = $taskMapper->loadLast();
+			$newPosition = $lastTask['position'] + 1;
+		}
+		$this->taskModel->setPosition($newPosition);
 		$taskMapper->saveTask($this->taskModel);
 	}
 }
