@@ -4,9 +4,7 @@ namespace Eiai;
 
 class Tag extends Item {
 
-	const ITEMID_TAG = 'tag';
-	const ITEMID_TAGCATEGORY = 'tag_category';
-
+	
 	/**
 	 * Returns the category of this tag
 	 * @return $item
@@ -14,5 +12,9 @@ class Tag extends Item {
 	public function getTagCategory() {
 		$itemSet = $this->getLinkedItemsByLinkedItem(self::ITEMID_TAGCATEGORY);
 		return $itemSet->first();
+	}
+	
+	public function isTag() {
+		return $this->isLinkedTo(self::ITEMID_TAG);
 	}
 }
