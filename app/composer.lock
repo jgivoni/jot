@@ -1,0 +1,36 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "e312938ca8ee6ef92dbbafb4f82da4f4",
+    "packages": [
+        {
+            "name": "jgivoni/ophp",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "/ophp",
+                "reference": "1745f112ad641c94b4baa0bd811b46d06c35355f",
+                "shasum": null
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ophp\\": "src/"
+                }
+            }
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "jgivoni/ophp": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

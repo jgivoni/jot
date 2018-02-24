@@ -1,0 +1,30 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "markush81/centos7-vbox-guestadditions"
+  config.vm.box_version = "1.0.2"
+
+  config.vm.provider "virtualbox" do |v|
+    v.name="replanner." + Time.now.strftime("%Y%m%d-%H%M")
+    v.memory = "1024"
+  end
+
+  require 'yaml'
+  vuc = YAML.load_file 'VagrantUserconfig'
+
+  config.vm.network "forwarded_port", guest: 80, host: vuc['host_web_port']
+  config.vm.network "private_network", ip: vuc['vm_ip']
+  config.vm.hostname = "replanner.local"
+
+  config.vm.synced_folder vuc['replanner_dir'], "/replanner"
+  config.vm.synced_folder vuc['ophp_dir'], "/ophp"
+
+  config.vm.provision "shell" do |s| 
+    s.inline = <<-SHELL
+      /bin/bash /vagrant/provisioning/install.sh
+      /bin/bash /vagrant/provisioning/configuration.sh $1 $2
+    SHELL
+    s.args = [vuc['aws_access_key_id'], vuc['aws_access_key_secret']]
+  end
+end
