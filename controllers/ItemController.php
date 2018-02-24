@@ -6,14 +6,8 @@ namespace Replanner;
  * 
  * An abstract base class for all controllers within this app
  */
-abstract class TaskController extends \Ophp\Controller {
+abstract class ItemController extends \Ophp\Controller {
 
-	/**
-	 * Id of the authenticated user
-	 * @var int
-	 */
-	protected $currentUserId = 1;
-	
 	/**
 	 * @var View
 	 */
@@ -34,16 +28,7 @@ abstract class TaskController extends \Ophp\Controller {
 	 * @todo Wrap in factory - be more specific about return type
 	 */
 	protected function newDataMapper($model) {
-		switch ($model) {
-			case 'task':
-				$dataMapper = new TaskMapper;
-				break;
-			case 'taskUser':
-				$dataMapper = new TaskUserMapper;
-				break;
-			default:
-				throw new \Exception('Unknown model class');
-		}
+		$dataMapper = new ItemMapper;
 		$dataMapper->setDba($this->getDba());
 		return $dataMapper;
 	}
@@ -64,18 +49,10 @@ abstract class TaskController extends \Ophp\Controller {
 	 * 
 	 * @return TaskMapper
 	 */
-	protected function getTaskMapper() {
-		return $this->getDataMapper('task');
+	protected function getItemMapper() {
+		return $this->getDataMapper('item');
 	}
 	
-	/**
-	 * 
-	 * @return TaskUserMapper
-	 */
-	protected function getTaskUserMapper() {
-		return $this->getDataMapper('taskUser')->setCurrentUserId($this->currentUserId);
-	}
-
 	/**
 	 * Returns the full path and filename to the template specified
 	 * @param string $template
@@ -137,7 +114,7 @@ abstract class TaskController extends \Ophp\Controller {
 	 */
 	protected function getDba() {
 		return isset($this->dba) ? $this->dba :
-			$this->dba = $this->getServer()->newMysqlDatabaseAdapter('replanner');
+			$this->dba = $this->getServer()->newDynamoDbDatabaseAdapter('replanner_item');
 	}
 
 	/**

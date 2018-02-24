@@ -53,9 +53,9 @@ class AppPackage {
 			$class = __NAMESPACE__ . '\\' . $class; 
 			$paths[$class] = $path;
 		}
-		$paths['Ophp\CorePackage'] = apache_getenv('ophp.path') . 'CorePackage.php';
+		$paths['Ophp\CorePackage'] = getenv('ophp.path') . 'CorePackage.php';
 		$paths['FirePhp\FirePhpPackage'] = 'libs/FirePHPCore/FirePhpPackage.php';
-		$paths[__NAMESPACE__.'\EnvironmentConfig'] = apache_getenv('ophp.root_config');
+		$paths[__NAMESPACE__.'\EnvironmentConfig'] = getenv('ophp.root_config');
 
 		spl_autoload_register(function($class) use ($paths) {
 			if (isset($paths[$class])) {
