@@ -24,5 +24,10 @@ class EnvironmentConfig extends DevelopmentConfig
             'password' => '',
         ),
     );
+	
+	protected $paths = array(
+		'staticAssets' => 'http://static.replanner.local/',
+	);
+
 
 }

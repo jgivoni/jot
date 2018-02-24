@@ -18,8 +18,5 @@ class DevelopmentConfig extends \Ophp\Config
 			'password' => '',
 		),
 	);
-	protected $paths = array(
-		'staticAssets' => 'static-assets/',
-	);
 
 }
