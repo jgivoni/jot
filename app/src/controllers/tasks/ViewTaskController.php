@@ -1,8 +1,8 @@
 <?php
 
-namespace Replanner;
+namespace Replanner\controllers\tasks;
 
-class ViewTaskController extends TaskController {
+class ViewTaskController extends \Replanner\controllers\TaskController {
 	
 	/**
 	 * @var TaskUserModel The current task
@@ -18,6 +18,7 @@ class ViewTaskController extends TaskController {
 	 * Creates a new controller and sets the task id
 	 */
 	function __construct($taskId) {
+		var_dump($taskId);die;
 		parent::__construct();
 		$this->taskId = $taskId;
 	}
