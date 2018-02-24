@@ -1,6 +1,6 @@
 <?php
 
-namespace Replanner;
+namespace Replanner\controllers;
 
 class NotFoundController extends TaskController {
 	public function __invoke() {

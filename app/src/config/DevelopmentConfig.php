@@ -4,7 +4,7 @@
  * Configuration for development runmode
  */
 
-namespace Replanner;
+namespace Replanner\config;
 
 class DevelopmentConfig extends \Ophp\Config
 {

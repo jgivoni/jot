@@ -1,6 +1,6 @@
 <?php
 
-namespace Replanner;
+namespace Replanner\controllers;
 
 class IndexController extends TaskController {
 	

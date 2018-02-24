@@ -17,8 +17,11 @@ if (!ini_get('date.timezone')) {
 	date_default_timezone_set('Europe/Madrid');
 }
 
-// Bootstrap the entire app by loading and initialising the Application Package
+// Composer autoloader
 require_once '/replanner/app/vendor/autoload.php';
+
+// Local environment configuration
+require_once 'EnvironmentConfig.php';
 
 // You can create a server for each type of request: webpages, REST, api, json, cli
 (new AppServer)->handleRequest();

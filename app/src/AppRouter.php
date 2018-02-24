@@ -2,17 +2,20 @@
 
 namespace Replanner;
 
-class AppRouter extends \Ophp\UrlRouter {
+use Ophp\Router;
+use Replanner\controllers;
+
+class AppRouter extends \Ophp\Router\UrlRouter {
 	public function __construct() {
-		$this->addRoute(new \Ophp\RegexRoute('^$', function(){return new IndexController();}))
-			->addRoute(new \Ophp\RegexRoute('^tasks/new(?:/([^/]*))?$', function($title=''){return new NewTaskController($title);}))
-			->addRoute(new \Ophp\RegexRoute('^tasks/cards$', function(){return new CardsController();}))
-			->addRoute(new \Ophp\RegexRoute('\.t(\d+)$', function($taskId) {return new ViewTaskController($taskId);}))
-			->addRoute(new \Ophp\RegexRoute('\.t(\d+)/edit$', function($taskId) {return new EditTaskController($taskId);}))
-			->addRoute(new \Ophp\RegexRoute('\.t(\d+)/delete', function($taskId) {return new DeleteTaskController($taskId);}))
-			->addRoute(new \Ophp\RegexRoute('^tasks$', function(){return new ListTaskController;}))
-			->addRoute(new \Ophp\RegexRoute('^tasks/ajax/reorder/(\d+)$', function($taskId) {return new TaskChangePositionController($taskId);}))
-			->addRoute(new \Ophp\RegexRoute('^tasks/ajax/view/(\d+)$', function($taskId) {return new AjaxViewTaskController($taskId);}))
-			->addRoute(new \Ophp\RegexRoute('', function() {return new NotFoundController;}));
+		$this->addRoute(new Router\RegexRoute('^$', function(){return new controllers\IndexController();}))
+			->addRoute(new Router\RegexRoute('^tasks/new(?:/([^/]*))?$', function($title=''){return new controllers\tasks\NewTaskController($title);}))
+			->addRoute(new Router\RegexRoute('^tasks/cards$', function(){return new controllers\CardsController();}))
+			->addRoute(new Router\RegexRoute('\.t(\d+)$', function($taskId) {return new controllers\ViewTaskController($taskId);}))
+			->addRoute(new Router\RegexRoute('\.t(\d+)/edit$', function($taskId) {return new controllers\EditTaskController($taskId);}))
+			->addRoute(new Router\RegexRoute('\.t(\d+)/delete', function($taskId) {return new controllers\DeleteTaskController($taskId);}))
+			->addRoute(new Router\RegexRoute('^tasks$', function(){return new controllers\tasks\ListTaskController;}))
+			->addRoute(new Router\RegexRoute('^tasks/ajax/reorder/(\d+)$', function($taskId) {return new controllers\TaskChangePositionController($taskId);}))
+			->addRoute(new Router\RegexRoute('^tasks/ajax/view/(\d+)$', function($taskId) {return new controllers\AjaxViewTaskController($taskId);}))
+			->addRoute(new Router\RegexRoute('', function() {return new controllers\NotFoundController;}));
 	}
 }

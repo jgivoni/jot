@@ -17,6 +17,8 @@ setenforce 0
 ln -s /vagrant/provisioning/apache/replanner.conf /etc/httpd/conf.d
 rm /etc/httpd/conf.d/welcome.conf
 
+ln -s /vagrant/provisioning/php/php.ini /etc/php.d/replanner.ini
+
 chmod -R 755 /replanner
 
 mkdir /var/lib/php/session

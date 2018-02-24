@@ -1,6 +1,6 @@
 <?php
 
-namespace Replanner;
+namespace Replanner\config;
 
 class EnvironmentConfig extends DevelopmentConfig
 {
