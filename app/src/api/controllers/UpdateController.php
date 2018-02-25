@@ -2,19 +2,22 @@
 
 namespace Replanner\api\controllers;
 
-class InsertController extends ApiController {
+class UpdateController extends ApiController {
 
 	protected $dba;
+	protected $itemId;
 	protected $content;
 
-	function __construct($content) {
+	function __construct($itemId, $content) {
+		$this->itemId = $itemId;
 		$this->content = $content;
 		parent::__construct();
 	}
 
 	public function __invoke() {
 		$dba = $this->getDynamoDbDatabaseAdapter();
-		$result = $dba->insert('replanner-items', 'itemId', [
+		$result = $dba->updateAttributes('replanner-items', 'itemId', [
+			'itemId' => $this->itemId,
 			'content' => $this->content,
 		]);
 		return $this->newResponse()->body(['result' => $result]);

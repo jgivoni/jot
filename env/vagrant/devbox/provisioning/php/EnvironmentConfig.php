@@ -19,7 +19,7 @@ class EnvironmentConfig extends DevelopmentConfig
      */
     protected $databaseConnections = array(
         'replanner' => array(
-            'credentialsFile' => '/home/vagrant/.aws./credentials',
+            'credentialsFile' => '/home/vagrant/.aws/credentials',
             'region' => 'eu-west-1',
         ),
     );
