@@ -14,14 +14,13 @@ class EnvironmentConfig extends DevelopmentConfig
     /**
      * List of database connections
      * - each named connection needs to specify host, db name, user and password
+	 * or credentials and region for dynamo db
      * @var array
      */
     protected $databaseConnections = array(
         'replanner' => array(
-            'host' => 'localhost',
-            'database' => 'replanner',
-            'user' => 'webapp',
-            'password' => '',
+            'credentialsFile' => '/home/vagrant/.aws./credentials',
+            'region' => 'eu-west-1',
         ),
     );
 	

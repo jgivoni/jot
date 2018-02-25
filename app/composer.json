@@ -1,6 +1,7 @@
 {
     "require": {
-        "jgivoni/ophp": "dev-master"
+        "jgivoni/ophp": "dev-master",
+        "aws/aws-sdk-php": "^3"
     },
 
     "autoload": {
