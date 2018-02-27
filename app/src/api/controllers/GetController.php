@@ -13,11 +13,9 @@ class GetController extends ApiController {
 	}
 
 	public function __invoke() {
-		$dba = $this->getDynamoDbDatabaseAdapter();
-		$result = $dba->get('replanner-items', 'itemId', [
-			'itemId' => $this->itemId,
-		]);
-		return $this->newResponse()->body(['result' => $result]);
+		$item = $this->getItemMapper()->loadByPrimaryKey($this->itemId);
+		
+		return $this->newResponse()->body(['result' => $item->content]);
 	}
 
 }

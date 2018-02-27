@@ -13,10 +13,10 @@ class InsertController extends ApiController {
 	}
 
 	public function __invoke() {
-		$dba = $this->getDynamoDbDatabaseAdapter();
-		$result = $dba->insert('replanner-items', 'itemId', [
-			'content' => $this->content,
-		]);
+		$item = $this->getItemMapper()->newModel();
+		$item->setContent($this->content);
+		$result = $this->getItemMapper()->save($item);
+		
 		return $this->newResponse()->body(['result' => $result]);
 	}
 
