@@ -34,6 +34,11 @@ abstract class Controller extends \Ophp\Controller {
 		return $this->getServer()->getAppRootPath() . '/views/';
 	}
 
+	/**
+	 * 
+	 * @param string $template
+	 * @return \Ophp\view
+	 */
 	protected function newView($template) {
 		$document = $this->newDocumentView();
 		$view = $document->fragment($template);
@@ -57,9 +62,6 @@ abstract class Controller extends \Ophp\Controller {
 		$staticAssets = $this->getServer()->getUrlHelper()->staticAssets;
 		
 		$document->addCssFile($staticAssets('global.css'));
-		$document->addCssFile($staticAssets('task/view.css'));
-		$document->addCssFile($staticAssets('task/form.css'));
-		$document->addCssFile($staticAssets('task/list.css'));
 		$document->addCssFile($staticAssets('jquery-ui/css/humanity/jquery-ui-1.8.19.custom.css'));
 		$document->addCssFile($staticAssets('chosen_v1.1.0/chosen.min.css'));
 		
@@ -67,7 +69,7 @@ abstract class Controller extends \Ophp\Controller {
 		$document->addJsFile($staticAssets('jquery-ui/js/jquery-ui-1.8.19.custom.min.js'));
 		$document->addJsFile($staticAssets('jquery-ui/js/jquery.history.js'));
 		$document->addJsFile($staticAssets('chosen_v1.1.0/chosen.jquery.min.js'));
-		$document->addJsFile($staticAssets('task/tasks.js'));
+		$document->addJsFile($staticAssets('index.js'));
 		return $document;
 	}
 
@@ -91,5 +93,15 @@ abstract class Controller extends \Ophp\Controller {
 			$response->body($view->top());
 		}
 		return $response;
+	}
+	
+	protected function getApiResult($query) {
+		$apiRequest = new \Ophp\requests\HttpRequest;
+		$apiRequest->url = $query;
+		$apiServer = new \Replanner\api\ApiServer;
+		$apiResponse = $apiServer->getResponse($apiRequest);
+		
+		$result = $apiResponse->body['result'];
+		return $result;
 	}
 }
