@@ -14,8 +14,8 @@ class GetController extends ApiController {
 
 	public function __invoke() {
 		$item = $this->getItemMapper()->loadByPrimaryKey($this->itemId);
-		
-		return $this->newResponse()->body(['result' => $item->content]);
+		$result = isset($item) ? $item->content : null;
+		return $this->newResponse()->body(['result' => $result]);
 	}
 
 }

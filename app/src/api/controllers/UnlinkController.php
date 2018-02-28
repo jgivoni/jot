@@ -2,7 +2,7 @@
 
 namespace Replanner\api\controllers;
 
-class LinkController extends ApiController {
+class UnlinkController extends ApiController {
 
 	protected $dba;
 	protected $itemId;
@@ -18,7 +18,7 @@ class LinkController extends ApiController {
 		$fromItem = $this->getItemMapper()->loadByPrimaryKey($this->itemId);
 		$toItem = $this->getItemMapper()->loadByPrimaryKey($this->toId);
 		if (isset($fromItem) && isset($toItem)) {
-			$result = $this->getItemMapper()->linkItems($fromItem, $toItem);
+			$result = $this->getItemMapper()->unlinkItems($fromItem, $toItem);
 		} else {
 			$result = false;
 		}

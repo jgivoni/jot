@@ -6,7 +6,7 @@ namespace Replanner\controllers;
  * 
  * An abstract base class for all controllers within this app
  */
-abstract class TaskController extends \Ophp\Controller {
+abstract class Controller extends \Ophp\Controller {
 
 	/**
 	 * Id of the authenticated user
@@ -20,62 +20,7 @@ abstract class TaskController extends \Ophp\Controller {
 	protected $baseView;
 	protected $baseTemplate = 'base.html';
 
-	/**
-	 * List of shared data mappers
-	 * @var array
-	 */
-	protected $dataMappers = array();
-
-	/**
-	 * Returns a new instance of the data mapper for $model
-	 * 
-	 * @param string $model Model name
-	 * @return \Ophp\dataMapper
-	 * @todo Wrap in factory - be more specific about return type
-	 */
-	protected function newDataMapper($model) {
-		switch ($model) {
-			case 'task':
-				$dataMapper = new TaskMapper;
-				break;
-			case 'taskUser':
-				$dataMapper = new TaskUserMapper;
-				break;
-			default:
-				throw new \Exception('Unknown model class');
-		}
-		$dataMapper->setDba($this->getDba());
-		return $dataMapper;
-	}
-
-	/**
-	 * Returns a shared instance of the data mapper for $model
-	 * 
-	 * @param string $model Model name
-	 * @return \Ophp\dataMapper
-	 */
-	protected function getDataMapper($model) {
-		return isset($this->dataMappers[$model]) ?
-				$this->dataMappers[$model] :
-				$this->dataMappers[$model] = $this->newDataMapper($model);
-	}
-
-	/**
-	 * 
-	 * @return TaskMapper
-	 */
-	protected function getTaskMapper() {
-		return $this->getDataMapper('task');
-	}
 	
-	/**
-	 * 
-	 * @return TaskUserMapper
-	 */
-	protected function getTaskUserMapper() {
-		return $this->getDataMapper('taskUser')->setCurrentUserId($this->currentUserId);
-	}
-
 	/**
 	 * Returns the full path and filename to the template specified
 	 * @param string $template
@@ -90,14 +35,10 @@ abstract class TaskController extends \Ophp\Controller {
 	}
 
 	protected function newView($template) {
-		if (!$this->getRequest()->isAjax()) {
-			$document = $this->newDocumentView();
-			$view = $document->fragment($template);
-			$document->assign(['content' => $view]);
-		} else {
-			$view = new \Ophp\View($template, $this->getTemplateBase());
-		}
-		return $view;
+		$document = $this->newDocumentView();
+		$view = $document->fragment($template);
+		$document->assign(['content' => $view]);
+		return $document;
 	}
 
 	/**
@@ -110,7 +51,6 @@ abstract class TaskController extends \Ophp\Controller {
 		$document->url = $this->getServer()->getUrlHelper();
 		$document->index = $document->fragment('task/list.html');
 		$document->index->assign([
-//			'tasks' => $this->getTaskUserMapper()->loadAllOrdered(),
 			'tasks' => [],
 		]);
 		$document->notifications = 'Was it what you expected?';

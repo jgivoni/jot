@@ -13,10 +13,12 @@ class DeleteController extends ApiController {
 	}
 
 	public function __invoke() {
-		$dba = $this->getDynamoDbDatabaseAdapter();
-		$result = $dba->delete('replanner-items', 'itemId', [
-			'itemId' => $this->itemId,
-		]);
+		$item = $this->getItemMapper()->loadByPrimaryKey($this->itemId);
+		if (isset($item)) {
+			$result = $this->getItemMapper()->deleteByModel($item);
+		} else {
+			$result = false;
+		}
 		return $this->newResponse()->body(['result' => $result]);
 	}
 

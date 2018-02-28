@@ -31,8 +31,8 @@ class ItemMapper extends \Ophp\NoSqlDataMapper {
 		return 1;
 	}
 
-	public function deleteByModel(\Ophp\Model $model) {
-		;
+	public function deleteByModel(\Ophp\Model $item) {
+		return $this->dba->delete($this->tableName, $this->modelToArray($item), $this->primaryKey);
 	}
 
 	public function save(Item $item) {
@@ -48,4 +48,33 @@ class ItemMapper extends \Ophp\NoSqlDataMapper {
 		$bytes = ceil($length * 0.625);
 		return substr(base_convert(bin2hex(random_bytes($bytes)), 16, 36), 0, $length);
 	}
+
+	public function linkItems(Item $fromItem, Item $toItem) {
+		$result1 = $this->dba->addSetElements($this->tableName, [
+			'itemId' => $fromItem->itemId,
+				], [
+			'to' => [$toItem->itemId],
+		]);
+		$result2 = $this->dba->addSetElements($this->tableName, [
+			'itemId' => $toItem->itemId,
+				], [
+			'from' => [$fromItem->itemId],
+		]);
+		return $result1 && $result2;
+	}
+	
+	public function unlinkItems(Item $fromItem, Item $toItem) {
+		$result1 = $this->dba->removeSetElements($this->tableName, [
+			'itemId' => $fromItem->itemId,
+				], [
+			'to' => [$toItem->itemId],
+		]);
+		$result2 = $this->dba->removeSetElements($this->tableName, [
+			'itemId' => $toItem->itemId,
+				], [
+			'from' => [$fromItem->itemId],
+		]);
+		return $result1 && $result2;
+	}
+
 }

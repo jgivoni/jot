@@ -2,8 +2,8 @@
 
 namespace Replanner\controllers;
 
-class IndexController extends TaskController {
-	
+class IndexController extends Controller {
+
 	/**
 	 * Returns a response with a list of important tasks
 	 * @return \Ophp\HttpResponse
@@ -12,5 +12,5 @@ class IndexController extends TaskController {
 		$view = $this->newView('index.html');
 		return $this->newResponse()->body($view);
 	}
-	
+
 }

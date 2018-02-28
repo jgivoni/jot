@@ -11,20 +11,10 @@
 		<?php endforeach; ?>
 	</head>
 	<body>
-		<div class="col1">
-			<? $p($index)->html(); ?>
-		</div>
-		<div class="col2">
+		<div class="content">
 			<? $p($content)->html(); ?>
-		</div>
-		<div class="col3">
-			<? $p($notifications)->html(); ?>
 		</div>
 
 		<p class="signature">Powered by ophp</p>
-		<div class="top-bar"><a class="replanner" href="<? $p($url())->attrVal() ?>">re*planner</a> | Agenda | <a href="<? $p($url('tasks'))->attrVal(); ?>">List</a> | 
-			<a href="<? $p($url('tasks/new'))->attrVal(); ?>">New task</a> | 
-			<a href="<? $p($url('tasks/cards'))->attrVal(); ?>">Cards/Tiles</a> | Settings</div>
-		<div class="bottom-bar"><a href="<? $p($url('tasks/new'))->attrVal(); ?>">New task</a> | Delete task | Reorder tasks</div>
 	</body>
 </html>
