@@ -51,6 +51,12 @@ systemctl start php-fpm
 systemctl enable httpd
 systemctl enable php-fpm
 
+systemctl start docker
+systemctl enable docker
+
 ntpdate pool.ntp.org
 systemctl start ntpd.service
 systemctl enable ntpd.service
+
+# Redis
+docker container run --name redis -d -p 6379:6379 redis

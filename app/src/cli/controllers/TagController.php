@@ -17,7 +17,8 @@ class TagController extends CliController {
 			$itemId = $this->getRequest()->getParam(0);
 		}
 
-		$tagIds = $this->getApiResult('/query/' . $tagName . '->:' . $tagsItemId);
+		$result  = $this->getApiResult('/get/' . $tagsItemId);
+		$tagIds = isset($result) ? (array) $result->linkFrom : [];
 		
 		if (!empty($tagIds)) {
 			$tagId = $tagIds[0];

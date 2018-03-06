@@ -37,7 +37,7 @@ class QueryController extends ApiController {
 	}
 
 	protected function getTokensFromQuery(string $query) {
-		preg_match_all('/([a-z0-9~\*\:]+|->|\(|\)|,|\|)/i', $query, $matches);
+		preg_match_all('/([a-z0-9~\*\:]+|->|<-|\(|\)|,|\|)/i', $query, $matches);
 		return $matches[0];
 	}
 
@@ -57,7 +57,7 @@ class QueryController extends ApiController {
 						});
 					};
 				}
-			} elseif (preg_match('/^(->|\(|,|\|)$/i', $token)) {
+			} elseif (preg_match('/^(->|<-|\(|,|\|)$/i', $token)) {
 				$operators[] = $token;
 			} elseif ($token === ')') {
 				while (true) {
@@ -94,6 +94,8 @@ class QueryController extends ApiController {
 	protected function calculateOperation($token, $operand1, $operand2) {
 		if ($token === '->') {
 			$result = $this->getItemsLinkedToItems($operand1, $operand2);
+		} elseif ($token === '<-') {
+			$result = $this->getItemsLinkedFromItems($operand1, $operand2);
 		} elseif ($token === ',') {
 			$result = $this->getIntersectionOfItems($operand1, $operand2);
 		} elseif ($token === '|') {
@@ -106,13 +108,29 @@ class QueryController extends ApiController {
 		$itemIds = [];
 		foreach ($parents as $parentItemId) {
 			$parentItem = $this->getItemMapper()->loadByPrimaryKey($parentItemId);
-			$itemIds = array_unique(array_merge($itemIds, $parentItem->linkFrom));
+			$itemIds = array_unique(array_merge($itemIds, (array) $parentItem->linkFrom));
 		}
 		$items = [];
 		foreach ($itemIds as $itemId) {
 			$items[] = $this->getItemMapper()->loadByPrimaryKey($itemId);
 		}
 		$items = $children($items);
+		return array_map(function(\Replanner\models\Item $item) {
+			return $item->itemId;
+		}, $items);
+	}
+	
+	protected function getItemsLinkedFromItems(\Closure $parents, array $children) {
+		$itemIds = [];
+		foreach ($children as $childItemId) {
+			$childItem = $this->getItemMapper()->loadByPrimaryKey($childItemId);
+			$itemIds = array_unique(array_merge($itemIds, (array) $childItem->linkTo));
+		}
+		$items = [];
+		foreach ($itemIds as $itemId) {
+			$items[] = $this->getItemMapper()->loadByPrimaryKey($itemId);
+		}
+		$items = $parents($items);
 		return array_map(function(\Replanner\models\Item $item) {
 			return $item->itemId;
 		}, $items);

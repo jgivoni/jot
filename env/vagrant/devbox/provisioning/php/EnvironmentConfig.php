@@ -22,6 +22,10 @@ class EnvironmentConfig extends DevelopmentConfig {
 			'credentialsFile' => '/home/vagrant/.aws/credentials',
 			'region' => 'eu-west-1',
 		),
+		'redis-cache' => [
+			'host' => 'localhost',
+			'port' => 6379,
+		]
 	);
 	protected $paths = array(
 		'staticAssets' => 'http://static.replanner.local/',

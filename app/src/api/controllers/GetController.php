@@ -13,8 +13,19 @@ class GetController extends ApiController {
 	}
 
 	public function __invoke() {
-		$item = $this->getItemMapper()->loadByPrimaryKey($this->itemId);
-		$result = isset($item) ? $item->content : null;
+		$redis = $this->getServer()->newRedisCacheClient();
+		$item = $redis->get($this->itemId);
+		if (empty($item)) {
+			$item = $this->getItemMapper()->loadByPrimaryKey($this->itemId);
+			$redis->set($this->itemId, $item);
+		}
+
+		$result = isset($item) ? [
+			'itemId' => $item->itemId,
+			'content' => $item->content,
+			'belongsTo' => (array) $item->linkTo,
+			'contains' => (array) $item->linkFrom,
+				] : null;
 		return $this->newResponse()->body(['result' => $result]);
 	}
 

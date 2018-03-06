@@ -13,14 +13,33 @@ class GetController extends CliController {
 		}
 
 		if (!empty($itemId)) {
-			$content = $this->getApiResult('/get/' . $itemId);
+			$result = $this->getApiResult('/get/' . $itemId);
+			$content = isset($result) ? $result['content'] : null;
+			$belongsToIds = isset($result) ? (array) $result['belongsTo'] : [];
+			$belongsTo = [];
+			foreach ($belongsToIds as $itemId) {
+				$belongsTo[] = $this->getApiResult('/get/' . $itemId);
+			}
+			$contains = [];
+			$containsIds = isset($result) ? (array) $result['contains'] : [];
+			foreach ($containsIds as $itemId) {
+				$contains[] = $this->getApiResult('/get/' . $itemId);
+			}
 		}
 
 		$response = $this->newResponse();
 
 		if (isset($content)) {
 			$_SESSION['itemId'] = $itemId;
-			$response->body($itemId . " \t" . $content);
+			$lines = [];
+			$lines[] = $itemId . " \t" . $content;
+			foreach ($belongsTo as $item) {
+				$lines[] = "-> \t" . $item['itemId'] . " \t" . $item['content'];
+			}
+			foreach ($contains as $item) {
+				$lines[] = "<- \t" . $item['itemId'] . " \t" . $item['content'];
+			}
+			$response->body(implode("\n", $lines));
 		} else {
 			$response->error(true)->body('An error occurred executing JOT');
 		}
