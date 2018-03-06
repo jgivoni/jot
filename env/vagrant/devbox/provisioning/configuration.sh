@@ -35,6 +35,16 @@ sed -e "s|<id>|$aws_access_key_id|g" -e "s|<secret>|$aws_access_key_secret|g" /v
 chown -R vagrant.vagrant /home/vagrant/.aws
 chmod -R 750 /home/vagrant
 
+# JOT CLI
+ln -s /vagrant/provisioning/php/jotcli.php /usr/bin/jot
+ln -s jot /usr/bin/jotadd
+ln -s jot /usr/bin/jotget
+ln -s jot /usr/bin/jotlink
+ln -s jot /usr/bin/jotlist
+ln -s jot /usr/bin/jottag
+
+ln -s /vagrant/provisioning/user/jotrc /home/vagrant/.jotrc
+
 # Autostart services
 systemctl start httpd
 systemctl start php-fpm

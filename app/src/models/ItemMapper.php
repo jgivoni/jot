@@ -2,6 +2,9 @@
 
 namespace Replanner\models;
 
+/**
+ * @method \Replanner\models\Item loadByPrimaryKey
+ */
 class ItemMapper extends \Ophp\NoSqlDataMapper {
 
 	protected $tableName = 'replanner-items';

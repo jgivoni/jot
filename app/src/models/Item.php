@@ -2,6 +2,12 @@
 
 namespace Replanner\models;
 
+/**
+ * @property string $itemId
+ * @property string $content
+ * @property array $linkTo
+ * @property array $linkFrom
+ */
 class Item extends \Ophp\Model {
 
 	protected $itemId;

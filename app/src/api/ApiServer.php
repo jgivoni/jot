@@ -14,7 +14,7 @@ class ApiServer extends \Ophp\WebServer {
 		return new ApiRouter();
 	}
 	
-	public function handleRequest(\Ophp\requests\HttpRequest $req = null) {
+	public function handleRequest(\Ophp\requests\Request $req = null) {
 		parent::handleRequest($req);
 	}
 	
