@@ -16,10 +16,10 @@ class UpdateController extends ApiController {
 
 	public function __invoke() {
 		$dba = $this->getDynamoDbDatabaseAdapter();
-		$result = $dba->updateAttributes('replanner-items', 'itemId', [
+		$result = $dba->updateAttributes('replanner-items', [
 			'itemId' => $this->itemId,
 			'content' => $this->content,
-		]);
+		], 'itemId');
 		return $this->newResponse()->body(['result' => $result]);
 	}
 

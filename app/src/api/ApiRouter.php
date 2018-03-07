@@ -12,6 +12,7 @@ class ApiRouter extends \Ophp\Router\UrlRouter {
 		$this->addRoute(new Router\RegexRoute('^update/(.*)/(.*)$', controllers\UpdateController::class));
 		$this->addRoute(new Router\RegexRoute('^delete/(.*)$', controllers\DeleteController::class));
 		$this->addRoute(new Router\RegexRoute('^get/(.*)$', controllers\GetController::class));
+		$this->addRoute(new Router\RegexRoute('^getbatch/(.*)$', controllers\GetBatchController::class));
 		$this->addRoute(new Router\RegexRoute('^link/(.*)/(.*)$', controllers\LinkController::class));
 		$this->addRoute(new Router\RegexRoute('^unlink/(.*)/(.*)$', controllers\UnlinkController::class));
 		$this->addRoute(new Router\RegexRoute('^query/(.*)$', controllers\QueryController::class));

@@ -23,7 +23,9 @@ class ApiServer extends \Ophp\WebServer {
 	}
 
 	public function newDynamoDbDatabaseAdapter(string $key): \Ophp\dba\DynamoDbDatabaseAdapter {
-		return new \Ophp\dba\DynamoDbDatabaseAdapter($this->getConfig()->databaseConnections[$key]);
+		$config = $this->getConfig()->databaseConnections[$key];
+		$config['cacheClient'] = $this->newRedisCacheClient();
+		return new \Ophp\dba\CachedDynamoDbDatabaseAdapter($config);
 	}
 
 	public function newRedisCacheClient() {
