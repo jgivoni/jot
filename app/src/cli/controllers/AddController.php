@@ -7,17 +7,21 @@ namespace Replanner\cli\controllers;
 class AddController extends CliController {
 
 	public function __invoke() {
-		$content = $this->getRequest()->getParam(0);
+		$content = implode(' ', $this->getRequest()->params);
 
-		$itemId = $this->getApiResult('/insert/' . $content);
+		$result = $this->getApiResult('/insert/' . $content);
 
+		$status = isset($result['status']) ? $result['status'] : null;
+		$itemId = isset($result['itemId']) ? $result['itemId'] : null;
+		
 		$response = $this->newResponse();
 
-		if (isset($itemId)) {
+		if ($status === 'success' && !empty($itemId)) {
 			$_SESSION['itemId'] = $itemId;
 			$response->body($itemId . " \t" . $content);
 		} else {
-			$response->error(true)->body('An error occurred executing JOT');
+			$message = isset($result['message']) ? $result['message'] : 'Unknown error';
+			$response->error(true)->body('An error occurred executing JOT: ' . $message);
 		}
 
 		return $response;

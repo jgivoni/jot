@@ -8,7 +8,7 @@ aws_access_key_secret=$2
 usermod -a -G vagrant apache
 
 # User home
-cp /vagrant/provisioning/user/bashrc.sh /home/vagrant/.bashrc
+ln -s /vagrant/provisioning/user/bashrc.sh /home/vagrant/.bashrc
 
 # SELinux - relax restrictions to make it possible to serve files from other directory
 setenforce 0
@@ -35,6 +35,9 @@ sed -e "s|<id>|$aws_access_key_id|g" -e "s|<secret>|$aws_access_key_secret|g" /v
 chown -R vagrant.vagrant /home/vagrant/.aws
 chmod -R 750 /home/vagrant
 
+# crons
+ln -s /vagrant/provisioning/system/crons.txt /etc/cron.d/jot
+
 # JOT CLI
 ln -s /vagrant/provisioning/php/jotcli.php /usr/bin/jot
 ln -s jot /usr/bin/jotadd
@@ -42,6 +45,7 @@ ln -s jot /usr/bin/jotget
 ln -s jot /usr/bin/jotlink
 ln -s jot /usr/bin/jotlist
 ln -s jot /usr/bin/jottag
+ln -s jot /usr/bin/jotflush
 
 ln -s /vagrant/provisioning/user/jotrc /home/vagrant/.jotrc
 
@@ -59,4 +63,4 @@ systemctl start ntpd.service
 systemctl enable ntpd.service
 
 # Redis
-docker container run --name redis -d -p 6379:6379 redis
+docker container run --name redis -d -p 6379:6379 --rm redis

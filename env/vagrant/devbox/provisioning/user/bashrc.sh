@@ -10,6 +10,8 @@ fi
 # export SYSTEMD_PAGER=
 
 # User specific aliases and functions
+alias flush="sudo docker container exec -it redis redis-cli flushall"
+alias reload="source /home/vagrant/.bashrc"
 
 export LANG=en_US.UTF-8
 

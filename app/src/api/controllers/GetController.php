@@ -13,19 +13,35 @@ class GetController extends ApiController {
 	}
 
 	public function __invoke() {
-//		$redis = $this->getServer()->newRedisCacheClient();
-//		$item = $redis->get($this->itemId);
-//		if (empty($item)) {
+		try {
+			$identity = $this->getIdentity();
+			if (!isset($identity)) {
+				throw new ControllerException('Missing identity. Please provide the header: X-Jot-Identity = <your user ID>');
+			}
+			$identityItem = $this->getItemMapper()->loadByPrimaryKey($identity);
+			if (!in_array($this->itemId, (array) $identityItem->linkFrom)) {
+				throw new ControllerException('Item not found');
+			}
 			$item = $this->getItemMapper()->loadByPrimaryKey($this->itemId);
-//			$redis->set($this->itemId, $item);
-//		}
+			if (!isset($item)) {
+				throw new ControllerException('Item not found');
+			}
 
-		$result = isset($item) ? [
-			'itemId' => $item->itemId,
-			'content' => $item->content,
-			'belongsTo' => (array) $item->linkTo,
-			'contains' => (array) $item->linkFrom,
-				] : null;
+			$result = [
+				'status' => 'success',
+				'item' => [
+					'itemId' => $item->itemId,
+					'content' => $item->content,
+					'belongsTo' => (array) $item->linkTo,
+					'contains' => (array) $item->linkFrom,
+				]];
+		} catch (ControllerException $e) {
+			$result = [
+				'status' => 'error',
+				'message' => $e->getMessage(),
+			];
+		}
+
 		return $this->newResponse()->body(['result' => $result]);
 	}
 

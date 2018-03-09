@@ -13,17 +13,31 @@ class GetController extends CliController {
 		}
 
 		if (!empty($itemId)) {
-			$result = $this->getApiResult('/get/' . $itemId);
-			$content = isset($result) ? $result['content'] : null;
-			$belongsToIds = isset($result) ? (array) $result['belongsTo'] : [];
-			$belongsTo = [];
-			foreach ($belongsToIds as $itemId) {
-				$belongsTo[] = $this->getApiResult('/get/' . $itemId);
+			$realItemId = $this->getItemId($itemId);
+			if (isset($realItemId)) {
+				$itemId = $realItemId;
 			}
-			$contains = [];
-			$containsIds = isset($result) ? (array) $result['contains'] : [];
-			foreach ($containsIds as $itemId) {
-				$contains[] = $this->getApiResult('/get/' . $itemId);
+
+			$result = $this->getApiResult('/get/' . $itemId);
+			if ($result['status'] === 'success') {
+				$content = $result['item']['content'];
+
+				$belongsTo = [];
+				$contains = [];
+				$belongsToIds = (array) $result['item']['belongsTo'];
+				$containsIds = (array) $result['item']['contains'];
+				$result = $this->getApiResult('/getbatch/' . implode(',', array_unique(array_merge($belongsToIds, $containsIds))));
+				
+				if ($result['status'] === 'success') {
+					foreach ((array) $result['items'] as $item) {
+						if (in_array($item['itemId'], $belongsToIds)) {
+							$belongsTo[] = $item;
+						}
+						if (in_array($item['itemId'], $containsIds)) {
+							$contains[] = $item;
+						}
+					}
+				}
 			}
 		}
 

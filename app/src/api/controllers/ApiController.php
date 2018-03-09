@@ -37,4 +37,13 @@ class ApiController extends \Ophp\JsonController {
 		return $this->newResponse()->body(['result' => 'ok']);
 	}
 
+	/**
+	 * Returns the caller's identity Item ID
+	 * 
+	 * @return string
+	 */
+	public function getIdentity() {
+		return $this->getRequest()->getHeader('X-Jot-Identity');
+	}
+
 }
