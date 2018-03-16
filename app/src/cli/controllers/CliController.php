@@ -8,9 +8,10 @@ namespace Replanner\cli\controllers;
  */
 abstract class CliController extends \Ophp\Controller {
 
-	public function __construct() {
-		parent::__construct();
-		session_id($_SERVER['XDG_SESSION_ID']);
+	public function setServer(\Ophp\Server $server) {
+		parent::setServer($server);
+		$sessionId = $this->getServer()->getRequest()->getServerVar('XDG_SESSION_ID');
+		session_id($sessionId);
 		session_start();
 	}
 

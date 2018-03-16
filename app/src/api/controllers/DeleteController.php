@@ -15,7 +15,19 @@ class DeleteController extends ApiController {
 	public function __invoke() {
 		$item = $this->getItemMapper()->loadByPrimaryKey($this->itemId);
 		if (isset($item)) {
+			$belongsTo = (array) $item->linkTo;
+			$contains = (array) $item->linkFrom;
 			$result = $this->getItemMapper()->deleteByModel($item);
+			if ($result) {
+				foreach ($belongsTo as $itemId) {
+					$toItem = $this->getItemMapper()->loadByPrimaryKey($itemId);
+					$result = $this->getItemMapper()->unlinkItemFrom($item, $toItem);
+				}
+				foreach ($contains as $itemId) {
+					$fromItem = $this->getItemMapper()->loadByPrimaryKey($itemId);
+					$result = $this->getItemMapper()->unlinkItemTo($fromItem, $item);
+				}
+			}
 		} else {
 			$result = false;
 		}

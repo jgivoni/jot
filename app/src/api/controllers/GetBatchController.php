@@ -13,16 +13,20 @@ class GetBatchController extends ApiController {
 	}
 
 	public function __invoke() {
+		$identity = $this->getIdentity();
+		$identityItem = $this->getItemMapper()->loadByPrimaryKey($identity);
 		$items = $this->getItemMapper()->loadByPrimaryKeys($this->itemIds);
 
 		$resultItems = [];
 		foreach ($items as $item) {
-			$resultItems[] = [
-				'itemId' => $item->itemId,
-				'content' => $item->content,
-				'belongsTo' => (array) $item->linkTo,
-				'contains' => (array) $item->linkFrom,
-			];
+			if (in_array($item->itemId, (array) $identityItem->linkFrom)) {
+				$resultItems[] = [
+					'itemId' => $item->itemId,
+					'content' => $item->content,
+					'belongsTo' => (array) $item->linkTo,
+					'contains' => (array) $item->linkFrom,
+				];
+			}
 		}
 		$result = [
 			'status' => 'success',

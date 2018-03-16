@@ -8,6 +8,7 @@ aws_access_key_secret=$2
 usermod -a -G vagrant apache
 
 # User home
+rm -f /home/vagrant/.bashrc
 ln -s /vagrant/provisioning/user/bashrc.sh /home/vagrant/.bashrc
 
 # SELinux - relax restrictions to make it possible to serve files from other directory
@@ -45,7 +46,10 @@ ln -s jot /usr/bin/jotget
 ln -s jot /usr/bin/jotlink
 ln -s jot /usr/bin/jotlist
 ln -s jot /usr/bin/jottag
-ln -s jot /usr/bin/jotflush
+ln -s jot /usr/bin/jotupdate
+ln -s jot /usr/bin/jotdelete
+ln -s jot /usr/bin/jotunlink
+ln -s jot /usr/bin/jotmove
 
 ln -s /vagrant/provisioning/user/jotrc /home/vagrant/.jotrc
 

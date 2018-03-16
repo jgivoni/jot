@@ -74,19 +74,27 @@ class ItemMapper extends \Ophp\NoSqlDataMapper {
 		]);
 		return $result1 && $result2;
 	}
-	
+
 	public function unlinkItems(Item $fromItem, Item $toItem) {
-		$result1 = $this->dba->removeSetElements($this->tableName, [
-			'itemId' => $fromItem->itemId,
-				], [
-			'to' => [$toItem->itemId],
-		]);
-		$result2 = $this->dba->removeSetElements($this->tableName, [
-			'itemId' => $toItem->itemId,
-				], [
-			'from' => [$fromItem->itemId],
-		]);
+		$result1 = $this->unlinkItemTo($fromItem, $toItem);
+		$result2 = $this->unlinkItemFrom($fromItem, $toItem);
 		return $result1 && $result2;
+	}
+
+	public function unlinkItemTo(Item $fromItem, Item $toItem) {
+		return $this->dba->removeSetElements($this->tableName, [
+					'itemId' => $fromItem->itemId,
+						], [
+					'to' => [$toItem->itemId],
+		]);
+	}
+
+	public function unlinkItemFrom(Item $fromItem, Item $toItem) {
+		return $this->dba->removeSetElements($this->tableName, [
+					'itemId' => $toItem->itemId,
+						], [
+					'from' => [$fromItem->itemId],
+		]);
 	}
 
 }
