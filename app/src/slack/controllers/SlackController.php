@@ -17,25 +17,54 @@ class SlackController extends \Ophp\Controller {
 
 	protected function newResponse() {
 		$res = new \Ophp\HttpResponse;
+		$res->header('Content-Type', 'application/json; charset=utf-8');
 		return $res;
 	}
-	
+
 	protected function getCliResult() {
 		$slackRequest = $this->getServer()->getRequest();
 
+		$command = $slackRequest->isPost() ? $slackRequest->getPostParam('command') : $slackRequest->getParam('command');
+		$args = $slackRequest->isPost() ? $slackRequest->getPostParam('text') : $slackRequest->getParam('text');
 		$cliRequest = new \Ophp\requests\CliRequest;
-		$cliRequest->command = $slackRequest->getParam('command');
-		$cliRequest->params = explode(' ', $slackRequest->getParam('text'));
+		$cliRequest->command = ltrim($command, '/');
+		$cliRequest->params = explode(' ', $args);
 		$cliRequest->setServerVars(['XDG_SESSION_ID' => 'slackuserid']);
 		$cliServer = new \Replanner\cli\CliServer;
 		$cliResponse = $cliServer->getResponse($cliRequest);
 
-		return $cliResponse->body;
+		return json_decode($cliResponse->body);
 	}
 
 	public function __invoke() {
-		$output = $this->getCliResult();
-		return $this->newResponse()->body($output);
+		$result = $this->getCliResult();
+		$output = [];
+		$output[] = '*' . htmlspecialchars($result->item->content) . '* `' . $result->item->itemId . '`';
+		$belongsTo = [];
+		$belongsTo[] = '_Belongs to:_';
+		foreach ($result->belongsTo as $item) {
+			$belongsTo[] = "- " . htmlspecialchars($item->content) . ' `' . $item->itemId . '`';
+		}
+		$contains = [];
+		$contains[] = '_Contains:_';
+		foreach ($result->contains as $item) {
+			$contains[] = "- " . htmlspecialchars($item->content) . ' `' . $item->itemId . '`';
+		}
+		$json = json_encode([
+			'text' => implode("\n", $output),
+			'attachments' => [
+				[
+					'text' => implode("\n", $belongsTo),
+					'color' => '#ff44ff',
+				],
+				[
+					'text' => implode("\n", $contains),
+					'color' => '#4444ff',
+				],
+			],
+		]);
+
+		return $this->newResponse()->body($json);
 	}
 
 }

@@ -43,7 +43,11 @@ class ApiController extends \Ophp\JsonController {
 	 * @return string
 	 */
 	public function getIdentity() {
-		return $this->getRequest()->getHeader('X-Jot-Identity');
+		$identity = $this->getRequest()->getHeader('X-Jot-Identity');
+		if (!isset($identity)) {
+			$identity = $this->getRequest()->getCookie('Jot-Identity');
+		}
+		return $identity;
 	}
 
 }

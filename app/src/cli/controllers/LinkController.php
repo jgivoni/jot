@@ -19,11 +19,11 @@ class LinkController extends CliController {
 			$parentId = $parentName;
 		}
 
-		$success = $this->getApiResult('/link/' . $itemId . '/' . $parentId);
+		$result = $this->getApiResult('/link/' . $itemId . '/' . $parentId);
 		
 		$response = $this->newResponse();
 
-		if ($success) {
+		if ($result['status'] === 'success') {
 			$_SESSION['itemId'] = $itemId;
 			$response->body('Ok');
 		} else {

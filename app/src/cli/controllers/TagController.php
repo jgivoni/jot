@@ -17,21 +17,32 @@ class TagController extends CliController {
 			$itemId = $this->getRequest()->getParam(0);
 		}
 
-		$result  = $this->getApiResult('/get/' . $tagsItemId);
-		$tagIds = isset($result) ? (array) $result->linkFrom : [];
+		$result = $this->getApiResult('/get/' . $tagsItemId);
+		if ($result['status'] === 'success') {
+			$tagIds = isset($result) ? (array) $result['item']['contains'] : [];
+		}
 		
 		if (!empty($tagIds)) {
-			$tagId = $tagIds[0];
-		} else {
-			$tagId = $this->getApiResult('/insert/' . $tagName);
+			foreach ($tagIds as $id) {
+				$result = $this->getApiResult('/get/' . $id);
+				if ($result['status'] === 'success' && $result['item']['content'] === $tagName) {
+					$tagId = $id;
+				}
+			}
+		}
+		if (!isset($tagId)) {
+			$result = $this->getApiResult('/insert/' . $tagName);
+			if ($result['status'] === 'success') {
+				$tagId = $result['itemId'];
+			}
 			$this->getApiResult('/link/' . $tagId . '/' . $tagsItemId);
 		}
 
-		$success = $this->getApiResult('/link/' . $itemId . '/' . $tagId);
+		$result = $this->getApiResult('/link/' . $itemId . '/' . $tagId);
 		
 		$response = $this->newResponse();
 
-		if ($success) {
+		if ($result['status'] === 'success') {
 			$_SESSION['itemId'] = $itemId;
 			$response->body('Ok');
 		} else {

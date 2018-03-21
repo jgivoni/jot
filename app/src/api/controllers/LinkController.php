@@ -18,10 +18,14 @@ class LinkController extends ApiController {
 		$fromItem = $this->getItemMapper()->loadByPrimaryKey($this->itemId);
 		$toItem = $this->getItemMapper()->loadByPrimaryKey($this->toId);
 		if (isset($fromItem) && isset($toItem)) {
-			$result = $this->getItemMapper()->linkItems($fromItem, $toItem);
+			$status = $this->getItemMapper()->linkItems($fromItem, $toItem);
 		} else {
-			$result = false;
+			$status = false;
 		}
+		
+		$result = [
+				'status' => $status ? 'success' : 'error',
+		];
 
 		return $this->newResponse()->body(['result' => $result]);
 	}

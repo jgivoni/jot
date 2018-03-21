@@ -2,6 +2,8 @@
 
 namespace Replanner\cli\controllers;
 
+use Ophp\Cli\OutputFormatter as OF;
+
 /**
  */
 class GetController extends CliController {
@@ -27,7 +29,7 @@ class GetController extends CliController {
 				$belongsToIds = (array) $result['item']['belongsTo'];
 				$containsIds = (array) $result['item']['contains'];
 				$result = $this->getApiResult('/getbatch/' . implode(',', array_unique(array_merge($belongsToIds, $containsIds))));
-				
+
 				if ($result['status'] === 'success') {
 					foreach ((array) $result['items'] as $item) {
 						if (in_array($item['itemId'], $belongsToIds)) {
@@ -36,6 +38,7 @@ class GetController extends CliController {
 						if (in_array($item['itemId'], $containsIds)) {
 							$contains[] = $item;
 						}
+						$this->pushItemToSessionRecentItems($item['itemId'], $item['content']);
 					}
 				}
 			}
@@ -45,20 +48,47 @@ class GetController extends CliController {
 
 		if (isset($content)) {
 			$_SESSION['itemId'] = $itemId;
-			$lines = [];
-			$lines[] = $itemId . " \t" . $content;
-			foreach ($belongsTo as $item) {
-				$lines[] = "-> \t" . $item['itemId'] . " \t" . $item['content'];
+
+			$format = $this->getOutputFormat();
+
+			if ($format === self::OUTPUT_FORMAT_CLI_LIST_COLORIZED) {
+				$output = $this->getOutputCliListColorized([
+					'itemId' => $itemId,
+					'content' => $content,
+						], $belongsTo, $contains);
+			} elseif ($format === self::OUTPUT_FORMAT_PLAIN) {
+				$output = json_encode([
+					'item' => [
+						'itemId' => $itemId,
+						'content' => $content,
+					],
+					'belongsTo' => $belongsTo,
+					'contains' => $contains,
+				]);
 			}
-			foreach ($contains as $item) {
-				$lines[] = "<- \t" . $item['itemId'] . " \t" . $item['content'];
-			}
-			$response->body(implode("\n", $lines));
+			$response->body($output);
 		} else {
 			$response->error(true)->body('An error occurred executing JOT');
 		}
 
 		return $response;
+	}
+
+	protected function getOutputCliListColorized($item, $belongsTo, $contains) {
+		$lines = [];
+		$lines[] = OF::colorize($item['itemId'], OF::COLOR_DARK_GRAY) . " \t" . OF::colorize($item['content'], OF::COLOR_YELLOW);
+
+		$lines[] = 'Belongs to:';
+		foreach ($belongsTo as $item) {
+			$lines[] = OF::colorize($item['itemId'], OF::COLOR_DARK_GRAY) . " \t" . OF::colorize($item['content'], OF::COLOR_PURPLE);
+		}
+
+		$lines[] = 'Contains:';
+		foreach ($contains as $item) {
+			$lines[] = OF::colorize($item['itemId'], OF::COLOR_DARK_GRAY) . " \t" . OF::colorize($item['content'], OF::COLOR_LIGHT_BLUE);
+		}
+
+		return implode("\n", $lines);
 	}
 
 }

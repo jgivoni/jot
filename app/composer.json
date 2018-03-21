@@ -1,7 +1,8 @@
 {
     "require": {
         "jgivoni/ophp": "dev-master",
-        "aws/aws-sdk-php": "^3"
+        "aws/aws-sdk-php": "^3",
+        "symfony/http-foundation": "^4.0"
     },
 
     "autoload": {

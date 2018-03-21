@@ -12,6 +12,7 @@ fi
 # User specific aliases and functions
 alias flush="sudo docker container exec -it redis redis-cli flushall"
 alias reload="source /home/vagrant/.bashrc"
+alias start="sudo /vagrant/provisioning/system/reboot.sh"
 
 export LANG=en_US.UTF-8
 

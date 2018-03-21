@@ -38,6 +38,7 @@ chmod -R 750 /home/vagrant
 
 # crons
 ln -s /vagrant/provisioning/system/crons.txt /etc/cron.d/jot
+chmod 755 /vagrant/provisioning/system/reboot.sh
 
 # JOT CLI
 ln -s /vagrant/provisioning/php/jotcli.php /usr/bin/jot
