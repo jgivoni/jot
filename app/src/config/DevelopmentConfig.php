@@ -4,16 +4,16 @@
  * Configuration for development runmode
  */
 
-namespace Replanner\config;
+namespace Jot\config;
 
 class DevelopmentConfig extends \Ophp\Config
 {
 
 	protected $runMode = 'development';
 	protected $databaseConnections = array(
-		'replanner' => array(
+		'jot' => array(
 			'host' => 'localhost',
-			'database' => 'replanner',
+			'database' => 'jot',
 			'user' => 'user',
 			'password' => '',
 		),

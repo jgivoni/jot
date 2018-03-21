@@ -1,8 +1,8 @@
 <?php
 
-namespace Replanner\slack;
+namespace Jot\slack;
 
-use Replanner\config;
+use Jot\config;
 
 class SlackServer extends \Ophp\WebServer {
 

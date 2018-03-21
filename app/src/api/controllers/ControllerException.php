@@ -1,5 +1,5 @@
 <?php
 
-namespace Replanner\api\controllers;
+namespace Jot\api\controllers;
 
 class ControllerException extends \Ophp\Exception {}

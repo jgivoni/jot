@@ -1,6 +1,6 @@
 <?php
 
-namespace Replanner\controllers;
+namespace Jot\controllers;
 
 class IndexController extends Controller {
 

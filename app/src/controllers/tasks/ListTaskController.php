@@ -1,8 +1,8 @@
 <?php
 
-namespace Replanner\controllers\tasks;
+namespace Jot\controllers\tasks;
 
-class ListTaskController extends \Replanner\controllers\TaskController {
+class ListTaskController extends \Jot\controllers\TaskController {
 	
 	public function __invoke() {
 		$content = $this->newView('task/index.html');

@@ -1,6 +1,6 @@
 <?php
 
-namespace Replanner\controllers;
+namespace Jot\controllers;
 
 /**
  * 
@@ -52,7 +52,7 @@ abstract class Controller extends \Ophp\Controller {
 	 */
 	protected function newDocumentView() {
 		$document = new \Ophp\HtmlDocumentView($this->baseTemplate, $this->getTemplateBase());
-		$document->title = "Replanner";
+		$document->title = "Jot";
 		$document->url = $this->getServer()->getUrlHelper();
 		$document->index = $document->fragment('task/list.html');
 		$document->index->assign([
@@ -79,7 +79,7 @@ abstract class Controller extends \Ophp\Controller {
 	 */
 	protected function getDba() {
 		return isset($this->dba) ? $this->dba :
-			$this->dba = $this->getServer()->newMysqlDatabaseAdapter('replanner');
+			$this->dba = $this->getServer()->newMysqlDatabaseAdapter('jot');
 	}
 
 	/**
@@ -98,7 +98,7 @@ abstract class Controller extends \Ophp\Controller {
 	protected function getApiResult($query) {
 		$apiRequest = new \Ophp\requests\HttpRequest;
 		$apiRequest->url = $query;
-		$apiServer = new \Replanner\api\ApiServer;
+		$apiServer = new \Jot\api\ApiServer;
 		$apiResponse = $apiServer->getResponse($apiRequest);
 		
 		$result = $apiResponse->body['result'];

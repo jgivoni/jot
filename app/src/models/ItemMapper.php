@@ -1,9 +1,9 @@
 <?php
 
-namespace Replanner\models;
+namespace Jot\models;
 
 /**
- * @method \Replanner\models\Item loadByPrimaryKey
+ * @method \Jot\models\Item loadByPrimaryKey
  */
 class ItemMapper extends \Ophp\NoSqlDataMapper {
 
@@ -43,7 +43,7 @@ class ItemMapper extends \Ophp\NoSqlDataMapper {
 	 * 
 	 * Autogenerates a new item ID if not specified
 	 * 
-	 * @param \Replanner\models\Item $item
+	 * @param \Jot\models\Item $item
 	 * @param string $identity Item ID for the user creating the item
 	 * @return string Item ID for the saved item
 	 */

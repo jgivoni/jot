@@ -1,6 +1,6 @@
 <?php
 
-namespace Replanner;
+namespace Jot;
 
 /**
  * This is the script where all requests start
@@ -18,7 +18,7 @@ if (!ini_get('date.timezone')) {
 }
 
 // Composer autoloader
-require_once '/replanner/app/vendor/autoload.php';
+require_once '/jot/app/vendor/autoload.php';
 
 // Local environment configuration
 require_once 'EnvironmentConfig.php';

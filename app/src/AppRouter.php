@@ -1,9 +1,9 @@
 <?php
 
-namespace Replanner;
+namespace Jot;
 
 use Ophp\Router;
-use Replanner\controllers;
+use Jot\controllers;
 
 class AppRouter extends \Ophp\Router\UrlRouter {
 	public function __construct() {

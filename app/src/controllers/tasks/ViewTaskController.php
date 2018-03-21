@@ -1,8 +1,8 @@
 <?php
 
-namespace Replanner\controllers\tasks;
+namespace Jot\controllers\tasks;
 
-class ViewTaskController extends \Replanner\controllers\TaskController {
+class ViewTaskController extends \Jot\controllers\TaskController {
 	
 	/**
 	 * @var TaskUserModel The current task

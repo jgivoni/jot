@@ -1,9 +1,9 @@
 <?php
 
-namespace Replanner\cli;
+namespace Jot\cli;
 
 use Ophp\Router;
-use Replanner\cli\controllers;
+use Jot\cli\controllers;
 
 class CliRouter extends \Ophp\Router\CommandRouter {
 

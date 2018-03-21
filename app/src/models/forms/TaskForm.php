@@ -1,6 +1,6 @@
 <?php
 
-namespace Replanner;
+namespace Jot;
 
 /**
  *  Not sure this should be used - check out TaskFilter instead

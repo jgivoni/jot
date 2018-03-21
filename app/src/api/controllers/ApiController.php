@@ -1,9 +1,9 @@
 <?php
 
-namespace Replanner\api\controllers;
+namespace Jot\api\controllers;
 
 /**
- * @method \Replanner\api\ApiServer getServer
+ * @method \Jot\api\ApiServer getServer
  */
 class ApiController extends \Ophp\JsonController {
 
@@ -16,18 +16,18 @@ class ApiController extends \Ophp\JsonController {
 	 */
 	protected function getDynamoDbDatabaseAdapter() {
 		if (!isset($this->dba)) {
-			$this->dba = $this->getServer()->newDynamoDbDatabaseAdapter('replanner');
+			$this->dba = $this->getServer()->newDynamoDbDatabaseAdapter('jot');
 		}
 		return $this->dba;
 	}
 
 	/**
 	 * 
-	 * @return \Replanner\models\ItemMapper
+	 * @return \Jot\models\ItemMapper
 	 */
 	protected function getItemMapper() {
 		if (!isset($this->itemMapper)) {
-			$this->itemMapper = new \Replanner\models\ItemMapper;
+			$this->itemMapper = new \Jot\models\ItemMapper;
 			$this->itemMapper->setDba($this->getDynamoDbDatabaseAdapter());
 		}
 		return $this->itemMapper;

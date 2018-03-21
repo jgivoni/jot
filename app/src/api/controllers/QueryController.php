@@ -1,6 +1,6 @@
 <?php
 
-namespace Replanner\api\controllers;
+namespace Jot\api\controllers;
 
 class QueryController extends ApiController {
 
@@ -115,7 +115,7 @@ class QueryController extends ApiController {
 			$items[] = $this->getItemMapper()->loadByPrimaryKey($itemId);
 		}
 		$items = $children($items);
-		return array_map(function(\Replanner\models\Item $item) {
+		return array_map(function(\Jot\models\Item $item) {
 			return $item->itemId;
 		}, $items);
 	}
@@ -131,7 +131,7 @@ class QueryController extends ApiController {
 			$items[] = $this->getItemMapper()->loadByPrimaryKey($itemId);
 		}
 		$items = $parents($items);
-		return array_map(function(\Replanner\models\Item $item) {
+		return array_map(function(\Jot\models\Item $item) {
 			return $item->itemId;
 		}, $items);
 	}

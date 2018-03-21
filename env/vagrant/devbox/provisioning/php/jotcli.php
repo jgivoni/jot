@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?
-namespace Replanner\cli;
+namespace Jot\cli;
 
 // Dummy php setup
 ini_set('display_errors', 1);
@@ -10,7 +10,7 @@ if (!ini_get('date.timezone')) {
 }
 
 // Composer autoloader
-require_once '/replanner/app/vendor/autoload.php';
+require_once '/jot/app/vendor/autoload.php';
 
 // Local environment configuration
 require_once 'EnvironmentConfig.php';

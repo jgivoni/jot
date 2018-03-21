@@ -1,6 +1,6 @@
 <?php
 
-namespace Replanner;
+namespace Jot;
 
 class UserModel extends \Ophp\Model {
 

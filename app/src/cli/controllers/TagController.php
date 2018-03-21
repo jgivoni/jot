@@ -1,6 +1,6 @@
 <?php
 
-namespace Replanner\cli\controllers;
+namespace Jot\cli\controllers;
 
 /**
  */

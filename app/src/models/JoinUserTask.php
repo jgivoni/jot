@@ -1,6 +1,6 @@
 <?php
 
-namespace Replanner;
+namespace Jot;
 
 /**
  * Trait for joining with user_task

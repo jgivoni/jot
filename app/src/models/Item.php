@@ -1,6 +1,6 @@
 <?php
 
-namespace Replanner\models;
+namespace Jot\models;
 
 /**
  * @property string $itemId

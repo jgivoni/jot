@@ -1,6 +1,6 @@
 <?php
 
-namespace Replanner;
+namespace Jot;
 
 class TaskFilter extends \Ophp\ParamsFilter
 {

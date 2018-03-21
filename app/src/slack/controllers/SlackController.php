@@ -1,12 +1,12 @@
 <?php
 
-namespace Replanner\slack\controllers;
+namespace Jot\slack\controllers;
 
 /**
  * 
  * OAuth Access Token: xoxp-327958999443-328906075702-328079565056-020efbc9b8acd6d36570ab3574030f6d
  * 
- * @method \Replanner\cli\CliServer getServer
+ * @method \Jot\cli\CliServer getServer
  * @method \Ophp\requests\CliRequest getRequest
  */
 class SlackController extends \Ophp\Controller {
@@ -30,7 +30,7 @@ class SlackController extends \Ophp\Controller {
 		$cliRequest->command = ltrim($command, '/');
 		$cliRequest->params = explode(' ', $args);
 		$cliRequest->setServerVars(['XDG_SESSION_ID' => 'slackuserid']);
-		$cliServer = new \Replanner\cli\CliServer;
+		$cliServer = new \Jot\cli\CliServer;
 		$cliResponse = $cliServer->getResponse($cliRequest);
 
 		return json_decode($cliResponse->body);

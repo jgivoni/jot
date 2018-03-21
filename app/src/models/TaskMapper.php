@@ -1,6 +1,6 @@
 <?php
 
-namespace Replanner;
+namespace Jot;
 
 use Ophp\SqlCriteriaBuilder as CB;
 
@@ -88,7 +88,7 @@ class TaskMapper extends \Ophp\DataMapper
 
 	/**
 	 * Stores the task model data in the db
-	 * @param \Replanner\TaskModel $task
+	 * @param \Jot\TaskModel $task
 	 */
 	public function saveTask(TaskModel $task)
 	{
@@ -141,7 +141,7 @@ class TaskMapper extends \Ophp\DataMapper
 	/**
 	 * Deletes a task
 	 * 
-	 * @param \Replanner\TaskModel $taskModel
+	 * @param \Jot\TaskModel $taskModel
 	 */
 	public function delete(TaskModel $taskModel)
 	{

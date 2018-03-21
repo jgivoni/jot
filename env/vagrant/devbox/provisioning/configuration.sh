@@ -15,12 +15,12 @@ ln -s /vagrant/provisioning/user/bashrc.sh /home/vagrant/.bashrc
 setenforce 0
 
 # Web app
-ln -s /vagrant/provisioning/apache/replanner.conf /etc/httpd/conf.d
+ln -s /vagrant/provisioning/apache/jot.conf /etc/httpd/conf.d
 rm /etc/httpd/conf.d/welcome.conf
 
-ln -s /vagrant/provisioning/php/php.ini /etc/php.d/replanner.ini
+ln -s /vagrant/provisioning/php/php.ini /etc/php.d/jot.ini
 
-chmod -R 755 /replanner
+chmod -R 755 /jot
 
 mkdir /var/lib/php/session
 chmod -R 777 /var/lib/php/session
@@ -29,7 +29,7 @@ mkdir /var/data
 mkdir /var/data/cache
 chmod -R 777 /var/data
 
-su - vagrant -c "cd /replanner/app && composer install"
+su - vagrant -c "cd /jot/app && composer install"
 
 mkdir /home/vagrant/.aws
 sed -e "s|<id>|$aws_access_key_id|g" -e "s|<secret>|$aws_access_key_secret|g" /vagrant/provisioning/aws/credentials.template > /home/vagrant/.aws/credentials

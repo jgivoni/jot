@@ -1,6 +1,6 @@
 <?php
 
-namespace Replanner;
+namespace Jot;
 
 class DeleteTaskController extends TaskController {
 	protected $taskId;

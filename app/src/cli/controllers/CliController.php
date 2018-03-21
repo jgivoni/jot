@@ -1,9 +1,9 @@
 <?php
 
-namespace Replanner\cli\controllers;
+namespace Jot\cli\controllers;
 
 /**
- * @method \Replanner\cli\CliServer getServer
+ * @method \Jot\cli\CliServer getServer
  * @method \Ophp\requests\CliRequest getRequest
  */
 abstract class CliController extends \Ophp\Controller {
@@ -31,7 +31,7 @@ abstract class CliController extends \Ophp\Controller {
 		$apiRequest = new \Ophp\requests\HttpRequest;
 		$apiRequest->url = $query;
 		$apiRequest->addHeader('X-Jot-Identity', $this->getServer()->getUserConfig()['me']);
-		$apiServer = new \Replanner\api\ApiServer;
+		$apiServer = new \Jot\api\ApiServer;
 		$apiResponse = $apiServer->getResponse($apiRequest);
 
 		$result = $apiResponse->body['result'];

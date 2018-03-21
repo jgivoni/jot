@@ -1,6 +1,6 @@
 <?php
 
-namespace Replanner\config;
+namespace Jot\config;
 
 class EnvironmentConfig extends DevelopmentConfig {
 
@@ -9,7 +9,7 @@ class EnvironmentConfig extends DevelopmentConfig {
 	 * This cannot be autodetected yet. Used for links and internal requests and redirects
 	 * @var string
 	 */
-	protected $baseUrl = "http://replanner.local/";
+	protected $baseUrl = "http://jotzone.local/";
 
 	/**
 	 * List of database connections
@@ -18,7 +18,7 @@ class EnvironmentConfig extends DevelopmentConfig {
 	 * @var array
 	 */
 	protected $databaseConnections = array(
-		'replanner' => array(
+		'jot' => array(
 			'credentialsFile' => '/home/vagrant/.aws/credentials',
 			'region' => 'eu-west-1',
 		),
@@ -28,7 +28,7 @@ class EnvironmentConfig extends DevelopmentConfig {
 		]
 	);
 	protected $paths = array(
-		'staticAssets' => 'http://static.replanner.local/',
+		'staticAssets' => 'http://static.jotzone.local/',
 	);
 	protected $files = [
 		'jot-config' => '/home/vagrant/.jotrc',

@@ -1,6 +1,6 @@
 <?php
 
-namespace Replanner;
+namespace Jot;
 
 /**
  * Trait for adding support for a parent user model into a model
@@ -15,8 +15,8 @@ trait ParentUser {
 
 	/**
 	 * 
-	 * @param \Replanner\UserModel $user
-	 * @return \Replanner\TaskUserModel
+	 * @param \Jot\UserModel $user
+	 * @return \Jot\TaskUserModel
 	 */
 	public function setParentUser(UserModel $user) {
 		$this->parentUserModel = $user;

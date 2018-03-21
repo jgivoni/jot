@@ -1,6 +1,6 @@
 <?php
 
-namespace Replanner\slack;
+namespace Jot\slack;
 
 use Ophp\Router;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Replanner\api;
+namespace Jot\api;
 
-use Replanner\config;
+use Jot\config;
 
 class ApiServer extends \Ophp\WebServer {
 

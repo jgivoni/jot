@@ -1,9 +1,9 @@
 <?php
 
-namespace Replanner\api;
+namespace Jot\api;
 
 use Ophp\Router;
-use Replanner\api\controllers;
+use Jot\api\controllers;
 
 class ApiRouter extends \Ophp\Router\UrlRouter {
 	public function __construct() {

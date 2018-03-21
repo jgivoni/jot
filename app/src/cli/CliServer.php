@@ -1,8 +1,8 @@
 <?php
 
-namespace Replanner\cli;
+namespace Jot\cli;
 
-use Replanner\config;
+use Jot\config;
 
 class CliServer extends \Ophp\Server {
 

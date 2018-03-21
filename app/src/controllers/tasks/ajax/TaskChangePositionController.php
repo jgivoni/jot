@@ -1,6 +1,6 @@
 <?php
 
-namespace Replanner;
+namespace Jot;
 
 class TaskChangePositionController extends TaskController {
 	protected $task_id;

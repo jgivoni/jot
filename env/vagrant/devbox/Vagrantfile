@@ -6,7 +6,7 @@ Vagrant.configure("2") do |config|
   config.vm.box_version = "1.0.2"
 
   config.vm.provider "virtualbox" do |v|
-    v.name="replanner." + Time.now.strftime("%Y%m%d-%H%M")
+    v.name="jot." + Time.now.strftime("%Y%m%d-%H%M")
     v.memory = "1024"
   end
 
@@ -15,10 +15,10 @@ Vagrant.configure("2") do |config|
 
   config.vm.network "forwarded_port", guest: 80, host: vuc['host_web_port']
   config.vm.network "private_network", ip: vuc['vm_ip']
-  config.vm.hostname = "replanner.local"
+  config.vm.hostname = "jot"
 
-  config.vm.synced_folder vuc['app_dir'], "/replanner/app"
-  config.vm.synced_folder vuc['ophp_dir'], "/replanner/ophp"
+  config.vm.synced_folder vuc['app_dir'], "/jot/app"
+  config.vm.synced_folder vuc['ophp_dir'], "/jot/ophp"
 
   config.vm.provision "shell" do |s| 
     s.inline = <<-SHELL
