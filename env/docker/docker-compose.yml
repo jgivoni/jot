@@ -10,6 +10,9 @@ services:
       - type: bind
         source: "${OPHP_DIR}"
         target: /jot/ophp
+      - type: bind
+        source: ./env
+        target: /jot/env
 
   jotstatic:
     image: jotstatic:latest

@@ -2,8 +2,10 @@
 
 FROM jotbase:latest
 
-COPY provisioning /docker/provisioning
+COPY vhost.conf /etc/httpd/conf.d/
 
-RUN /bin/bash /docker/provisioning/configuration.sh
+COPY php.ini /etc/php.d/php.ini
 
-COPY private/.aws-credentials /.aws/credentials
+RUN mkdir /jot
+
+COPY bootstrap.php /jot/bootstrap.php

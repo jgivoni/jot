@@ -32,4 +32,7 @@ $ docker container run --name jot -p 81:80 --rm --mount type=bind,src=/webdev/jg
 ```
 $ docker-compose up
 ```
-# No symlinks on host side!
+# Inspect
+```
+$ docker container exec -it docker_jotzone_1 /bin/bash
+```

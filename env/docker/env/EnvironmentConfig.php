@@ -19,7 +19,7 @@ class EnvironmentConfig extends DevelopmentConfig {
 	 */
 	protected $databaseConnections = array(
 		'jot' => array(
-			'credentialsFile' => '/.aws/credentials',
+			'credentialsFile' => '/jot/env/private/.aws-credentials',
 			'region' => 'eu-west-1',
 		),
 		'redis-cache' => [

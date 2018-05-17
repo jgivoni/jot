@@ -20,6 +20,8 @@ RUN yum install -y \
 
 RUN ln -sf /dev/stdout /var/log/httpd/access_log
 
+RUN rm /etc/httpd/conf.d/welcome.conf
+
 COPY up.sh /usr/local/bin/
 
 EXPOSE 80
