@@ -3,7 +3,7 @@
 aws_access_key_id=$1
 aws_access_key_secret=$2
 
-# Making configuration changes to the enviroment after installation of components
+# Making configuration changes to the environment after installation of components
 
 usermod -a -G vagrant apache
 

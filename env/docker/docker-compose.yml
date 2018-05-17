@@ -1,0 +1,27 @@
+version: '3.2'
+
+services:
+  jotzone:
+    image: jotzone:latest
+    volumes:
+      - type: bind
+        source: ../../app
+        target: /jot/app
+      - type: bind
+        source: "${OPHP_DIR}"
+        target: /jot/ophp
+
+  jotstatic:
+    image: jotstatic:latest
+    volumes:
+      - type: bind
+        source: ../../app
+        target: /jot/app
+
+  redis:
+    image: redis:4
+
+  loadbalancer:
+    image: loadbalancer:latest
+    ports:
+      - 80:80
