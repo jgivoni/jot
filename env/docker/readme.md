@@ -30,9 +30,18 @@ $ docker container run --name jot -p 81:80 --rm --mount type=bind,src=/webdev/jg
 
 # Launch compose
 ```
-$ docker-compose up
+$ docker-compose up --build
 ```
 # Inspect
 ```
 $ docker container exec -it docker_jotzone_1 /bin/bash
 ```
+
+# Execute CLI command
+```
+$ docker container exec docker_jotcli_1 jotget l48rlduz85c0g /bin/bash
+```
+
+# Access
+http://api.jotzone.local/
+http://static.jotzone.local/index.js

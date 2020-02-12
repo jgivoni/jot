@@ -1,8 +1,26 @@
 version: '3.2'
 
 services:
+  jotcli:
+    image: jotcli:latest
+    build: jotcli
+    volumes:
+      - type: bind
+        source: ../../app
+        target: /jot/app
+      - type: bind
+        source: "${OPHP_DIR}"
+        target: /jot/ophp
+      - type: bind
+        source: ./env
+        target: /jot/env
+    stdin_open: true
+
   jotzone:
     image: jotzone:latest
+    build:
+      context: jotzone
+        target: dev
     volumes:
       - type: bind
         source: ../../app
@@ -16,6 +34,7 @@ services:
 
   jotstatic:
     image: jotstatic:latest
+    build: jotstatic
     volumes:
       - type: bind
         source: ../../app
@@ -26,5 +45,6 @@ services:
 
   loadbalancer:
     image: loadbalancer:latest
+    build: loadbalancer
     ports:
       - 80:80

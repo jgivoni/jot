@@ -31,7 +31,7 @@ class EnvironmentConfig extends DevelopmentConfig {
 		'staticAssets' => 'http://static.jotzone.local/',
 	);
 	protected $files = [
-		'jot-config' => '/home/docker/.jotrc',
+		'jot-config' => '/jot/env/.jotrc',
 	];
 
 }

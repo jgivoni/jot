@@ -40,6 +40,9 @@ abstract class CliController extends \Ophp\Controller {
 
 	protected function getOutputFormat() {
 		$format = $this->getRequest()->getServerVar('SHELL');
+		if (!isset($format)) {
+			$format = $this->getRequest()->getParam(1);
+		}
 		return isset($format) ? $format : self::OUTPUT_FORMAT_PLAIN;
 	}
 
